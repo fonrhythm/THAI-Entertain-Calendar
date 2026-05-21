@@ -401,53 +401,29 @@ function setContentOffset(){
   if(shell&&content)content.style.paddingTop=shell.offsetHeight+'px';
 }
 
-async function loadFromSheets(){
+async function loadFromSheets() {
   setSyncState('busy');
-  try{
-    // 使用 no-cors 模式在手机上更可靠；同时加上 cache:no-store 避免缓存旧数据
-    const r=await fetch(CSV_URL,{cache:'no-store'});
-    if(!r.ok)throw new Error(`HTTP ${r.status}`);
-    const csv=await r.text();
-    if(!csv||csv.trim().length===0)throw new Error('Empty response');
-    const parsed=Papa.parse(csv,{header:true,skipEmptyLines:true});
-    if(!parsed.data||parsed.data.length===0)throw new Error('No data rows');
-    events=parsed.data
-      .map(row=>{const obj={};Object.keys(row).forEach(k=>{obj[k.trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():row[k]});return{...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()}})
-      .filter(o=>o.date||o.sale_date);
+  try {
+    const r = await fetch(CSV_URL);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const rows = await r.json();
+    events = rows
+      .map(row => {
+        const obj = {};
+        Object.keys(row).forEach(k => {
+          obj[k.trim().toLowerCase()] = typeof row[k] === 'string' ? row[k].trim() : String(row[k] ?? '');
+        });
+        return { ...obj, category: (obj.category || '').toLowerCase(), status: (obj.status || '').toLowerCase() };
+      })
+      .filter(o => o.date || o.sale_date);
     setSyncState('ok');
-  }catch(e){
-    console.error('Sheets load failed:',e);
-    // 如果 fetch 失败，尝试通过 JSONP 风格的备用方案（直接用 script 标签加 gviz）
-    tryFallbackLoad();
-    return;
+    render();
+    requestAnimationFrame(() => setContentOffset());
+  } catch (e) {
+    console.error('Load failed:', e);
+    setSyncState('err');
+    render();
   }
-  render();
-  // 数据加载完毕后重新计算 offset，防止手机端内容被遮挡
-  requestAnimationFrame(()=>setContentOffset());
-}
-
-function tryFallbackLoad(){
-  // 备用：通过 Google Visualization API 加载（支持跨域，手机端更稳定）
-  const GID=0;
-  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
-  fetch(url,{cache:'no-store'})
-    .then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.text()})
-    .then(csv=>{
-      if(!csv||csv.trim().length===0)throw new Error('Empty fallback');
-      const parsed=Papa.parse(csv,{header:true,skipEmptyLines:true});
-      if(!parsed.data||parsed.data.length===0)throw new Error('No fallback data');
-      events=parsed.data
-        .map(row=>{const obj={};Object.keys(row).forEach(k=>{obj[k.trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():row[k]});return{...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()}})
-        .filter(o=>o.date||o.sale_date);
-      setSyncState('ok');
-      render();
-      requestAnimationFrame(()=>setContentOffset());
-    })
-    .catch(e=>{
-      console.error('Fallback load failed:',e);
-      setSyncState('err');
-      render();
-    });
 }
 
 updateHeader();
