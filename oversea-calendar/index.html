@@ -394,7 +394,18 @@ async function loadFromSheets(){
     const r=await fetch(CSV_URL);if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const csv=await r.text();
     events=Papa.parse(csv,{header:true,skipEmptyLines:true}).data
-      .map(row=>{const obj={};Object.keys(row).forEach(k=>{obj[k.trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():row[k]});return{...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()}})
+      .map(row=>{
+        const obj={};
+        // 1. 清洗表头，干掉移动端可能存在的不可见杂质字符
+        Object.keys(row).forEach(k=>{
+          obj[k.replace(/^\uFEFF/i, '').trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():row[k]
+        });
+        // 2. 强制把连字符 - 替换为斜杠 /，让 iOS 手机浏览器能正常识别日期
+        if(obj.date) obj.date = obj.date.replace(/-/g, "/");
+        if(obj.sale_date) obj.sale_date = obj.sale_date.replace(/-/g, "/");
+        
+        return{...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()}
+      })
       .filter(o=>o.date||o.sale_date);
     setSyncState('ok');
   }catch(e){console.error('Sheets load failed:',e);setSyncState('err')}
