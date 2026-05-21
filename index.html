@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chob泰娱行程日历</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#faf9f7;--surface:#fff;--border:#e8e4de;--border-soft:#f0ece6;
+  --text:#1a1a1a;--sub:#6b6b6b;--muted:#999;
+}
+
+/* ── 核心修改：弹性全屏锁定，完美解除无法点击的阻挡 ── */
+html, body {
+  height: 100%;
+  height: 100dvh; 
+  background:var(--bg);
+}
+
+body{
+  font-family:'Noto Sans SC','Lato',sans-serif;
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  position: relative;
+}
+
+/* ── MAIN 内容区域垂直居中 ── */
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px 24px; 
+  z-index: 2; /* 确保交互层级永远在最上方 */
+}
+
+.logo-wrap{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  text-align:center;
+}
+
+.logo-en{
+  font-family:'Lato',sans-serif;
+  font-size:11px;
+  font-weight:400;
+  letter-spacing:5px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.logo-title{
+  font-family:'Lato',sans-serif;
+  font-size:52px;
+  font-weight:700;
+  letter-spacing:-2px;
+  color:var(--text);
+  line-height:1;
+  margin:8px 0 4px;
+}
+
+.logo-sub{
+  font-family:'Lato',sans-serif;
+  font-size:11px;
+  font-weight:300;
+  letter-spacing:4px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.divider{
+  width:40px;
+  height:1px;
+  background:var(--border);
+  margin:30px auto; 
+}
+
+/* ── NAV BUTTONS ── */
+.nav{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px; 
+  width:100%;
+  max-width:420px;
+}
+
+.nav-btn{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  padding:16px 24px; 
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  text-decoration:none;
+  color:var(--text);
+  font-family:'Lato',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  transition:background .15s, border-color .15s, transform .1s;
+  pointer-events: auto; /* 强行确保点击穿透不受任何影响 */
+}
+
+.nav-btn:hover{
+  background:#f5f3f0;
+  border-color:#d4cfc8;
+  transform:translateX(3px);
+}
+
+.nav-btn .arrow{
+  font-size:16px;
+  color:var(--muted);
+  transition:color .15s;
+  font-weight:300;
+  flex-shrink:0;
+}
+
+.nav-btn:hover .arrow{color:var(--text)}
+
+.nav-btn .tag{
+  font-size:9px;
+  font-weight:400;
+  letter-spacing:1px;
+  color:var(--muted);
+  background:var(--bg);
+  border:1px solid var(--border-soft);
+  border-radius:20px;
+  padding:2px 8px;
+  margin-left:10px;
+  white-space:nowrap;
+}
+
+.btn-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border-soft);
+  padding:14px 0;
+  text-align:center;
+  font-size:10px;
+  color:var(--muted);
+  background:var(--surface);
+  flex-shrink:0;
+  z-index: 1;
+}
+
+/* ── MOBILE 移动端适配 ── */
+@media(max-width:480px){
+  .main { padding: 15px 20px; }
+  .logo-title{ font-size:38px; }
+  .divider { margin: 15px auto; }
+  .nav-btn{ padding:12px 18px; font-size:12px; } 
+  .nav{ gap: 8px; }
+}
+
+@media(max-height: 660px) {
+  .logo-title { font-size: 32px; }
+  .divider { margin: 10px auto; }
+  .nav-btn { padding: 10px 16px; }
+  .nav { gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<main class="main">
+  <div class="logo-wrap">
+    <span class="logo-en">Thai Artist</span>
+    <div class="logo-title">Chob</div>
+    <span class="logo-sub">Calendar</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <nav class="nav">
+    <a class="nav-btn" href="/th-cn-calendar/">
+      <div class="btn-left">
+        China Schedule
+        <span class="tag">来华行程</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="nav-btn" href="/thai-local-calendar/">
+      <div class="btn-left">
+        Thailand Schedule
+        <span class="tag">泰国行程</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="nav-btn" href="/oversea-calendar/">
+      <div class="btn-left">
+        Oversea Schedule
+        <span class="tag">海外行程</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="nav-btn" href="javascript:void(0);" style="cursor: not-allowed; opacity: 0.6;">
+      <div class="btn-left">
+        Temporarily Unavailable
+        <span class="tag">暂不可用</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+  </nav>
+</main>
+
+<footer>Copyright &copy; 2026 — All rights reserved by SomenStjerne</footer>
+
+</body>
+</html>
