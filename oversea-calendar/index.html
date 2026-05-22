@@ -354,7 +354,7 @@ function openModal(enc){
   if(ev.sale_date){const sd=new Date(ev.sale_date),st=ev.sale_time?` ${ev.sale_time}`:'';document.getElementById('m-sale').textContent=`开售：${sd.getFullYear()}年${sd.getMonth()+1}月${sd.getDate()}日${st}`;saleRow.style.display='flex'}
   else saleRow.style.display='none';
   const nr=document.getElementById('m-note-row');
-  if(ev.note){document.getElementById('m-note').textContent=ev.note;nr.style.display='flex'}else nr.style.display='none';
+  if(ev.note){const noteEl=document.getElementById('m-note');noteEl.textContent=ev.note;noteEl.style.whiteSpace='pre-line';nr.style.display='flex'}
   const buyBtn=document.getElementById('m-buy'),tInfo=document.getElementById('m-ticket-info'),url=(ev.ticket_url||'').trim();
   if(url.startsWith('http')){buyBtn.style.display='block';tInfo.style.display='none';buyBtn.onclick=()=>window.open(url,'_blank')}
   else if(url){buyBtn.style.display='none';tInfo.style.display='block';tInfo.textContent='购票信息：'+url}
