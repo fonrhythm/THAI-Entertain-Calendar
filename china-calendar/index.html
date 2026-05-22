@@ -85,6 +85,8 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.artist{background:var(--c-artist);color:var(--t-artist)}
 .chip.cancelled{opacity:.38!important;text-decoration:line-through;position:relative}
 .chip.cancelled::after{content:'已取消';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none}
+.chip.postponed{opacity:.6!important;position:relative}
+.chip.postponed::after{content:'已延期';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(210,140,0,.85);color:#fff}
 .more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
 .more:hover{color:var(--text)}
 .coming-soon-wrap{display:flex;justify-content:center;padding:12px 0 28px}
@@ -386,8 +388,8 @@ function render(){
       const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
       const opStyle = view === 'sale' ? 'opacity:0.68;' : '';
       html += hasMore
-        ? `<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="pointer-events:none;${opStyle}">${ev.name}</button>`
-        : `<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="${opStyle}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+        ? `<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':ev.status==='postponed'?' postponed':''}" style="pointer-events:none;${opStyle}">${ev.name}</button>`
+        : `<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':ev.status==='postponed'?' postponed':''}" style="${opStyle}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
     });
 
     // 注意：这里的文案去掉了原本最后的 "..." 省略号，避免和系统的 ellipsis 冲突
@@ -406,7 +408,7 @@ function openDayModal(day,encEvs){
   const prefix=view==='sale'?'[开售] ':'';
   document.getElementById('day-events-list').innerHTML=dayEvs.map(ev=>{
     const enc=btoa(encodeURIComponent(JSON.stringify(ev)));
-    return `<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;height:auto;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${prefix}${ev.name}</button>`;
+    return `<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':ev.status==='postponed'?' postponed':''}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;height:auto;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${prefix}${ev.name}</button>`;
   }).join('');
   document.getElementById('day-overlay').classList.add('open');
 }
