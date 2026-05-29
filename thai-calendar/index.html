@@ -105,7 +105,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 #day-overlay{z-index:900!important}
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:60vh}
-.modal-bar{height:5px}
+.modal-bar{height:8px;flex-shrink:0;border-radius:16px 16px 0 0}
 .modal-body{padding:20px 20px 14px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
 .modal-x{position:absolute;top:13px;right:13px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--sub)}
 .modal-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:500;margin-bottom:10px}
@@ -246,7 +246,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 </div>
 
 <div class="overlay" id="day-overlay" onclick="if(event.target===this)closeDayModal()">
-  <div class="modal" style="max-height:80vh;display:flex;flex-direction:column">
+  <div class="modal" style="max-height:60vh;display:flex;flex-direction:column">
     <div class="modal-body" style="padding-bottom:10px">
       <button class="modal-x" onclick="closeDayModal()"><i class="ti ti-x"></i></button>
       <div class="modal-name" id="day-modal-title">日期详情</div>
@@ -336,7 +336,7 @@ function openDayModal(day,encEvs){
   const prefix=view==='sale'?'[开售] ':'';
   document.getElementById('day-events-list').innerHTML=dayEvs.map(ev=>{
     const enc=btoa(encodeURIComponent(JSON.stringify(ev)));
-    return`<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;height:auto;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${prefix}${ev.name}</button>`;
+    return`<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${prefix}${ev.name}</button>`;
   }).join('');
   document.getElementById('day-overlay').classList.add('open');
 }
