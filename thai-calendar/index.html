@@ -106,7 +106,8 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:60vh}
 .modal-bar{height:8px;flex-shrink:0;border-radius:16px 16px 0 0}
-.modal-body{padding:20px 20px 14px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.modal-body{padding:20px 20px 14px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.modal-body::-webkit-scrollbar{display:none}
 .modal-x{position:absolute;top:13px;right:13px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--sub)}
 .modal-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:500;margin-bottom:10px}
 .modal-name{font-size:18px;font-weight:700;margin-bottom:3px;line-height:1.3}
@@ -348,17 +349,17 @@ function openModal(enc){
   document.getElementById('m-bar').style.background=cat.bg;
   const badge=document.getElementById('m-badge');badge.textContent=cat.label;badge.style.background=cat.bg;badge.style.color=cat.fg;
   const namePart=ev.name||'',actPart=ev.activity||'';
-  document.getElementById('m-name').textContent=namePart&&actPart?`${namePart} | ${actPart}`:actPart||namePart||'未命名';
+  document.getElementById('m-name').textContent=namePart&&actPart?`${namePart} | ${actPart}`:namePart||actPart||'';
   if(ev.date){const d=new Date(ev.date);document.getElementById('m-date').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`}
   else document.getElementById('m-date').textContent='日期待定';
   document.getElementById('m-venue').textContent=`${ev.venue||'待公布'}${ev.city?' · '+ev.city:''}`;
-  document.getElementById('m-price').textContent=ev.price||'免费';
+  document.getElementById('m-price').textContent=ev.price||'';
   document.getElementById('m-time').textContent=ev.time||'待公布';
   const saleRow=document.getElementById('m-sale-row');
   if(ev.sale_date){const sd=new Date(ev.sale_date),st=ev.sale_time?` ${ev.sale_time}`:'';document.getElementById('m-sale').textContent=`开售：${sd.getFullYear()}年${sd.getMonth()+1}月${sd.getDate()}日${st}`;saleRow.style.display='flex'}
   else saleRow.style.display='none';
   const nr=document.getElementById('m-note-row');
-  if(ev.note){const noteEl=document.getElementById('m-note');noteEl.textContent=ev.note;noteEl.style.whiteSpace='pre-line';nr.style.display='flex'}
+  if(ev.note){document.getElementById('m-note').innerHTML=ev.note.replace(/\n/g,'<br>');nr.style.display='flex'}else{nr.style.display='none'}
   const buyBtn=document.getElementById('m-buy'),tInfo=document.getElementById('m-ticket-info'),url=(ev.ticket_url||'').trim(),ttype=(ev.ticket_type||'').trim().toLowerCase();
   buyBtn.style.display='none';tInfo.style.display='none';
   if(ttype==='buy'&&url){buyBtn.textContent='立即购票 →';buyBtn.style.display='block';tInfo.style.display='none';buyBtn.onclick=()=>window.open(url,'_blank')}
