@@ -101,7 +101,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 @keyframes cs-pulse{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;color:#fff;border-radius:10px;padding:11px 18px;font-size:12px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .25s,transform .25s;z-index:999;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:16px}
+.overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
 #day-overlay{z-index:900!important}
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:60vh}
@@ -352,7 +352,7 @@ function openModal(enc){
   document.getElementById('m-name').textContent=namePart&&actPart?`${namePart} | ${actPart}`:namePart||actPart||'';
   if(ev.date){const d=new Date(ev.date);document.getElementById('m-date').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`}
   else document.getElementById('m-date').textContent='日期待定';
-  document.getElementById('m-venue').textContent=`${ev.venue||'待公布'}${ev.city?' · '+ev.city:''}`;
+  document.getElementById('m-venue').innerHTML=`${ev.venue||'待公布'}${ev.city?' · '+ev.city:''}`.replace(/\n/g,'<br>');
   document.getElementById('m-price').textContent=ev.price||'';
   document.getElementById('m-time').textContent=ev.time||'待公布';
   const saleRow=document.getElementById('m-sale-row');
@@ -364,7 +364,7 @@ function openModal(enc){
   buyBtn.style.display='none';tInfo.style.display='none';
   if(ttype==='buy'&&url){buyBtn.textContent='立即购票 →';buyBtn.style.display='block';tInfo.style.display='none';buyBtn.onclick=()=>window.open(url,'_blank')}
   else if(ttype==='form'&&url){buyBtn.textContent='填写报名表 →';buyBtn.style.display='block';tInfo.style.display='none';buyBtn.onclick=()=>window.open(url,'_blank')}
-  else if(ttype==='info'&&url){buyBtn.style.display='none';tInfo.style.display='block';tInfo.textContent=url}
+  else if(ttype==='info'&&url){buyBtn.style.display='none';tInfo.style.display='block';tInfo.innerHTML=url.replace(/\n/g,'<br>')}
   document.getElementById('m-remind').onclick=()=>addToCalendar(ev);
   document.getElementById('overlay').classList.add('open');
 }
