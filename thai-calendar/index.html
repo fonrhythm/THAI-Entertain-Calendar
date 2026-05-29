@@ -102,16 +102,20 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:16px}
 #day-overlay{z-index:900!important}
 .overlay.open{display:flex}
-.modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:75vh}
+.modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:60vh}
 .modal-bar{height:5px;flex-shrink:0}
-.modal-body{padding:20px 20px 14px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
-.modal-x{position:sticky;top:0;float:right;margin:-4px -4px 0 0;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--sub);z-index:1;flex-shrink:0}
-.modal-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:500;margin-bottom:10px}
-.modal-name{font-size:18px;font-weight:700;margin-bottom:3px;line-height:1.3}
-.modal-date{font-size:12px;color:var(--sub);margin-bottom:13px}
-.modal-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;font-size:12px;color:var(--sub)}
-.modal-row span{color:var(--text)}
+/* 标题区：固定，不滚动 */
+.modal-head{padding:16px 20px 12px;flex-shrink:0;border-bottom:1px solid var(--border-soft);position:relative}
+/* 内容区：超出时滚动 */
+.modal-body{padding:14px 20px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+/* 按钮区：固定在底部 */
 .modal-foot{border-top:1px solid var(--border-soft);padding:12px 20px 16px;display:flex;flex-direction:column;gap:7px;flex-shrink:0}
+.modal-x{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--sub)}
+.modal-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:500;margin-bottom:8px}
+.modal-name{font-size:18px;font-weight:700;margin-bottom:3px;line-height:1.3;padding-right:32px}
+.modal-date{font-size:12px;color:var(--sub);margin-bottom:0}
+.modal-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;font-size:12px;color:var(--sub)}
+.modal-row span{color:var(--text)}
 .btn{display:block;width:100%;padding:10px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;border:none;text-align:center}
 .btn-dark{background:var(--text);color:#fff}
 .btn-ghost{background:var(--bg);color:var(--text);border:1px solid var(--border)}
@@ -220,11 +224,13 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-bar" id="m-bar"></div>
-    <div class="modal-body">
+    <div class="modal-head">
       <button class="modal-x" onclick="closeModal()"><i class="ti ti-x"></i></button>
       <div class="modal-badge" id="m-badge"></div>
       <div class="modal-name" id="m-name"></div>
       <div class="modal-date" id="m-date"></div>
+    </div>
+    <div class="modal-body">
       <div class="modal-row"><i class="ti ti-map-pin"></i><span id="m-venue">—</span></div>
       <div class="modal-row" id="m-sale-row" style="display:none"><i class="ti ti-calendar-event"></i><span id="m-sale">—</span></div>
       <div class="modal-row"><i class="ti ti-ticket"></i><span id="m-price">—</span></div>
@@ -240,12 +246,12 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 </div>
 
 <div class="overlay" id="day-overlay" onclick="if(event.target===this)closeDayModal()">
-  <div class="modal" style="max-height:80vh;display:flex;flex-direction:column">
-    <div class="modal-body" style="padding-bottom:10px">
+  <div class="modal">
+    <div class="modal-head">
       <button class="modal-x" onclick="closeDayModal()"><i class="ti ti-x"></i></button>
       <div class="modal-name" id="day-modal-title">日期详情</div>
     </div>
-    <div id="day-events-list" style="overflow-y:auto;padding:0 20px 20px;flex:1"></div>
+    <div id="day-events-list" class="modal-body"></div>
   </div>
 </div>
 
