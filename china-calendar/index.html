@@ -314,8 +314,12 @@ const ALL_TAGS=['pop','indie','singer','bl','gl','artist'];
 const SHEET_ID='1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA';
 const CSV_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
 
-let yr=2026,mo=5,view='perform',events=[];
-let active=new Set(ALL_TAGS);
+const _now = new Date();
+let yr = _now.getFullYear();
+let mo = _now.getMonth() + 1; 
+let view = 'perform', events = [];
+let active = new Set(ALL_TAGS);
+
 
 function updateHeader(){
   document.getElementById('y-lbl').textContent=yr;
