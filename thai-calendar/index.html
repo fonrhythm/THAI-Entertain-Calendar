@@ -275,8 +275,12 @@ const SHEET_ID = '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU';
 const CSV_URL = `https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}`;
 const STAT_TYPES=['站台活动','剧集宣传','舞台演出','其他'];
 
-let yr=2026,mo=5,view='perform',events=[];
-let active=new Set(ALL_TAGS);
+const _now = new Date();
+let yr = _now.getFullYear();
+let mo = _now.getMonth() + 1; 
+let view = 'perform', events = [];
+let active = new Set(ALL_TAGS);
+
 
 function updateHeader(){document.getElementById('y-lbl').textContent=yr;document.getElementById('m-cn').textContent=CN_M[mo-1];document.getElementById('m-en').textContent=EN_M[mo-1]}
 function changeMonth(d){mo+=d;if(mo>12){mo=1;yr++}if(mo<1){mo=12;yr--}updateHeader();render()}
