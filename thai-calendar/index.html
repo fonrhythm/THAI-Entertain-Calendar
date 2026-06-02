@@ -95,10 +95,9 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
 .more:hover{color:var(--text)}
 .coming-soon-wrap{display:flex;justify-content:center;padding:12px 0 28px}
-.coming-soon-badge{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 18px 7px 14px;font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:default;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:border-color .2s,color .2s}
-.coming-soon-badge:hover{border-color:#c9b8a8;color:var(--sub)}
-.coming-soon-badge .cs-dot{width:5px;height:5px;border-radius:50%;background:var(--border);animation:cs-pulse 2.4s ease-in-out infinite}
-@keyframes cs-pulse{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+.coming-soon-badge{display:inline-flex;align-items:center;font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;transition:color .2s}
+.coming-soon-badge:hover{color:var(--text)}
+.coming-soon-badge .cs-dot{display:none}@keyframes cs-pulse{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;color:#fff;border-radius:10px;padding:11px 18px;font-size:12px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .25s,transform .25s;z-index:999;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
@@ -218,7 +217,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
       </div>
       <div class="cal-grid" id="grid"></div>
     </div>
-    <div class="coming-soon-wrap"><span class="coming-soon-badge"><span class="cs-dot"></span>Coming Soon</span></div>
+    <div class="coming-soon-wrap"><span class="coming-soon-badge"><span class="cs-dot"></span>Contact Me</span></div>
   </div>
 </div>
 
