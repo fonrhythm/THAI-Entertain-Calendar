@@ -68,8 +68,8 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .stat:last-child{border-right:none}
 .stat-n{font-size:26px;font-weight:700;font-family:'Lato',sans-serif;line-height:1}
 .stat-l{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.3px}
-.cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:0px}
-.dow-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:10px solid var(--border-soft)}
+.cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:32px}
+.dow-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--border-soft)}
 .dow{text-align:center;padding:8px 0;font-size:10px;font-weight:500;letter-spacing:1.5px;color:var(--muted);border-right:1px solid var(--border-soft);overflow:hidden}
 .dow:last-child{border-right:none}
 .dow.sun{color:#c0524e}.dow.sat{color:#5E7B9B}
@@ -94,7 +94,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.cancelled::after{content:'已取消';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none}
 .more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
 .more:hover{color:var(--text)}
-.coming-soon-wrap{display:flex;justify-content:center;align-items:center;padding:24px 0}
+.coming-soon-wrap{display:flex;justify-content:center;padding:10px 0 10px}
 .coming-soon-badge{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 18px;font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:border-color .2s,color .2s}
 .coming-soon-badge:hover{border-color:#c9b8a8;color:var(--sub)}
 .coming-soon-badge .cs-dot{display:none}
@@ -207,7 +207,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 
 <div class="page-content" id="page-content">
   <div class="wrap" style="flex:1;padding-top:16px">
-    <div class="stats" style="margin:16px 0 0">
+    <div class="stats" style="margin:16px 0 12px">
       <div class="stat"><div class="stat-n" id="s-0">—</div><div class="stat-l">站台活动</div></div>
       <div class="stat"><div class="stat-n" id="s-1">—</div><div class="stat-l">剧集宣传</div></div>
       <div class="stat"><div class="stat-n" id="s-2">—</div><div class="stat-l">舞台演出</div></div>
