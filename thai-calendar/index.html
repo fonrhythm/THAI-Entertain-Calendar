@@ -247,13 +247,14 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 </div>
 
 <div class="overlay" id="day-overlay" onclick="if(event.target===this)closeDayModal()">
-  <div class="modal" style="max-height:60vh;display:flex;flex-direction:column">
-    <div class="modal-body" style="padding-bottom:10px">
+<div class="modal" style="max-height:60vh;display:flex;flex-direction:column">
+    <div style="padding:20px 20px 16px;flex-shrink:0;border-bottom:1px solid var(--border-soft);position:relative">
       <button class="modal-x" onclick="closeDayModal()"><i class="ti ti-x"></i></button>
       <div class="modal-name" id="day-modal-title">日期详情</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px" id="day-modal-count"></div>
     </div>
-    <div id="day-events-list" style="overflow-y:auto;padding:0 20px 20px;flex:1"></div>
-  </div>
+    <div id="day-events-list" style="overflow-y:auto;padding:16px 20px 20px;flex:1;-webkit-overflow-scrolling:touch"></div>
+</div>
 </div>
 
 <footer>Copyright &copy; 2026 — All rights reserved by SomenStjerne</footer>
@@ -338,6 +339,7 @@ function render(){
 function openDayModal(day,encEvs){
   const dayEvs=JSON.parse(decodeURIComponent(encEvs));
   document.getElementById('day-modal-title').textContent=`${mo}月${day}日 全部活动`;
+  document.getElementById('day-modal-count').textContent=`共 ${dayEvs.length} 个行程`;
   const prefix=view==='sale'?'[开售] ':'';
   document.getElementById('day-events-list').innerHTML=dayEvs.map(ev=>{
     const enc=btoa(encodeURIComponent(JSON.stringify(ev)));
