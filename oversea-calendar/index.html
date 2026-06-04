@@ -66,7 +66,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .stat:last-child{border-right:none}
 .stat-n{font-size:26px;font-weight:700;font-family:'Lato',sans-serif;line-height:1}
 .stat-l{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.3px}
-.cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:32px}
+.cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:0;border-bottom:10px solid var(--border)}
 .dow-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--border-soft)}
 .dow{text-align:center;padding:8px 0;font-size:10px;font-weight:500;letter-spacing:1.5px;color:var(--muted);border-right:1px solid var(--border-soft);overflow:hidden}
 .dow:last-child{border-right:none}
@@ -197,7 +197,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 
 <div class="page-content" id="page-content">
   <div class="wrap" style="flex:1;padding-top:16px">
-    <div class="stats" style="margin:16px 0 12px">
+    <div class="stats" style="margin:0px 0 12px">
       <div class="stat"><div class="stat-n" id="s-0">—</div><div class="stat-l">品牌活动</div></div>
       <div class="stat"><div class="stat-n" id="s-1">—</div><div class="stat-l">舞台演出</div></div>
       <div class="stat"><div class="stat-n" id="s-2">—</div><div class="stat-l">见面会</div></div>
