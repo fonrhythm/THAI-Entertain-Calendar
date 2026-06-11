@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>注册 — Chob Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf9f7;--surface:#fff;--border:#e8e4de;--border-soft:#f0ece6;
+  --text:#1a1a1a;--sub:#6b6b6b;--muted:#999;--accent:#142b4b;
+}
+body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px;width:100%}
+.site-nav{background:var(--surface);border-bottom:1px solid var(--border-soft);padding:8px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.site-nav-inner{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.site-nav a{font-family:'Lato',sans-serif;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;flex-shrink:0}
+.site-nav a:hover{color:var(--text);background:var(--bg)}
+.sep{color:#bbb;font-size:10px;flex-shrink:0}
+.page{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:400px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card-head{padding:28px 28px 0}
+.card-label{font-family:'Lato',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.card-title{font-family:'Lato',sans-serif;font-size:26px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:6px}
+.card-sub{font-size:13px;color:var(--sub);line-height:1.6}
+.card-body{padding:24px 28px}
+.card-foot{padding:0 28px 24px;display:flex;flex-direction:column;gap:10px}
+.form-group{margin-bottom:16px}
+.form-group:last-child{margin-bottom:0}
+.form-label{display:block;font-size:11px;font-weight:500;color:var(--sub);margin-bottom:6px;letter-spacing:.3px}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);transition:border-color .15s;outline:none}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--muted)}
+.form-input.error{border-color:#e53935}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:opacity .15s,background .15s;text-decoration:none}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover:not(:disabled){opacity:.88}
+.btn-google{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
+.btn-google:hover{background:var(--bg)}
+.divider{display:flex;align-items:center;gap:12px;margin:4px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{font-size:11px;color:var(--muted);white-space:nowrap}
+.alert{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:4px;display:none}
+.alert.show{display:block}
+.alert-error{background:#fff5f5;border:1px solid #ffcdd2;color:#c62828}
+.alert-success{background:#f1f8e9;border:1px solid #c5e1a5;color:#2e7d32}
+.foot-link{text-align:center;font-size:13px;color:var(--sub)}
+.foot-link a{color:var(--accent);text-decoration:none;font-weight:500}
+.foot-link a:hover{text-decoration:underline}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0}
+.spinner-dark{border-color:rgba(0,0,0,.15);border-top-color:var(--accent)}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* 密码强度 */
+.pw-hint{font-size:11px;color:var(--muted);margin-top:5px}
+footer{border-top:1px solid var(--border-soft);padding:14px 0;text-align:center;font-size:10px;color:var(--muted);background:var(--surface)}
+@media(max-width:480px){
+  .wrap{padding:0 16px}
+  .card-head{padding:22px 20px 0}
+  .card-body{padding:20px 20px}
+  .card-foot{padding:0 20px 20px}
+}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="wrap">
+    <div class="site-nav-inner">
+      <a href="/">Chob Calendar</a><span class="sep">›</span>
+      <a href="/china-calendar/">China</a><span class="sep">›</span>
+      <a href="/thai-calendar/">Thailand</a><span class="sep">›</span>
+      <a href="/oversea-calendar/">Oversea</a><span class="sep">›</span>
+      <a href="/About/">About</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-label">Chob Calendar</div>
+      <div class="card-title">创建账号</div>
+      <div class="card-sub">注册后即可使用搜索功能</div>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-error" id="error-msg"></div>
+      <div class="alert alert-success" id="success-msg"></div>
+
+      <div class="form-group">
+        <label class="form-label">昵称（选填）</label>
+        <input class="form-input" type="text" id="displayName" placeholder="你的显示名称" autocomplete="nickname">
+      </div>
+      <div class="form-group">
+        <label class="form-label">电子邮箱</label>
+        <input class="form-input" type="email" id="email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">密码</label>
+        <input class="form-input" type="password" id="password" placeholder="至少 6 位" autocomplete="new-password">
+        <div class="pw-hint">至少 6 个字符</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">确认密码</label>
+        <input class="form-input" type="password" id="password2" placeholder="再次输入密码" autocomplete="new-password">
+      </div>
+    </div>
+    <div class="card-foot">
+      <button class="btn btn-primary" id="register-btn" onclick="handleRegister()">
+        <span id="register-btn-text">注册</span>
+      </button>
+
+      <div class="divider"><span>或</span></div>
+
+      <button class="btn btn-google" id="google-btn" onclick="handleGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:18px;height:18px">
+        使用 Google 账号注册
+      </button>
+
+      <div class="foot-link">已有账号？<a href="/login/">立即登录</a></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Copyright &copy; 2026 — All rights reserved by SomenStjerne</div>
+</footer>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAv4v5B1HXotOABmIcc5TOi3uzqPmLnvNs",
+  authDomain: "chob-calendar.firebaseapp.com",
+  projectId: "chob-calendar",
+  storageBucket: "chob-calendar.firebasestorage.app",
+  messagingSenderId: "629896393980",
+  appId: "1:629896393980:web:d8800df187ba495b895379"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+onAuthStateChanged(auth, user => {
+  if (user) location.href = '/';
+});
+
+function showError(msg){ const e=document.getElementById('error-msg');e.textContent=msg;e.classList.add('show');document.getElementById('success-msg').classList.remove('show')}
+function showSuccess(msg){ const e=document.getElementById('success-msg');e.textContent=msg;e.classList.add('show');document.getElementById('error-msg').classList.remove('show')}
+function hideAlerts(){ document.getElementById('error-msg').classList.remove('show');document.getElementById('success-msg').classList.remove('show')}
+function setLoading(loading){ const btn=document.getElementById('register-btn');const txt=document.getElementById('register-btn-text');btn.disabled=loading;txt.innerHTML=loading?'<span class="spinner"></span>':'注册'}
+function setGoogleLoading(loading){ const btn=document.getElementById('google-btn');btn.disabled=loading;btn.innerHTML=loading?'<span class="spinner spinner-dark"></span> 正在跳转…':'<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:18px;height:18px"> 使用 Google 账号注册'}
+
+function friendlyError(code){
+  const map={'auth/email-already-in-use':'该邮箱已被注册','auth/invalid-email':'邮箱格式不正确','auth/weak-password':'密码太简单，请至少使用 6 个字符','auth/popup-closed-by-user':'登录窗口已关闭，请重试','auth/cancelled-popup-request':''};
+  return map[code]||'注册失败，请重试';
+}
+
+// 创建用户 Firestore 文档
+async function createUserDoc(user) {
+  await setDoc(doc(db, 'users', user.uid), {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName || '',
+    photoURL: user.photoURL || '',
+    plan: 'free',         // free / pro
+    createdAt: serverTimestamp(),
+    proExpiry: null,      // Pro 到期时间
+  }, { merge: true });
+}
+
+window.handleRegister = async function() {
+  hideAlerts();
+  const name = document.getElementById('displayName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const pw = document.getElementById('password').value;
+  const pw2 = document.getElementById('password2').value;
+  if (!email) { showError('请填写邮箱'); return; }
+  if (!pw) { showError('请填写密码'); return; }
+  if (pw.length < 6) { showError('密码至少需要 6 个字符'); return; }
+  if (pw !== pw2) { showError('两次输入的密码不一致'); return; }
+  setLoading(true);
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pw);
+    if (name) await updateProfile(cred.user, { displayName: name });
+    await createUserDoc(cred.user);
+    showSuccess('注册成功，正在跳转…');
+    setTimeout(() => location.href = '/', 1200);
+  } catch(e) {
+    showError(friendlyError(e.code));
+    setLoading(false);
+  }
+};
+
+window.handleGoogle = async function() {
+  hideAlerts();
+  setGoogleLoading(true);
+  try {
+    const cred = await signInWithPopup(auth, provider);
+    await createUserDoc(cred.user);
+    location.href = '/';
+  } catch(e) {
+    const msg = friendlyError(e.code);
+    if (msg) showError(msg);
+    setGoogleLoading(false);
+  }
+};
+
+document.getElementById('password2').addEventListener('keydown', e => {
+  if (e.key === 'Enter') window.handleRegister();
+});
+</script>
+</body>
+</html>
+HTMLEOF
