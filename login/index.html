@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 — Chob Calendar</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+
+  <style>
+    /* --- 1. 全局样式与变量定义 --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    :root {
+      --bg: #faf9f7;          /* 奶油白背景 */
+      --surface: #fff;       /* 卡片白色纯白 */
+      --border: #e8e4de;      /* 边框颜色 */
+      --border-soft: #f0ece6; /* 浅色边框 */
+      --text: #1a1a1a;        /* 主文字 */
+      --sub: #6b6b6b;         /* 副文本 */
+      --muted: #999;          /* 提示置灰文字 */
+      --accent: #142b4b;       /* 品牌深蓝色 */
+    }
+
+    body {
+      font-family: 'Noto Sans SC', 'Lato', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+
+    /* --- 2. 导航栏样式 --- */
+    .site-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 8px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .site-nav a {
+      font-family: 'Lato', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .site-nav a:hover {
+      color: var(--text);
+      background: var(--bg);
+    }
+    .sep {
+      color: #bbb;
+      font-size: 10px;
+      flex-shrink: 0;
+    }
+
+    /* --- 3. 登录卡片布局 --- */
+    .page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .card-head {
+      padding: 28px 28px 0;
+    }
+    .card-label {
+      font-family: 'Lato', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-family: 'Lato', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .card-sub {
+      font-size: 13px;
+      color: var(--sub);
+      line-height: 1.6;
+    }
+    .card-body {
+      padding: 24px 28px;
+    }
+    .card-foot {
+      padding: 0 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* --- 4. 表单与输入框 --- */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--sub);
+      margin-bottom: 6px;
+      letter-spacing: .3px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+      transition: border-color .15s;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--accent);
+    }
+    .form-input::placeholder {
+      color: var(--muted);
+    }
+
+    /* --- 5. 按钮与分割线 --- */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: opacity .15s, background .15s;
+      text-decoration: none;
+    }
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover:not(:disabled) {
+      opacity: .88;
+    }
+    .btn-google {
+      background: var(--surface);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+    .btn-google:hover {
+      background: var(--bg);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider span {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* --- 6. 提示弹窗与加载动画 --- */
+    .alert {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 4px;
+      display: none;
+    }
+    .alert.show {
+      display: block;
+    }
+    .alert-error {
+      background: #fff5f5;
+      border: 1px solid #ffcdd2;
+      color: #c62828;
+    }
+    .alert-success {
+      background: #f1f8e9;
+      border: 1px solid #c5e1a5;
+      color: #2e7d32;
+    }
+
+    .foot-link {
+      text-align: center;
+      font-size: 13px;
+      color: var(--sub);
+    }
+    .foot-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .foot-link a:hover {
+      text-decoration: underline;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      flex-shrink: 0;
+    }
+    .spinner-dark {
+      border-color: rgba(0,0,0,.15);
+      border-top-color: var(--accent);
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    footer {
+      border-top: 1px solid var(--border-soft);
+      padding: 14px 0;
+      text-align: center;
+      font-size: 10px;
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    /* 移动端适配 */
+    @media(max-width: 480px){
+      .wrap { padding: 0 16px; }
+      .card-head { padding: 22px 20px 0; }
+      .card-body { padding: 20px 20px; }
+      .card-foot { padding: 0 20px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="wrap">
+      <div class="site-nav-inner">
+        <a href="/">Chob Calendar</a><span class="sep">›</span>
+        <a href="/china-calendar/">China</a><span class="sep">›</span>
+        <a href="/thai-calendar/">Thailand</a><span class="sep">›</span>
+        <a href="/oversea-calendar/">Oversea</a><span class="sep">›</span>
+        <a href="/About/">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-label">Chob Calendar</div>
+        <div class="card-title">欢迎回来</div>
+        <div class="card-sub">登录后即可使用搜索功能</div>
+      </div>
+      
+      <form id="login-form" onsubmit="return false;">
+        <div class="card-body">
+          <div class="alert alert-error" id="error-msg"></div>
+          <div class="alert alert-success" id="success-msg"></div>
+          
+          <div class="form-group">
+            <label class="form-label">电子邮箱</label>
+            <input class="form-input" type="email" id="email" placeholder="your@email.com" autocomplete="email" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">密码</label>
+            <input class="form-input" type="password" id="password" placeholder="请输入密码" autocomplete="current-password" required>
+          </div>
+        </div>
+        
+        <div class="card-foot">
+          <button type="submit" class="btn btn-primary" id="login-btn">
+            <span id="login-btn-text">登录</span>
+          </button>
+          
+          <div class="divider"><span>或</span></div>
+          
+          <button type="button" class="btn btn-google" id="google-btn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:18px;height:18px">
+            使用 Google 账号登录
+          </button>
+          
+          <div class="foot-link">还没有账号？<a href="/register/">立即注册</a></div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">Copyright &copy; 2026 — All rights reserved by SomenStjerne</div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    // Firebase 配置信息
+    const firebaseConfig = {
+      apiKey: "AIzaSyAv4v5B1HXotOABmIcc5TOi3uzqPmLnvNs",
+      authDomain: "chob-calendar.firebaseapp.com",
+      projectId: "chob-calendar",
+      storageBucket: "chob-calendar.firebasestorage.app",
+      messagingSenderId: "629896393980",
+      appId: "1:629896393980:web:d8800df187ba495b895379"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // 提示框控制工具
+    function showError(msg) {
+      const e = document.getElementById('error-msg');
+      e.textContent = msg;
+      e.classList.add('show');
+      document.getElementById('success-msg').classList.remove('show');
+    }
+
+    function showSuccess(msg) {
+      const e = document.getElementById('success-msg');
+      e.textContent = msg;
+      e.classList.add('show');
+      document.getElementById('error-msg').classList.remove('show');
+    }
+
+    function hideAlerts() {
+      document.getElementById('error-msg').classList.remove('show');
+      document.getElementById('success-msg').classList.remove('show');
+    }
+
+    // 状态加载控制
+    function setLoading(loading) {
+      const btn = document.getElementById('login-btn');
+      const txt = document.getElementById('login-btn-text');
+      btn.disabled = loading;
+      txt.innerHTML = loading ? '<span class="spinner"></span>' : '登录';
+    }
+
+    function setGoogleLoading(loading) {
+      const btn = document.getElementById('google-btn');
+      btn.disabled = loading;
+      btn.innerHTML = loading 
+        ? '<span class="spinner spinner-dark"></span> 正在跳转…' 
+        : '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:18px;height:18px"> 使用 Google 账号登录';
+    }
+
+    // Firebase 错误代码汉化对照表
+    function friendlyError(code) {
+      const map = {
+        'auth/invalid-credential': '账号或密码错误，请重试',
+        'auth/invalid-email': '邮箱格式不正确',
+        'auth/user-disabled': '该账号已被禁用',
+        'auth/popup-closed-by-user': '登录窗口已关闭，请重试',
+        'auth/cancelled-popup-request': ''
+      };
+      return map[code] || '登录失败，请重试';
+    }
+
+    // 账号密码登录核心处理
+    async function handleLogin() {
+      hideAlerts();
+      const email = document.getElementById('email').value.trim();
+      const pw = document.getElementById('password').value;
+
+      if (!email) { showError('请填写邮箱'); return; }
+      if (!pw) { showError('请填写密码'); return; }
+
+      setLoading(true);
+      try {
+        await signInWithEmailAndPassword(auth, email, pw);
+        showSuccess('登录成功，正在跳转…');
+        setTimeout(() => location.href = '/', 1000);
+      } catch(e) {
+        showError(friendlyError(e.code));
+        setLoading(false);
+      }
+    }
+
+    // Google 快捷登录核心处理
+    async function handleGoogle() {
+      hideAlerts();
+      setGoogleLoading(true);
+      try {
+        await signInWithPopup(auth, provider);
+        location.href = '/';
+      } catch(e) {
+        const msg = friendlyError(e.code);
+        if (msg) showError(msg);
+        setGoogleLoading(false);
+      }
+    }
+
+    // 绑定表单提交与点击事件
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleLogin();
+    });
+
+    document.getElementById('google-btn').addEventListener('click', handleGoogle);
+  </script>
+</body>
+</html>
