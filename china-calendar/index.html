@@ -262,7 +262,7 @@ const CAT={
 };
 const ALL_TAGS=['pop','indie','singer','bl','gl','artist'];
 const SHEET_ID='1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA';
-const CSV_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+const CSV_URL=`https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}`;
 
 const evStore=new Map();
 let evStoreIdx=0;
@@ -428,13 +428,20 @@ async function loadFromSheets(){
   setSyncState('busy');
   try{
     const r=await fetch(CSV_URL);if(!r.ok)throw new Error(`HTTP ${r.status}`);
-    const csv=await r.text();
-    events=Papa.parse(csv,{header:true,skipEmptyLines:true}).data
-      .map(row=>{const obj={};Object.keys(row).forEach(k=>{obj[k.trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():row[k]});return{...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()}})
-      .filter(o=>o.date||o.sale_date);
+    const rows=await r.json();
+    events=rows.map(row=>{
+      const obj={};
+      Object.keys(row).forEach(k=>{obj[k.trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():String(row[k]??'')});
+      return{...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()};
+    }).filter(o=>o.date||o.sale_date);
     setSyncState('ok');
-  }catch(e){console.error('Sheets load failed:',e);setSyncState('err')}
-  render();
+    render();
+    requestAnimationFrame(()=>setContentOffset());
+  }catch(e){
+    console.error('Load failed:',e);
+    setSyncState('err');
+    render();
+  }
 }
 
 updateHeader();
