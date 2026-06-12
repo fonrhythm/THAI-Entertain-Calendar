@@ -262,7 +262,8 @@ const CAT={
 };
 const ALL_TAGS=['pop','indie','singer','bl','gl','artist'];
 const SHEET_ID='1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA';
-const CSV_URL=`https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}`&origin=chobcalendar.pages.dev`;
+//  修正后的代码（去掉多余的双引号，确保整段 URL 包裹在同一个反引号中）
+const CSV_URL=`https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}&origin=chobcalendar.pages.dev`;
 
 const evStore=new Map();
 let evStoreIdx=0;
