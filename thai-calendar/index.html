@@ -275,7 +275,8 @@ const CAT={
 };
 const ALL_TAGS=['bl','gl','band','singer','group','actor','other'];
 const SHEET_ID = '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU';
-const CSV_URL = `https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}&origin=chobcalendar.pages.dev`;
+const SECRET_KEY = 'TheNorthRemembers';
+const BASE_CSV_URL = `https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}&origin=chobcalendar.pages.dev&key=${SECRET_KEY}`;
 const STAT_TYPES=['站台活动','剧集宣传','舞台演出','其他'];
 
 const _now = new Date();
@@ -283,10 +284,17 @@ let yr = _now.getFullYear();
 let mo = _now.getMonth() + 1; 
 let view = 'perform', events = [];
 let active = new Set(ALL_TAGS);
+const loadedRanges = []; // [{start:'yyyy-mm-dd', end:'yyyy-mm-dd'}]
+let loadSeq = 0;
 
 
 function updateHeader(){document.getElementById('y-lbl').textContent=yr;document.getElementById('m-cn').textContent=CN_M[mo-1];document.getElementById('m-en').textContent=EN_M[mo-1]}
-function changeMonth(d){mo+=d;if(mo>12){mo=1;yr++}if(mo<1){mo=12;yr--}updateHeader();render()}
+function changeMonth(d){
+  mo+=d;if(mo>12){mo=1;yr++}if(mo<1){mo=12;yr--}
+  updateHeader();
+  render();
+  ensureMonthLoaded(yr,mo);
+}
 function setView(btn,v){view=v;document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render()}
 function toggleTag(btn,t){
   if(active.size===ALL_TAGS.length){active=new Set([t])}
@@ -418,29 +426,64 @@ function setContentOffset(){
   if(shell&&content)content.style.paddingTop=shell.offsetHeight+'px';
 }
 
-async function loadFromSheets() {
+function fmtYMD(d){
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+function rangeCovered(startStr,endStr){
+  return loadedRanges.some(r=>r.start<=startStr&&r.end>=endStr);
+}
+
+function mergeEvents(newRows){
+  const seen=new Set(events.map(e=>JSON.stringify(e)));
+  newRows.forEach(row=>{
+    const key=JSON.stringify(row);
+    if(!seen.has(key)){events.push(row);seen.add(key)}
+  });
+}
+
+async function fetchRange(startStr,endStr){
+  const url=`${BASE_CSV_URL}&start=${startStr}&end=${endStr}`;
+  const r=await fetch(url);
+  if(!r.ok) throw new Error(`HTTP ${r.status}`);
+  const data=await r.json();
+  if(data && data.error) throw new Error(data.error);
+  if(!Array.isArray(data)) throw new Error('unexpected response');
+  return data.map(row=>{
+    const obj={};
+    Object.keys(row).forEach(k=>{
+      obj[k.trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():String(row[k]??'');
+    });
+    return {...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()};
+  }).filter(o=>o.date||o.sale_date);
+}
+
+// 确保当前所在月份（含前后各1个月缓冲）已加载数据，未加载则补拉
+async function ensureMonthLoaded(y,m){
+  const from=new Date(y,m-2,1);
+  const to=new Date(y,m+1,0);
+  const startStr=fmtYMD(from),endStr=fmtYMD(to);
+  if(rangeCovered(startStr,endStr))return;
+  const mySeq=++loadSeq;
   setSyncState('busy');
-  try {
-    const r = await fetch(CSV_URL);
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const rows = await r.json();
-    events = rows
-      .map(row => {
-        const obj = {};
-        Object.keys(row).forEach(k => {
-          obj[k.trim().toLowerCase()] = typeof row[k] === 'string' ? row[k].trim() : String(row[k] ?? '');
-        });
-        return { ...obj, category: (obj.category || '').toLowerCase(), status: (obj.status || '').toLowerCase() };
-      })
-      .filter(o => o.date || o.sale_date);
+  try{
+    const rows=await fetchRange(startStr,endStr);
+    if(mySeq!==loadSeq)return; // 有更新的请求已经发出，丢弃过期结果
+    mergeEvents(rows);
+    loadedRanges.push({start:startStr,end:endStr});
     setSyncState('ok');
     render();
-    requestAnimationFrame(() => setContentOffset());
-  } catch (e) {
-    console.error('Load failed:', e);
-    setSyncState('err');
+    requestAnimationFrame(()=>setContentOffset());
+  }catch(e){
+    console.error('Load failed:',e);
+    if(mySeq===loadSeq)setSyncState('err');
     render();
   }
+}
+
+async function loadFromSheets(){
+  await ensureMonthLoaded(yr,mo);
 }
 
 updateHeader();
