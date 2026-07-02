@@ -487,7 +487,7 @@ async function loadFromSheets(){
 }
 
 updateHeader();
-loadFromSheets();
+  
 window.addEventListener('resize',()=>{setContentOffset();render()});
 // 多次尝试 offset 计算，确保字体和图标加载完毕后也正确
 requestAnimationFrame(()=>{
