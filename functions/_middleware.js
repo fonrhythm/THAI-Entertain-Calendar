@@ -1,11 +1,9 @@
-// 需要拦截的可疑IP列表
 const BLOCKED_IPS = [
   "165.154.1.81",
   "101.36.123.60"
 ];
 
-// 需要拦截的云服务商 ASN(UCLOUD HK)
-const BLOCKED_ASN = [135377];
+const BLOCKED_ASN = [135377]; // UCLOUD HK,之前查到这两个IP都属于这家
 
 export async function onRequest(context) {
   const { request, next } = context;
