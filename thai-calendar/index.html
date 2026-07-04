@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0VZ4MGL1YE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0VZ4MGL1YE');
+</script>
+  
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -275,7 +286,7 @@ const CAT={
 };
 const ALL_TAGS=['bl','gl','band','singer','group','actor','other'];
 const SHEET_ID = '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU';
-const SECRET_KEY = 'TheNorthRemembers';
+const SECRET_KEY = 'thenorthremenbersandhighgardengrowingstrong';
 const BASE_CSV_URL = `https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}&origin=chobcalendar.pages.dev&key=${SECRET_KEY}`;
 const STAT_TYPES=['站台活动','剧集宣传','舞台演出','其他'];
 
