@@ -397,6 +397,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
             font-weight: bold;
         }
 
+/* 1. 先补齐并接上你原本就有的这两个样式 */
         .platform-handle {
             font-size: 12px;
             font-weight: 600;
@@ -412,63 +413,196 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
             font-weight: 500;
         }
 
-:root {
-        --primary: #800020;        /* 暗红色/勃艮第红 */
-        --primary-light: #fdf5f6;  /* 极浅暗红 */
-        --warning: #8B4513;        /* 深棕色/马鞍棕 */
-        --warning-light: #fbf7f4;  /* 浅暖棕色背景 */
-        --text-main: #2c1e1a;      /* 极深棕色 */
-        --text-sub: #6e5e5a;       /* 暖深灰棕 */
-        --bg-card: #ffffff;        /* 白色卡片主体 */
-        --border-color: #e8dedb;   /* 淡淡的暖色调边框 */
-    }
+        /* 2. 核心颜色全局变量 */
+        :root {
+            --primary: #800020;        /* 暗红色/勃艮第红 */
+            --primary-light: #fdf5f6;  /* 极浅暗红 */
+            --warning: #8B4513;        /* 深棕色/马鞍棕 */
+            --warning-light: #fbf7f4;  /* 浅暖棕色背景 */
+            --text-main: #2c1e1a;      /* 极深棕色 */
+            --text-sub: #6e5e5a;       /* 暖深灰棕 */
+            --bg-card: #ffffff;        /* 白色卡片主体 */
+            --border-color: #e8dedb;   /* 淡淡的暖色调边框 */
+        }
 
-    <div class="chob-notice-container">
-    <div class="status-banner">
-        <span class="status-icon">⚠️</span>
-        <h2 class="status-title">日历数据同步暂时关闭通知</h2>
-    </div>
+        /* 3. 补齐公告所需的全部具体美化样式 */
+        .chob-notice-container {
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(128, 0, 32, 0.04);
+            padding: 32px;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
 
-    <div class="update-box">
-        <h3 class="update-title">🔧 网页重新调整升级中</h3>
-        <p class="update-text">
-            由于升级期间涉及日程数据库的同步校验，为了保证使用体验，我决定暂时关闭网页行程同步。预计将关闭 <span class="update-highlight">1 ~ 2 日</span>。
-        </p>
-        <h3 class="update-title" style="font-size: 14px; margin-bottom: 8px;"> 本次升级主要解决两大功能：</h3>
-        <ul class="feature-list">
-            <li>增加 <strong>「行程图」 </strong> 展示 </li>
-            <li>增加 <strong>「搜索功能」</strong>（快速查找特定艺人或活动）</li>
-            <li>增加 <strong>「登录」与「收藏」</strong>功能（方便定制你的专属追星日程）</li>
-            <li>Maybe 或许会增加 </strong>“微信小程序” </strong>的探索，这样会更加方便大家使用，但只是maybe </li>
-        </ul>
-    </div>
+        .status-banner {
+            background-color: var(--warning-light);
+            border-left: 4px solid var(--warning);
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    <div class="letter-section">
-        <h3 class="letter-title"> 网页管理员ChobJaii想说的话</h3>
-        <div class="letter-content">
-            <p style="margin-top: 0;">
-                大家好，我是网页的管理员 <strong>ChobJaii</strong>。我建立这个网站的初衷，是希望能为大家线下追星提供一些实用的便利。
+        .status-icon {
+            font-size: 20px;
+        }
+
+        .status-title {
+            color: var(--warning);
+            font-weight: 600;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .update-box {
+            background-color: #faf8f7;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .update-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .update-text {
+            font-size: 13.5px;
+            color: var(--text-sub);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .update-highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .feature-list {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 13.5px;
+            color: var(--text-main);
+        }
+
+        .feature-list li {
+            margin-bottom: 8px;
+        }
+
+        .letter-section {
+            border-top: 1px dashed var(--border-color);
+            padding-top: 24px;
+        }
+
+        .letter-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 14px;
+        }
+
+        .letter-content {
+            font-size: 13.5px;
+            color: var(--text-sub);
+            line-height: 1.75;
+            text-align: justify;
+        }
+
+        .reason-box {
+            background-color: #fdfbfb;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-size: 13px;
+            border: 1px solid #f5edea;
+        }
+
+        .reason-box ol {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .reason-box li {
+            margin-bottom: 6px;
+            color: var(--text-sub);
+        }
+
+        .reason-box li::marker {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .cooperate-call {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-weight: 500;
+            font-size: 13px;
+            border: 1px solid rgba(128, 0, 32, 0.1);
+        }
+
+    </style> <div class="chob-notice-container">
+        <div class="status-banner">
+            <span class="status-icon">⚠️</span>
+            <h2 class="status-title">日历数据同步暂时关闭通知</h2>
+        </div>
+
+        <div class="update-box">
+            <h3 class="update-title">🔧 网页重新调整升级中</h3>
+            <p class="update-text">
+                由于升级期间涉及日程数据库的同步校验，为了保证使用体验，我决定暂时关闭网页行程同步。预计将关闭 <span class="update-highlight">1 ~ 2 日</span>。
             </p>
-            <p>
-                相信细心的小伙伴已经发现，目前的行程更新有时会不太及时。这主要是因为：
-            </p>
-            
-            <div class="reason-box">
-                <ol>
-                    <li>目前我主要关注艺人经纪公司的官方行程，很容易漏掉一些提前公布的商务、代言或其他活动。</li>
-                    <li>由于个人的时间和精力关系，目前很难做到全天候、高细节地实时同步。</li>
-                </ol>
-            </div>
+            <h3 class="update-title" style="font-size: 14px; margin-bottom: 8px;">本次升级主要解决两大功能：</h3>
+            <ul class="feature-list">
+                <li>增加 <strong>「行程图」</strong> 展示</li>
+                <li>增加 <strong>「搜索功能」</strong>（快速查找特定艺人或活动）</li>
+                <li>增加 <strong>「登录」与「收藏」</strong>功能（方便定制你的专属追星日程）</li>
+                <li>Maybe 或许会增加 <strong>“微信小程序”</strong> 的探索，这样会更加方便大家使用，但只是maybe</li>
+            </ul>
+        </div>
 
-            <p>
-                一个人负责整个网站，难免会有疏忽和遗漏。为了带给大家更准确、好用的体验，我真诚地邀请各家粉丝或站子一起展开合作，<strong>协同更新</strong>！
-            </p>
+        <div class="letter-section">
+            <h3 class="letter-title">💌 网页管理员 ChobJaii 想说的话</h3>
+            <div class="letter-content">
+                <p style="margin-top: 0;">
+                    大家好，我是网页的管理员 <strong>ChobJaii</strong>。我建立这个网站的初衷，是希望能为大家线下追星提供一些实用的便利。
+                </p>
+                <p>
+                    相信细心的小伙伴已经发现，目前的行程更新有时会不太及时。这主要是因为：
+                </p>
+                
+                <div class="reason-box">
+                    <ol>
+                        <li>目前我主要关注艺人经纪公司的官方行程，很容易漏掉一些提前公布的商务、代言或其他活动。</li>
+                        <li>由于个人的时间和精力关系，目前很难做到全天候、高细节地实时同步。</li>
+                    </ol>
+                </div>
 
-            <div class="cooperate-call">
-                🤝 <strong>协同共建邀请：</strong>如果你愿意和我一起建设这个行程网站，或是有更多问题，欢迎通过下方的账号随时与我联系。
+                <p>
+                    一个人负责整个网站，难免会有疏忽和遗漏。为了带给大家更准确、好用的体验，我真诚地邀请各家粉丝或站子一起展开合作，<strong>协同更新</strong>！
+                </p>
+
+                <div class="cooperate-call">
+                    🤝 <strong>协同共建邀请：</strong>如果你愿意和我一起建设这个行程网站，或是有更多问题，欢迎通过下方的账号随时与我联系。
+                </div>
             </div>
         </div>
-    </div>
+    
 
     <div class="contact-grid">
         <div class="contact-card">
