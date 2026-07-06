@@ -1,35 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0VZ4MGL1YE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-0VZ4MGL1YE');
-</script>
-  
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thailand Calendar — Chob Calendar</title>
+<title>Oversea Calendar — Chob Calendar</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#faf9f7;--surface:#fff;--border:#e8e4de;--border-soft:#f0ece6;
-  --text:#1a1a1a;--sub:#6b6b6b;--muted:#999;
-  --c-bl:#142b4b;--t-bl:#fff;
-  --c-gl:#d7ccba;--t-gl:#7a5c3a;
-  --c-band:#2b4779;--t-band:#fff;
-  --c-singer:#c4b59c;--t-singer:#fff;
-  --c-group:#6e8dbb;--t-group:#fff;
-  --c-actor:#d0c5af;--t-actor:#fff;
-  --c-other:#9db1ca;--t-other:#fff;
+  --bg:#faf9f7;--surface:#fff;--border:#e6e2dc;--border-soft:#f1eee8;
+  --text:#1a1a1a;--sub:#666;--muted:#8a8a8a;
+  --c-bl:#442D1C;--t-bl:#fff;
+  --c-gl:#743014;--t-gl:#fff;
+  --c-band:#464336;--t-band:#fff;
+  --c-singer:#674b3f;--t-singer:#fff;
+  --c-group:#907C6C;--t-group:#fff;
+  --c-actor:#C9BEAD;--t-actor:#3a2a1e;
+  --c-other:#a27d60;--t-other:#fff;
 }
 body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .wrap{max-width:1100px;margin:0 auto;padding:0 24px;width:100%}
@@ -38,7 +27,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .site-nav-inner{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .site-nav a{font-family:'Lato',sans-serif;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;flex-shrink:0}
 .site-nav a:hover{color:var(--text);background:var(--bg)}
-.site-nav a.active{color: var(--text);font-weight: 700;}
+.site-nav a.active{color:var(--text);font-weight:700}
 .sep{color:#bbb;font-size:10px;flex-shrink:0}
 .header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 0 16px}
 .header-inner{display:flex;align-items:center}
@@ -58,15 +47,13 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .pills{display:flex;gap:5px;flex-wrap:wrap;flex:1}
 .pill{border:1.5px solid transparent;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .15s;white-space:nowrap;opacity:.42}
 .pill.on{opacity:1;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.pill .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:rgba(0,0,0,0.18)}
+.pill .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .p-bl{background:var(--c-bl);color:var(--t-bl);border-color:var(--c-bl)}
-.p-bl .dot{background:rgba(0,0,0,0.45)}
 .p-gl{background:var(--c-gl);color:var(--t-gl);border-color:var(--c-gl)}
 .p-band{background:var(--c-band);color:var(--t-band);border-color:var(--c-band)}
-.p-band .dot{background:rgba(0,0,0,0.45)}
 .p-singer{background:var(--c-singer);color:var(--t-singer);border-color:var(--c-singer)}
 .p-group{background:var(--c-group);color:var(--t-group);border-color:var(--c-group)}
-.p-actor{background:var(--c-actor);color:var(--t-actor);border-color:var(--c-actor)}
+.p-actor{background:var(--c-actor);color:var(--t-actor);border-color:#b0a090}
 .p-other{background:var(--c-other);color:var(--t-other);border-color:var(--c-other)}
 .sync{margin-left:auto;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px;flex-shrink:0}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:#4caf50;flex-shrink:0}
@@ -75,7 +62,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .page-content{padding-top:0}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.stat{padding:13px 16px;text-align:center;border-right:1px solid var(--border-soft)}
+.stat{padding:8px 16px;text-align:center;border-right:1px solid var(--border-soft)}
 .stat:last-child{border-right:none}
 .stat-n{font-size:26px;font-weight:700;font-family:'Lato',sans-serif;line-height:1}
 .stat-l{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.3px}
@@ -105,7 +92,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.cancelled::after{content:'已取消';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none}
 .more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
 .more:hover{color:var(--text)}
-.coming-soon-wrap{display:flex;justify-content:center;padding:10px 0 10px}
+.coming-soon-wrap{display:flex;justify-content:center;align-items:center;padding:24px 0}
 .coming-soon-badge{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 18px;font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:border-color .2s,color .2s}
 .coming-soon-badge:hover{border-color:#c9b8a8;color:var(--sub)}
 .coming-soon-badge .cs-dot{display:none}
@@ -164,32 +151,26 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
   <div class="site-nav">
     <div class="wrap">
       <div class="site-nav-inner">
-  <a href="/">Chob Calendar</a><span class="sep">›</span>
-  <a href="/china-calendar/">China</a><span class="sep">›</span>
-  <a href="/thai-calendar/" class="active">Thailand</a><span class="sep">›</span>
-  <a href="/oversea-calendar/">Oversea</a>
-     <span class="sep">›</span>
-  <a href="/About/">About</a>   
-</div>
+        <a href="/">Chob</a><span class="sep">›</span>
+        <a href="/china-calendar/">China</a><span class="sep">›</span>
+        <a href="/thai-calendar/">Thailand</a><span class="sep">›</span>
+        <a href="/oversea-calendar/" class="active">Oversea</a><span class="sep">›</span>
+        <a href="/About/">About</a>
+      </div>
     </div>
   </div>
-
   <div class="header">
     <div class="wrap">
       <div class="header-inner">
         <button class="nav-btn" onclick="changeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
         <div class="month-block">
           <div class="year-lbl" id="y-lbl">2026</div>
-          <div class="month-row">
-            <span class="month-cn" id="m-cn">五月</span>
-            <span class="month-en" id="m-en">May</span>
-          </div>
+          <div class="month-row"><span class="month-cn" id="m-cn">五月</span><span class="month-en" id="m-en">May</span></div>
         </div>
         <button class="nav-btn" onclick="changeMonth(1)"><i class="ti ti-chevron-right"></i></button>
       </div>
     </div>
   </div>
-
   <div class="toolbar">
     <div class="wrap">
       <div class="toolbar-inner">
@@ -199,17 +180,17 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
         </div>
         <div class="tb-div"></div>
         <div class="pills">
-          <button class="pill p-bl on" onclick="toggleTag(this,'bl')"><span class="dot"></span>泰腐</button>
-          <button class="pill p-gl on" onclick="toggleTag(this,'gl')"><span class="dot"></span>泰百</button>
-          <button class="pill p-band on" onclick="toggleTag(this,'band')"><span class="dot"></span>乐队</button>
-          <button class="pill p-singer on" onclick="toggleTag(this,'singer')"><span class="dot"></span>歌手</button>
-          <button class="pill p-group on" onclick="toggleTag(this,'group')"><span class="dot"></span>男女团</button>
-          <button class="pill p-actor on" onclick="toggleTag(this,'actor')"><span class="dot"></span>演员</button>
-          <button class="pill p-other on" onclick="toggleTag(this,'other')"><span class="dot"></span>其他艺人</button>
+          <button class="pill p-bl on" onclick="toggleTag(this,'bl')"><span class="dot" style="background:rgba(255,255,255,.4)"></span>泰腐</button>
+          <button class="pill p-gl on" onclick="toggleTag(this,'gl')"><span class="dot" style="background:rgba(255,255,255,.4)"></span>泰百</button>
+          <button class="pill p-band on" onclick="toggleTag(this,'band')"><span class="dot" style="background:rgba(255,255,255,.4)"></span>乐队</button>
+          <button class="pill p-singer on" onclick="toggleTag(this,'singer')"><span class="dot" style="background:rgba(255,255,255,.4)"></span>歌手</button>
+          <button class="pill p-group on" onclick="toggleTag(this,'group')"><span class="dot" style="background:rgba(255,255,255,.4)"></span>男女团</button>
+          <button class="pill p-actor on" onclick="toggleTag(this,'actor')"><span class="dot" style="background:#907C6C"></span>演员</button>
+          <button class="pill p-other on" onclick="toggleTag(this,'other')"><span class="dot" style="background:rgba(255,255,255,.4)"></span>其他艺人</button>
         </div>
         <div class="sync">
           <div class="sync-dot busy" id="sync-dot"></div>
-          <span id="sync-txt">同步中…</span>
+          <span id="sync-txt">载入中…</span>
         </div>
       </div>
     </div>
@@ -218,421 +199,14 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 
 <div class="page-content" id="page-content">
   <div class="wrap" style="flex:1;padding-top:16px">
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网站维护与共建公告</title>
-    <style>
-        :root {
-            --primary: #6c5ce7;
-            --primary-light: #f1f0fe;
-            --warning: #ff9f43;
-            --warning-light: #fff5eb;
-            --text-main: #2d3436;
-            --text-sub: #636e72;
-            --bg-card: #ffffff;
-            --border-color: #dfe6e9;
-        }
-
-        .chob-notice-container {
-            max-width: 600px;
-            width: 100%;
-            margin: 20px auto;
-            background: var(--bg-card);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            padding: 32px;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
-        /* 顶部警告横幅 */
-        .status-banner {
-            background-color: var(--warning-light);
-            border-left: 4px solid var(--warning);
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .status-icon {
-            font-size: 20px;
-        }
-
-        .status-title {
-            color: #d35400;
-            font-weight: 600;
-            font-size: 15px;
-            margin: 0;
-        }
-
-        /* 升级内容区域 */
-        .update-box {
-            background-color: #fafafa;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-
-        .update-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: var(--text-main);
-        }
-
-        .update-text {
-            font-size: 13.5px;
-            color: var(--text-sub);
-            margin-bottom: 16px;
-            line-height: 1.7;
-        }
-
-        .update-highlight {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .feature-list {
-            margin: 0;
-            padding-left: 20px;
-            font-size: 13.5px;
-            color: var(--text-main);
-        }
-
-        .feature-list li {
-            margin-bottom: 8px;
-        }
-
-        /* 管理员寄语区域 */
-        .letter-section {
-            border-top: 1px dashed var(--border-color);
-            padding-top: 24px;
-        }
-
-        .letter-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-top: 0;
-            margin-bottom: 14px;
-        }
-
-        .letter-content {
-            font-size: 13.5px;
-            color: var(--text-sub);
-            line-height: 1.75;
-            text-align: justify;
-        }
-
-        .reason-box {
-            background-color: #f9f9fb;
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin: 12px 0;
-            font-size: 13px;
-        }
-
-        .reason-box ol {
-            margin: 0;
-            padding-left: 18px;
-        }
-
-        .reason-box li {
-            margin-bottom: 6px;
-            color: var(--text-sub);
-        }
-
-        .reason-box li::marker {
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .cooperate-call {
-            background-color: var(--primary-light);
-            color: var(--primary);
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-top: 16px;
-            font-weight: 500;
-            font-size: 13px;
-            border: 1px solid rgba(108, 92, 231, 0.15);
-        }
-
-        /* 社交媒体联系卡片（使用 table 布局确保多端完美兼容） */
-        .contact-grid {
-            display: table;
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: separate;
-            border-spacing: 8px 0px;
-        }
-
-        .contact-card {
-            display: table-cell;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-            width: 33.33%;
-            vertical-align: middle;
-        }
-
-        .platform-name {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            display: block;
-            font-weight: bold;
-        }
-
-/* 1. 先补齐并接上你原本就有的这两个样式 */
-        .platform-handle {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-main);
-            word-break: break-all;
-        }
-
-        .footer-thanks {
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-sub);
-            margin-top: 24px;
-            font-weight: 500;
-        }
-
-        /* 2. 核心颜色全局变量 */
-        :root {
-            --primary: #800020;        /* 暗红色/勃艮第红 */
-            --primary-light: #fdf5f6;  /* 极浅暗红 */
-            --warning: #8B4513;        /* 深棕色/马鞍棕 */
-            --warning-light: #fbf7f4;  /* 浅暖棕色背景 */
-            --text-main: #2c1e1a;      /* 极深棕色 */
-            --text-sub: #6e5e5a;       /* 暖深灰棕 */
-            --bg-card: #ffffff;        /* 白色卡片主体 */
-            --border-color: #e8dedb;   /* 淡淡的暖色调边框 */
-        }
-
-        /* 3. 补齐公告所需的全部具体美化样式 */
-        .chob-notice-container {
-            max-width: 600px;
-            width: 100%;
-            margin: 20px auto;
-            background: var(--bg-card);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(128, 0, 32, 0.04);
-            padding: 32px;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
-        .status-banner {
-            background-color: var(--warning-light);
-            border-left: 4px solid var(--warning);
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .status-icon {
-            font-size: 20px;
-        }
-
-        .status-title {
-            color: var(--warning);
-            font-weight: 600;
-            font-size: 15px;
-            margin: 0;
-        }
-
-        .update-box {
-            background-color: #faf8f7;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-
-        .update-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: var(--text-main);
-        }
-
-        .update-text {
-            font-size: 13.5px;
-            color: var(--text-sub);
-            margin-bottom: 16px;
-            line-height: 1.7;
-        }
-
-        .update-highlight {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .feature-list {
-            margin: 0;
-            padding-left: 20px;
-            font-size: 13.5px;
-            color: var(--text-main);
-        }
-
-        .feature-list li {
-            margin-bottom: 8px;
-        }
-
-        .letter-section {
-            border-top: 1px dashed var(--border-color);
-            padding-top: 24px;
-        }
-
-        .letter-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-top: 0;
-            margin-bottom: 14px;
-        }
-
-        .letter-content {
-            font-size: 13.5px;
-            color: var(--text-sub);
-            line-height: 1.75;
-            text-align: justify;
-        }
-
-        .reason-box {
-            background-color: #fdfbfb;
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin: 12px 0;
-            font-size: 13px;
-            border: 1px solid #f5edea;
-        }
-
-        .reason-box ol {
-            margin: 0;
-            padding-left: 18px;
-        }
-
-        .reason-box li {
-            margin-bottom: 6px;
-            color: var(--text-sub);
-        }
-
-        .reason-box li::marker {
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .cooperate-call {
-            background-color: var(--primary-light);
-            color: var(--primary);
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-top: 16px;
-            font-weight: 500;
-            font-size: 13px;
-            border: 1px solid rgba(128, 0, 32, 0.1);
-        }
-
-    </style> <div class="chob-notice-container">
-        <div class="status-banner">
-            <span class="status-icon">⚠️</span>
-            <h2 class="status-title">日历数据同步暂时关闭通知</h2>⚠️
-        </div>
-
-        <div class="update-box">
-            <h3 class="update-title">🔧 网页重新调整升级中</h3>
-            <p class="update-text">
-                由于升级期间涉及日程数据库的同步校验，为了保证使用体验，我决定暂时关闭网页行程同步。预计将关闭 <span class="update-highlight">1 ~ 2 日</span>。
-            </p>
-            <h3 class="update-title" style="font-size: 14px; margin-bottom: 8px;">本次升级主要解决两大功能：</h3>
-            <ul class="feature-list">
-                <li>增加 <strong>「行程图」</strong> 展示</li>
-                <li>增加 <strong>「搜索功能」</strong>（快速查找特定艺人或活动）</li>
-                <li>增加 <strong>「登录」与「收藏」</strong>功能（方便定制你的专属追星日程）</li>
-                <li>Maybe 或许会增加 <strong>“微信小程序”</strong> 的探索，这样会更加方便大家使用，但只是maybe</li>
-            </ul>
-        </div>
-
-        <div class="letter-section">
-            <h3 class="letter-title">网页管理员 ChobJaii 想说的话</h3>
-            <div class="letter-content">
-                <p style="margin-top: 0;">
-                    大家好，我是网页的管理员 <strong>ChobJaii</strong>。我建立这个网站的初衷，是希望能为大家线下追星提供一些实用的便利。
-                </p>
-                <p>
-                    相信细心的小伙伴已经发现，目前的行程更新有时会不太及时。这主要是因为：
-                </p>
-                
-                <div class="reason-box">
-                    <ol>
-                        <li>目前我主要关注艺人经纪公司的官方行程，很容易漏掉一些提前公布的商务、代言或其他活动。</li>
-                        <li>由于个人的时间和精力关系，目前很难做到全天候、高细节地实时同步。</li>
-                    </ol>
-                </div>
-
-                <p>
-                    一个人负责整个网站，难免会有疏忽和遗漏。为了带给大家更准确、好用的体验，我真诚地邀请各家粉丝或站子一起展开合作，<strong>协同更新</strong>！
-                </p>
-
-                <div class="cooperate-call">
-                    🤝 <strong>协同共建邀请：</strong>如果你愿意和我一起建设这个行程网站，或是有更多问题，欢迎通过下方的账号随时与我联系。
-                </div>
-            </div>
-        </div>
-    
-
-    <div class="contact-grid">
-        <div class="contact-card">
-            <span class="platform-name" style="color: #ff2442;">小红书</span>
-            <span class="platform-handle">SomenStjerne</span>
-        </div>
-        <div class="contact-card">
-            <span class="platform-name" style="color: #000000;">Threads</span>
-            <span class="platform-handle">SomenStjerne</span>
-        </div>
-        <div class="contact-card">
-            <span class="platform-name" style="color: #1da1f2;">X (Twitter)</span>
-            <span class="platform-handle">ChobCalendar</span>
-        </div>
-    </div>
-
-    <div class="footer-thanks">
-        <p style="margin: 0;"> 感谢大家的支持、包容和理解！รักนะคะ จุ๊บๆ </p>
-    </div>
-</div>
-
-</body>
-</html>
-    
-    
     <div class="stats" style="margin:0px 0 12px">
-      <div class="stat"><div class="stat-n" id="s-0">—</div><div class="stat-l">站台活动</div></div>
-      <div class="stat"><div class="stat-n" id="s-1">—</div><div class="stat-l">剧集宣传</div></div>
-      <div class="stat"><div class="stat-n" id="s-2">—</div><div class="stat-l">舞台演出</div></div>
+      <div class="stat"><div class="stat-n" id="s-0">—</div><div class="stat-l">品牌活动</div></div>
+      <div class="stat"><div class="stat-n" id="s-1">—</div><div class="stat-l">舞台演出</div></div>
+      <div class="stat"><div class="stat-n" id="s-2">—</div><div class="stat-l">见面会</div></div>
       <div class="stat"><div class="stat-n" id="s-3">—</div><div class="stat-l">其他</div></div>
+    </div>
+    <div style="font-size:11px;color:#999;margin-bottom:8px;padding:0 2px;">
+      📍 🌍 本页行程均为活动当地时间，受您所在时区影响，日历单元格可能存在 ±1 天的显示偏差，请务必点击查看详情，核对准确时间。
     </div>
     <div class="cal">
       <div class="dow-row">
@@ -670,14 +244,14 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 </div>
 
 <div class="overlay" id="day-overlay" onclick="if(event.target===this)closeDayModal()">
-<div class="modal" style="max-height:60vh;display:flex;flex-direction:column">
-    <div style="padding:20px 20px 16px;flex-shrink:0;border-bottom:1px solid var(--border-soft);position:relative">
+  <div class="modal" style="max-height:60vh;display:flex;flex-direction:column">
+    <div style="padding:20px 20px 24px;flex-shrink:0;border-bottom:1px solid var(--border-soft);position:relative">
       <button class="modal-x" onclick="closeDayModal()"><i class="ti ti-x"></i></button>
       <div class="modal-name" id="day-modal-title">日期详情</div>
       <div style="font-size:12px;color:var(--muted);margin-top:4px" id="day-modal-count"></div>
     </div>
-    <div id="day-events-list" style="overflow-y:auto;padding:16px 20px 20px;flex:1;-webkit-overflow-scrolling:touch"></div>
-</div>
+    <div id="day-events-list" style="overflow-y:auto;padding:24px 20px 32px;flex:1;-webkit-overflow-scrolling:touch"></div>
+  </div>
 </div>
 
 <footer>Copyright &copy; 2026 — All rights reserved by SomenStjerne</footer>
@@ -686,60 +260,30 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 const CN_M=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
 const EN_M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const CAT={
-  bl:{label:'泰腐',bg:'#142b4b',fg:'#fff'},
-  gl:{label:'泰百',bg:'#d7ccba',fg:'#fff'},
-  band:{label:'乐队',bg:'#2b4779',fg:'#fff'},
-  singer:{label:'歌手',bg:'#c4b59c',fg:'#fff'},
-  group:{label:'男女团',bg:'#6e8dbb',fg:'#fff'},
-  actor:{label:'演员',bg:'#d0c5af',fg:'#fff'},
-  other:{label:'其他艺人',bg:'#9db1ca',fg:'#fff'}
+  bl:{label:'泰腐',bg:'#442D1C',fg:'#fff'},
+  gl:{label:'泰百',bg:'#743014',fg:'#fff'},
+  band:{label:'乐队',bg:'#464336',fg:'#fff'},
+  singer:{label:'歌手',bg:'#674b3f',fg:'#fff'},
+  group:{label:'男女团',bg:'#907C6C',fg:'#fff'},
+  actor:{label:'演员',bg:'#C9BEAD',fg:'#3a2a1e'},
+  other:{label:'其他艺人',bg:'#a27d60',fg:'#fff'}
 };
 const ALL_TAGS=['bl','gl','band','singer','group','actor','other'];
-const SHEET_ID = '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU';
-const SECRET_KEY = 'thenorthremenbersandhighgardengrowingstrong';
-const BASE_CSV_URL = `https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}&origin=chobcalendar.pages.dev&key=${SECRET_KEY}`;
-const STAT_TYPES=['站台活动','剧集宣传','舞台演出','其他'];
+const SHEET_ID='1Irbm_DlW63XjhS54qbopw18WnpJpo_s3gbrDKqkmyvY';
+const CSV_URL=`https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec?id=${SHEET_ID}&origin=chobcalendar.pages.dev`;
+const STAT_TYPES=['品牌活动','舞台演出','见面会','其他'];
 
-/* ============ 新增：本地缓存（stale-while-revalidate） ============ */
-const LOCAL_CACHE_PREFIX = 'chobcal_' + SHEET_ID + '_';
-const LOCAL_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 本地缓存最长保留24小时
+const evStore=new Map();
+let evStoreIdx=0;
+function storeEv(ev){const k='e'+(evStoreIdx++);evStore.set(k,ev);return k;}
+function getEv(k){return evStore.get(k)||null;}
 
-function localCacheKey(startStr, endStr) {
-  return LOCAL_CACHE_PREFIX + startStr + '_' + endStr;
-}
-function readLocalCache(startStr, endStr) {
-  try {
-    const raw = localStorage.getItem(localCacheKey(startStr, endStr));
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!parsed || !parsed.savedAt || !Array.isArray(parsed.rows)) return null;
-    if (Date.now() - parsed.savedAt > LOCAL_CACHE_MAX_AGE_MS) return null;
-    return parsed.rows;
-  } catch (e) { return null; }
-}
-function writeLocalCache(startStr, endStr, rows) {
-  try {
-    localStorage.setItem(localCacheKey(startStr, endStr), JSON.stringify({ savedAt: Date.now(), rows: rows }));
-  } catch (e) { /* 存储失败静默忽略 */ }
-}
-/* ============ 新增部分结束 ============ */
-
-const _now = new Date();
-let yr = _now.getFullYear();
-let mo = _now.getMonth() + 1; 
-let view = 'perform', events = [];
-let active = new Set(ALL_TAGS);
-const loadedRanges = []; // [{start:'yyyy-mm-dd', end:'yyyy-mm-dd'}]
-let loadSeq = 0;
-
+const _now=new Date();
+let yr=_now.getFullYear(),mo=_now.getMonth()+1,view='perform',events=[];
+let active=new Set(ALL_TAGS);
 
 function updateHeader(){document.getElementById('y-lbl').textContent=yr;document.getElementById('m-cn').textContent=CN_M[mo-1];document.getElementById('m-en').textContent=EN_M[mo-1]}
-function changeMonth(d){
-  mo+=d;if(mo>12){mo=1;yr++}if(mo<1){mo=12;yr--}
-  updateHeader();
-  render();
-  ensureMonthLoaded(yr,mo);
-}
+function changeMonth(d){mo+=d;if(mo>12){mo=1;yr++}if(mo<1){mo=12;yr--}updateHeader();render()}
 function setView(btn,v){view=v;document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render()}
 function toggleTag(btn,t){
   if(active.size===ALL_TAGS.length){active=new Set([t])}
@@ -751,7 +295,8 @@ function toggleTag(btn,t){
 function getDate(ev){return view==='sale'?(ev.sale_date||'').trim()||null:(ev.date||'').trim()||null}
 
 function render(){
-  const isMobile=window.innerWidth<480,limit=isMobile?2:3;
+  evStore.clear();evStoreIdx=0;
+  const isMobile=window.innerWidth<480;
   const mo_evs=events.filter(ev=>{const d=new Date(ev.date);return d.getFullYear()===yr&&d.getMonth()+1===mo});
   STAT_TYPES.forEach((t,i)=>document.getElementById('s-'+i).textContent=mo_evs.filter(e=>(e.type||'')===t).length);
   const vis=events.filter(ev=>{
@@ -768,72 +313,84 @@ function render(){
   for(let d=1;d<=dim;d++){
     const dow=(fd+d-1)%7,isT=isNow&&d===tod.getDate(),evs=byDay[d]||[];
     const nc=dow===0?'sun':dow===6?'sat':'';
-    const currentLoopDate=new Date(yr,mo-1,d),todayZero=new Date(tod.getFullYear(),tod.getMonth(),tod.getDate());
-    const isPast=currentLoopDate<todayZero;
+    const cur=new Date(yr,mo-1,d),todZ=new Date(tod.getFullYear(),tod.getMonth(),tod.getDate());
+    const isPast=cur<todZ;
     const hasMore=evs.length>3;
     const maxVisible=hasMore?(isMobile?2:3):(isMobile?3:4);
-    const encAll=encodeURIComponent(JSON.stringify(evs));
-    const cellAttrs=hasMore?`data-evs="${encAll}" onclick="openDayModal(${d},this.getAttribute('data-evs'))" style="cursor:pointer"`:'';
-    let cellClass='cell';
-    if(isT)cellClass+=' today';else if(isPast)cellClass+=' past-day';
-    html+=`<div class="${cellClass}" ${cellAttrs}><div class="cell-num ${nc}">${d}</div>`;
-    evs.slice(0,maxVisible).forEach(ev=>{
-      const enc=btoa(encodeURIComponent(JSON.stringify(ev)));
+    const allKeys=evs.map(ev=>storeEv(ev));
+    let cellClass='cell'+(isT?' today':isPast?' past-day':'');
+    const cellAttrs=hasMore?`data-day="${d}" data-day-keys="${allKeys.join(',')}" class="${cellClass} day-has-more"`:`class="${cellClass}"`;
+    html+=`<div ${cellAttrs}><div class="cell-num ${nc}">${d}</div>`;
+    evs.slice(0,maxVisible).forEach((ev,idx)=>{
       const opStyle=view==='sale'?'opacity:0.68;':'';
-      html+=hasMore
-        ?`<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="pointer-events:none;${opStyle}">${ev.name}</button>`
-        :`<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="${opStyle}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+      if(hasMore){
+        html+=`<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="pointer-events:none;${opStyle}" tabindex="-1">${ev.name}</button>`;
+      } else {
+        html+=`<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="${opStyle}" data-ev-key="${allKeys[idx]}">${ev.name}</button>`;
+      }
     });
-    if(hasMore)html+=`<span class="more">还有 ${evs.length-maxVisible} 个活动</span>`;
+    if(hasMore)html+=`<span class="more" style="pointer-events:none">还有 ${evs.length-maxVisible} 个活动</span>`;
     html+='</div>';
   }
   const rem=(fd+dim)%7;if(rem>0)for(let i=rem;i<7;i++)html+='<div class="cell empty"></div>';
   document.getElementById('grid').innerHTML=html;
 }
 
-function openDayModal(day,encEvs){
-  const dayEvs=JSON.parse(decodeURIComponent(encEvs));
+document.getElementById('grid').addEventListener('click',function(e){
+  const chip=e.target.closest('[data-ev-key]');
+  if(chip){e.stopPropagation();const ev=getEv(chip.dataset.evKey);if(ev)openModal(ev);return;}
+  const cell=e.target.closest('.day-has-more');
+  if(cell){
+    const day=parseInt(cell.dataset.day);
+    const dayEvs=cell.dataset.dayKeys.split(',').map(k=>getEv(k)).filter(Boolean);
+    openDayModal(day,dayEvs);
+  }
+});
+
+function openDayModal(day,dayEvs){
   document.getElementById('day-modal-title').textContent=`${mo}月${day}日 全部活动`;
   document.getElementById('day-modal-count').textContent=`共 ${dayEvs.length} 个行程`;
   const prefix=view==='sale'?'[开售] ':'';
-  document.getElementById('day-events-list').innerHTML=dayEvs.map(ev=>{
-    const enc=btoa(encodeURIComponent(JSON.stringify(ev)));
-    return`<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${prefix}${ev.name}</button>`;
-  }).join('');
+  const listKeys=dayEvs.map(ev=>storeEv(ev));
+  document.getElementById('day-events-list').innerHTML=dayEvs.map((ev,i)=>
+    `<button class="chip ${ev.category}${ev.status==='cancelled'?' cancelled':''}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" data-ev-key="${listKeys[i]}">${prefix}${ev.name}</button>`
+  ).join('');
   document.getElementById('day-overlay').classList.add('open');
 }
+document.getElementById('day-events-list').addEventListener('click',function(e){
+  const chip=e.target.closest('[data-ev-key]');
+  if(chip){e.stopPropagation();const ev=getEv(chip.dataset.evKey);if(ev)openModal(ev);}
+});
 function closeDayModal(){document.getElementById('day-overlay').classList.remove('open')}
 
-function openModal(enc){
-  const ev=JSON.parse(decodeURIComponent(atob(enc)));
+function openModal(ev){
   const cat=CAT[ev.category]||CAT.other;
   document.getElementById('m-bar').style.background=cat.bg;
   const badge=document.getElementById('m-badge');badge.textContent=cat.label;badge.style.background=cat.bg;badge.style.color=cat.fg;
-  const namePart=ev.name||'',actPart=ev.activity||'';
-  document.getElementById('m-name').textContent=namePart&&actPart?`${namePart} | ${actPart}`:namePart||actPart||'';
+  const namePart=ev.name||'',fullPart=ev.full_name||'';
+  document.getElementById('m-name').textContent=namePart&&fullPart?`${namePart} | ${fullPart}`:namePart||fullPart||'';
   if(ev.date){const d=new Date(ev.date);document.getElementById('m-date').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`}
   else document.getElementById('m-date').textContent='日期待定';
   document.getElementById('m-venue').innerHTML=`${ev.venue||'待公布'}${ev.city?' · '+ev.city:''}`.replace(/\n/g,'<br>');
   document.getElementById('m-price').textContent=ev.price||'';
-  document.getElementById('m-time').textContent=ev.time||'待公布';
+  document.getElementById('m-time').textContent=ev.time?`${ev.time}（当地时间）`:'待公布';
   const saleRow=document.getElementById('m-sale-row');
-if(ev.sale_date){
-  const sd=new Date(ev.sale_date);
-  if(!isNaN(sd.getTime())){
-    const st=ev.sale_time?` ${ev.sale_time}`:'';
-    document.getElementById('m-sale').textContent=`开售：${sd.getFullYear()}年${sd.getMonth()+1}月${sd.getDate()}日${st}`;
-    saleRow.style.display='flex';
-  } else {
-    saleRow.style.display='none';
-  }
-} else saleRow.style.display='none';
+  if(ev.sale_date){
+    const sd=new Date(ev.sale_date);
+    if(!isNaN(sd.getTime())){
+      const st=ev.sale_time?` ${ev.sale_time}`:'';
+      document.getElementById('m-sale').textContent=`开售：${sd.getFullYear()}年${sd.getMonth()+1}月${sd.getDate()}日${st}`;
+      saleRow.style.display='flex';
+    } else saleRow.style.display='none';
+  } else saleRow.style.display='none';
   const nr=document.getElementById('m-note-row');
   if(ev.note){document.getElementById('m-note').innerHTML=ev.note.replace(/\n/g,'<br>');nr.style.display='flex'}else{nr.style.display='none'}
   const buyBtn=document.getElementById('m-buy'),tInfo=document.getElementById('m-ticket-info'),url=(ev.ticket_url||'').trim(),ttype=(ev.ticket_type||'').trim().toLowerCase();
   buyBtn.style.display='none';tInfo.style.display='none';
-  if(ttype==='buy'&&url){buyBtn.textContent='立即购票 →';buyBtn.style.display='block';tInfo.style.display='none';buyBtn.onclick=()=>window.open(url,'_blank')}
-  else if(ttype==='form'&&url){buyBtn.textContent='填写报名表 →';buyBtn.style.display='block';tInfo.style.display='none';buyBtn.onclick=()=>window.open(url,'_blank')}
-  else if(ttype==='info'&&url){buyBtn.style.display='none';tInfo.style.display='block';tInfo.innerHTML=url.replace(/\n/g,'<br>')}
+  if(ttype==='buy'&&url){buyBtn.textContent='立即购票 →';buyBtn.style.display='block';buyBtn.onclick=()=>window.open(url,'_blank')}
+  else if(ttype==='form'&&url){buyBtn.textContent='填写报名表 →';buyBtn.style.display='block';buyBtn.onclick=()=>window.open(url,'_blank')}
+  else if(ttype==='info'&&url){tInfo.style.display='block';tInfo.innerHTML=url.replace(/\n/g,'<br>')}
+  else if(url.startsWith('http')){buyBtn.textContent='立即购票 →';buyBtn.style.display='block';buyBtn.onclick=()=>window.open(url,'_blank')}
   document.getElementById('m-remind').onclick=()=>addToCalendar(ev);
   document.getElementById('overlay').classList.add('open');
 }
@@ -844,8 +401,8 @@ function addToCalendar(ev){
   const[sh,sm]=(saleTimeStr+':00').split(':').map(Number);
   const sd=new Date(saleDateStr);sd.setHours(sh,sm,0,0);
   const ed=new Date(sd.getTime()+30*60000);
-  const title=`[开售提醒] ${ev.activity||ev.name}`;
-  const desc=`演出日期：${ev.date}\n场地：${ev.venue||''}${ev.city?'，'+ev.city:''}\n票价：${ev.price||'免费'}`;
+  const title=`[开售提醒] ${ev.full_name||ev.name}`;
+  const desc=`演出日期：${ev.date}\n场地：${ev.venue||''}${ev.city?'，'+ev.city:''}\n票价：${ev.price||''}`;
   const fmt=dt=>dt.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
   const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//SomenStjerne//ChobCalendar//EN','BEGIN:VEVENT',
     `UID:${Date.now()}@somenstjerne`,`DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(sd)}`,`DTEND:${fmt(ed)}`,
@@ -853,7 +410,7 @@ function addToCalendar(ev){
     `DESCRIPTION:${title}`,'END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
   const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'})),download:`${(ev.name||'提醒').replace(/\s/g,'_')}_开售提醒.ics`});
   document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(a.href)},1000);
-  closeModal();showToast(`已下载「${ev.activity||ev.name}」开售提醒`);
+  closeModal();showToast(`已下载「${ev.full_name||ev.name}」开售提醒`);
 }
 
 let toastTimer=null;
@@ -866,120 +423,32 @@ function setSyncState(s){
   else txt.textContent=s==='ok'?'已同步':'同步中…';
 }
 
-function setContentOffset(){
-  const shell=document.querySelector('.sticky-shell'),content=document.getElementById('page-content');
-  if(shell&&content)content.style.paddingTop=shell.offsetHeight+'px';
-}
+function setContentOffset(){const shell=document.querySelector('.sticky-shell'),content=document.getElementById('page-content');if(shell&&content)content.style.paddingTop=shell.offsetHeight+'px'}
 
-function fmtYMD(d){
-  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');
-  return `${y}-${m}-${dd}`;
-}
-
-function rangeCovered(startStr,endStr){
-  return loadedRanges.some(r=>r.start<=startStr&&r.end>=endStr);
-}
-
-function mergeEvents(newRows){
-  const seen=new Set(events.map(e=>JSON.stringify(e)));
-  newRows.forEach(row=>{
-    const key=JSON.stringify(row);
-    if(!seen.has(key)){events.push(row);seen.add(key)}
-  });
-}
-
-async function fetchRange(startStr,endStr){
-  const url=`${BASE_CSV_URL}&start=${startStr}&end=${endStr}`;
-  const r=await fetch(url);
-  if(!r.ok) throw new Error(`HTTP ${r.status}`);
-  const data=await r.json();
-  if(data && data.error) throw new Error(data.error);
-  if(!Array.isArray(data)) throw new Error('unexpected response');
-  return data.map(row=>{
-    const obj={};
-    Object.keys(row).forEach(k=>{
-      obj[k.trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():String(row[k]??'');
-    });
-    return {...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()};
-  }).filter(o=>o.date||o.sale_date);
-}
-
-/* ============ 替换后的 ensureMonthLoaded：当月优先 + 本地缓存 + 缓冲月延后加载 ============ */
-async function ensureMonthLoaded(y,m){
-  const curFrom=new Date(y,m-1,1);
-  const curTo=new Date(y,m,0);
-  const curStartStr=fmtYMD(curFrom),curEndStr=fmtYMD(curTo);
-
-  // 第一步：当月——先读本地缓存，有就立刻渲染，不等网络
-  const localCached=readLocalCache(curStartStr,curEndStr);
-  if(localCached){
-    mergeEvents(localCached);
-    render();
-    requestAnimationFrame(()=>setContentOffset());
-  }
-
-  // 第二步：当月——去后台确认最新数据（有本地缓存时静默更新，没有时显示 loading 状态）
-  if(!rangeCovered(curStartStr,curEndStr)){
-    await fetchAndMergeRange(curStartStr,curEndStr,!localCached);
-  }
-
-  // 第三步：前一个月 + 后一个月，作为缓冲，延后在背景加载，不阻塞当月显示
-  const prevFrom=new Date(y,m-2,1),prevTo=new Date(y,m-1,0);
-  const nextFrom=new Date(y,m,1),nextTo=new Date(y,m+1,0);
-  const bufferRanges=[
-    {start:fmtYMD(prevFrom),end:fmtYMD(prevTo)},
-    {start:fmtYMD(nextFrom),end:fmtYMD(nextTo)}
-  ];
-
-  let hasBufferLocalCache=false;
-  bufferRanges.forEach(r=>{
-    const cached=readLocalCache(r.start,r.end);
-    if(cached){mergeEvents(cached);hasBufferLocalCache=true}
-    if(!rangeCovered(r.start,r.end)){
-      fetchAndMergeRange(r.start,r.end,false); // 不 await，后台慢慢加载
-    }
-  });
-
-  if(hasBufferLocalCache){
-    render();
-    requestAnimationFrame(()=>setContentOffset());
-  }
-}
-
-// 新增：实际发请求、合并数据、写本地缓存、按需触发 render 的封装
-async function fetchAndMergeRange(startStr,endStr,showBusyState){
-  const mySeq=++loadSeq;
-  if(showBusyState)setSyncState('busy');
+async function loadFromSheets(){
+  setSyncState('busy');
   try{
-    const rows=await fetchRange(startStr,endStr);
-    if(mySeq!==loadSeq)return; // 有更新的请求已经发出，丢弃过期结果
-    mergeEvents(rows);
-    loadedRanges.push({start:startStr,end:endStr});
-    writeLocalCache(startStr,endStr,rows);
-    if(showBusyState)setSyncState('ok');
+    const r=await fetch(CSV_URL);if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    const rows=await r.json();
+    events=rows.map(row=>{
+      const obj={};
+      Object.keys(row).forEach(k=>{obj[k.trim().toLowerCase()]=typeof row[k]==='string'?row[k].trim():String(row[k]??'')});
+      return{...obj,category:(obj.category||'').toLowerCase(),status:(obj.status||'').toLowerCase()};
+    }).filter(o=>o.date||o.sale_date);
+    setSyncState('ok');
     render();
     requestAnimationFrame(()=>setContentOffset());
   }catch(e){
     console.error('Load failed:',e);
-    if(mySeq===loadSeq&&showBusyState)setSyncState('err');
+    setSyncState('err');
     render();
   }
 }
-/* ============ 替换部分结束 ============ */
-
-async function loadFromSheets(){
-  await ensureMonthLoaded(yr,mo);
-}
 
 updateHeader();
-
+loadFromSheets();
 window.addEventListener('resize',()=>{setContentOffset();render()});
-// 多次尝试 offset 计算，确保字体和图标加载完毕后也正确
-requestAnimationFrame(()=>{
-  setContentOffset();
-  setTimeout(setContentOffset,300);
-  setTimeout(setContentOffset,800);
-});
+requestAnimationFrame(()=>{setContentOffset();setTimeout(setContentOffset,300);setTimeout(setContentOffset,800)});
 </script>
 </body>
 </html>
