@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>网站维护与共建公告 - Chob泰娱行程日历</title>
+<title>网站维护公告 - Chob泰娱行程日历</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -17,7 +17,7 @@
   --sub: #6b6b6b;
   --muted: #999;
   
-  /* 维护页面专属高亮色 */
+  /* 維護頁面專屬高亮色 */
   --primary: #6c5ce7;
   --primary-light: #f1f0fe;
   --warning: #e67e22;
@@ -38,7 +38,7 @@ body {
   line-height: 1.6;
 }
 
-/* ── MAIN 内容容器 ── */
+/* ── MAIN 內容容器 ── */
 .main {
   flex: 1;
   display: flex;
@@ -99,7 +99,7 @@ body {
   gap: 20px;
 }
 
-/* 状态 Banner */
+/* 狀態 Banner */
 .status-banner {
   display: flex;
   align-items: center;
@@ -122,7 +122,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* 升级详情板块 */
+/* 升級詳情板塊 */
 .update-box {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -178,7 +178,7 @@ body {
   font-weight: bold;
 }
 
-/* 留言板块 */
+/* 留言板塊 */
 .letter-section {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -231,7 +231,7 @@ body {
   margin-top: 6px;
 }
 
-/* 联系方式网格 */
+/* ── 社媒聯繫卡片網格 ── */
 .contact-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -248,6 +248,15 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  text-decoration: none; /* 清除連結預設底線 */
+  transition: background .15s, border-color .15s, transform .1s;
+}
+
+/* 卡片懸停與點擊動效 */
+.contact-card:hover {
+  background: #f5f3f0;
+  border-color: #d4cfc8;
+  transform: translateY(-2px); /* 懸停時微微上浮 */
 }
 
 .platform-name {
@@ -262,7 +271,7 @@ body {
   color: var(--muted);
 }
 
-/* 底部感谢 */
+/* 底部感謝 */
 .footer-thanks {
   text-align: center;
   padding: 10px 0;
@@ -283,7 +292,7 @@ footer {
   margin-top: 20px;
 }
 
-/* ── MOBILE 移动端适配 ── */
+/* ── MOBILE 行動端適配 ── */
 @media(max-width:480px){
   .main { padding: 24px 16px; }
   .logo-title { font-size: 38px; }
@@ -292,13 +301,13 @@ footer {
   .update-box, .letter-section { padding: 18px; }
   .contact-grid { grid-template-columns: 1fr; gap: 8px; }
   .contact-card { flex-direction: row; justify-content: space-between; padding: 12px 16px; }
+  .contact-card:hover { transform: translateX(3px); } /* 行動端改為向右微動 */
 }
 </style>
 </head>
 <body>
 
 <main class="main">
-  <!-- LOGO 区域保持品牌一致性 -->
   <div class="logo-wrap">
     <span class="logo-en">Thai Artist</span>
     <div class="logo-title">Chob</div>
@@ -307,75 +316,72 @@ footer {
 
   <div class="divider"></div>
 
-  <!-- 公告主容器 -->
   <div class="chob-notice-container">
     
-    <!-- 状态横幅 -->
     <div class="status-banner">
       <span class="status-icon">⚠️</span>
-      <h2 class="status-title">日历数据同步暂时关闭通知</h2>
+      <h2 class="status-title">网站暂时关闭通知</h2>
       <span class="status-icon">⚠️</span>
     </div>
 
-    <!-- 升级计划 -->
     <div class="update-box">
-      <h3 class="update-title"> 网页重新调整升级中</h3>
+      <h3 class="update-title">网页重新调正升级中</h3>
       <p class="update-text">
-        由于升级期间涉及日程数据库的同步校验，为了保证使用体验，我决定暂时关闭网页行程同步。预计将关闭 <span class="update-highlight">1 ~ 2 日</span>。
+        由于升级期间涉及日程数据库的同步连接，为了保证使用体验，我决定暂时关闭网页行程同步。预计将关闭 <span class="update-highlight">1 ~ 2 日</span>。
       </p>
-      <h3 class="update-title" style="font-size: 14px; margin-bottom: 8px;">本次升级主要包含三大功能：</h3>
+      <h3 class="update-title" style="font-size: 14px; margin-bottom: 8px;">本次升级主要包含三个功能：</h3>
       <ul class="feature-list">
-        <li>增加 <strong>「行程图」</strong> 展示</li>
+        <li>增加 <strong>「行程图」</strong> 展示区域（方便各位确认行程）</li>
         <li>增加 <strong>「搜索功能」</strong>（快速查找特定艺人或活动）</li>
-        <li>增加 <strong>「登录」与「收藏」</strong>功能（方便定制你的专属追星日程）</li>
-        <li>Maybe 或许会增加 <strong>“微信小程序”</strong> 的探索，这样会更加方便大家使用，但只是maybe，需要认证审核之类的手续还挺麻烦，我试试看</li>
+        <li>增加 <strong>「登陆」与「收藏」</strong>功能（便于大家安排行程）</li>
+        <li>Maybe 或许会增加 <strong>“微信小程序”</strong> ，这样会更加方便大家使用，所以打算在关闭期间去探索一下，但只是maybe会有</li>
       </ul>
     </div>
 
-    <!-- 管理员致信 -->
     <div class="letter-section">
-      <h3 class="letter-title">网页管理员 ChobJaii 想说的话</h3>
+      <h3 class="letter-title"> 想说的话 </h3>
       <div class="letter-content">
         <p style="margin-top: 0;">
-          大家好，我是网页的管理员 <strong>ChobJaii</strong>。我建立这个网站的初衷，是希望能为大家线下追星提供一些实用的便利。相信细心的小伙伴已经发现，目前的行程更新有时会不太及时。这主要是因为：
+          大家好，我是网页的管理员 <strong>ChobJaii</strong>。我建立这个网站的初衷，是希望能为大家先下追星提供一些实用的便利。
+        </p>
+        <p>
+          相信细心的各位已经发现，目前的行程更新有时会不太及时。这主要是因为：
         </p>
         
         <div class="reason-box">
           <ol>
-            <li>目前我主要关注艺人经纪公司的官方行程，很容易漏掉一些提前公布的商务、代言或其他活动。</li>
+            <li>目前我主要关注艺人经纪公司的官方行程，很容易漏掉一些提前公布的商务、代言或活动变更等细节内容。</li>
             <li>由于个人的时间和精力关系，目前很难做到全天候、高细节地实时同步。</li>
           </ol>
         </div>
 
         <p>
-          一个人负责整个网站，难免会有疏忽和遗漏。为了带给大家更准确、好用的体验，我真诚地邀请各家粉丝或站子一起展开合作， <strong>协同更新</strong>！
+          一个人负责整个网站，难免会有疏忽和遗漏。为了带给大家更准确、好用的体验，我真诚地邀请各家粉丝或站子一起合作， <strong>协同更新</strong>！
         </p>
 
         <div class="cooperate-call">
-         <strong>协同共建邀请：</strong>如果你愿意和我一起建设这个行程网站，或是有更多问题，欢迎通过下方的账号随时与我联系。
+          🤝 <strong>协同共建邀请：</strong>如果你愿意和我一起建设这个行程网站，或是有更多问题，欢迎通过下方的帐号随时与我联系。
         </div>
       </div>
     </div>
 
-    <!-- 联系渠道网格 -->
     <div class="contact-grid">
-      <div class="contact-card">
-        <span class="platform-name" style="color: #ff2442;">小红书</span>
+      <a class="contact-card" href="https://www.xiaohongshu.com/user/profile/5ff48d99000000000101df2d?xsec_token=YBskWbDiBKVT_4USMuG6xXAG9ytpdRWfYrx0sjERweymU=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=N0o0RUg2NEE2NzUyOTgwNjc5OThIS0o9&apptime=1783376917&share_id=8afaf979f1414a6db5e1c1d2d703b723" target="_blank">
+        <span class="platform-name" style="color: #ff2442;">小紅書</span>
         <span class="platform-handle">SomenStjerne</span>
-      </div>
-      <div class="contact-card">
+      </a>
+      <a class="contact-card" href="https://www.threads.net/@somenstjerne?igshid=NTc4MTIwNjQ2YQ==" target="_blank">
         <span class="platform-name" style="color: #000000;">Threads</span>
         <span class="platform-handle">SomenStjerne</span>
-      </div>
-      <div class="contact-card">
+      </a>
+      <a class="contact-card" href="https://x.com/chobcalendar?s=11&t=Qn0SXFPWEp3no2_UZXXBug" target="_blank">
         <span class="platform-name" style="color: #1da1f2;">X (Twitter)</span>
         <span class="platform-handle">ChobCalendar</span>
-      </div>
+      </a>
     </div>
 
-    <!-- 底部寄语 -->
     <div class="footer-thanks">
-      <p>感谢大家的支持、包容和理解！รักนะคะ จุ๊บๆ </p>
+      <p>感谢大家的支持、包容和理解！รักนะคะ จุ๊บๆ</p>
     </div>
 
   </div>
