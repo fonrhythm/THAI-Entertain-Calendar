@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人档案 — Chob Calendar</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #faf9f7;
+      --surface: #fff;
+      --border: #e8e4de;
+      --border-soft: #f0ece6;
+      --text: #1a1a1a;
+      --sub: #6b6b6b;
+      --muted: #999;
+      --accent: #5F1E24;
+    }
+
+    body {
+      font-family: 'Noto Sans SC', 'Lato', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+
+    /* ════ 导航栏 ════ */
+    .site-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 8px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .site-nav a {
+      font-family: 'Lato', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .site-nav a:hover {
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .sep {
+      color: #bbb;
+      font-size: 10px;
+      flex-shrink: 0;
+    }
+
+    /* ════ 主内容区 ════ */
+    .page {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .page-header {
+      position: absolute;
+      top: 70px;
+      left: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text);
+      padding: 8px;
+      border-radius: 6px;
+      transition: background .15s;
+    }
+
+    .back-btn:hover {
+      background: var(--bg);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      margin-top: 40px;
+    }
+
+    .card-header {
+      background: var(--accent);
+      padding: 28px;
+      color: #fff;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .header-left {
+      flex: 1;
+    }
+
+    .header-title {
+      font-family: 'Lato', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .header-sub {
+      font-size: 12px;
+      opacity: .85;
+    }
+
+    .avatar-section {
+      text-align: center;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 700;
+      font-family: 'Noto Sans SC', sans-serif;
+      color: #fff;
+      margin-bottom: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,.3);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-change-btn {
+      font-size: 11px;
+      opacity: .9;
+      cursor: pointer;
+      text-decoration: underline;
+      border: none;
+      background: none;
+      color: #fff;
+      font-family: inherit;
+    }
+
+    /* ════ 卡片内容 ════ */
+    .card-body {
+      padding: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--sub);
+      margin-bottom: 8px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-value {
+      font-size: 14px;
+      color: var(--text);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+      transition: border-color .15s;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+    }
+
+    .form-input::placeholder {
+      color: var(--muted);
+    }
+
+    .form-input.error {
+      border-color: #e53935;
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-hint.warn {
+      color: #e53935;
+    }
+
+    /* ════ 头像风格选择 ════ */
+    .avatar-style-selector {
+      display: none;
+      margin-bottom: 16px;
+    }
+
+    .avatar-style-selector.visible {
+      display: block;
+    }
+
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .style-option {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all .15s;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .style-option img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .style-option:hover {
+      transform: scale(1.05);
+      border-color: var(--sub);
+    }
+
+    .style-option.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+      transform: scale(1.08);
+    }
+
+    .style-name {
+      font-size: 10px;
+      color: var(--sub);
+      text-align: center;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 2px;
+    }
+
+    /* ════ 标签/药丸 ════ */
+    .tags-container {
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .tag-remove {
+      cursor: pointer;
+      font-size: 14px;
+      opacity: .7;
+      transition: opacity .15s;
+    }
+
+    .tag-remove:hover {
+      opacity: 1;
+    }
+
+    .tag-input-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .tag-input:focus {
+      border-color: var(--accent);
+    }
+
+    .tag-btn {
+      padding: 8px 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+
+    .tag-btn:hover {
+      opacity: .88;
+    }
+
+    .tag-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    /* ════ 模式切换 ════ */
+    .view-mode .form-input,
+    .view-mode .tag-input,
+    .view-mode .tag-btn,
+    .view-mode .avatar-style-selector {
+      display: none;
+    }
+
+    .edit-mode .form-value,
+    .edit-mode .avatar-change-btn {
+      display: none;
+    }
+
+    .edit-mode .form-input,
+    .edit-mode .tag-input,
+    .edit-mode .tag-btn {
+      display: block;
+    }
+
+    .edit-mode .avatar-style-selector.visible {
+      display: block;
+    }
+
+    /* ════ 心肝独立编辑模式 ════ */
+    .favorites-group.favorites-view-mode .favorites-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .favorites-group.favorites-view-mode .favorites-edit {
+      display: none;
+    }
+
+    .favorites-group.favorites-edit-mode .favorites-display {
+      display: none;
+    }
+
+    .favorites-group.favorites-edit-mode .favorites-edit {
+      display: block;
+    }
+
+    .edit-favorites-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: color .15s, background .15s;
+    }
+
+    .edit-favorites-btn:hover {
+      background: rgba(255,255,255,.2);
+    }
+
+    .favorites-action-btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .favorites-action-btns .btn {
+      flex: 1;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+
+    .favorites-confirm-btn {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .favorites-confirm-btn:hover {
+      opacity: .88;
+    }
+
+    .favorites-cancel-btn {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .favorites-cancel-btn:hover {
+      background: #f5f3f0;
+    }
+
+    .favorites-group.favorites-edit-mode .tag-input {
+      display: block !important;
+    }
+
+    .favorites-group.favorites-edit-mode .tag-btn {
+      display: block !important;
+    }
+
+    .favorites-group.favorites-edit-mode .tag-input-group {
+      display: flex !important;
+    }
+
+    .favorites-group.favorites-edit-mode .form-hint {
+      display: flex !important;
+    }
+
+    /* ════ 按钮组 ════ */
+    .card-footer {
+      padding: 0 28px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity .15s, background .15s;
+      text-decoration: none;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      opacity: .88;
+    }
+
+    .btn-ghost {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: #f5f3f0;
+    }
+
+    .view-mode .btn-edit,
+    .edit-mode .btn-cancel,
+    .edit-mode .btn-save {
+      display: flex;
+    }
+
+    .view-mode .btn-cancel,
+    .view-mode .btn-save {
+      display: none;
+    }
+
+    /* ════ 提示框 ════ */
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert-error {
+      background: #ffebee;
+      border: 1px solid #ef9a9a;
+      color: #c62828;
+    }
+
+    .alert-success {
+      background: #e8f5e9;
+      border: 1px solid #81c784;
+      color: #2e7d32;
+    }
+
+    /* ════ Footer ════ */
+    footer {
+      border-top: 1px solid var(--border-soft);
+      padding: 14px 0;
+      text-align: center;
+      font-size: 10px;
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    /* ════ 响应式 ════ */
+    @media(max-width: 480px) {
+      .wrap { padding: 0 16px; }
+      .page { padding: 24px 16px; }
+      .page-header { left: 16px; }
+      .card { margin-top: 50px; }
+      .card-header { padding: 20px; }
+      .card-body { padding: 20px; }
+      .card-footer { padding: 0 20px 20px; }
+      .avatar { width: 64px; height: 64px; font-size: 28px; }
+      .btn-group { flex-direction: column; }
+      .style-grid { grid-template-columns: repeat(4, 1fr); max-height: 150px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="wrap">
+      <div class="site-nav-inner">
+        <a href="/">Chob Calendar</a><span class="sep">›</span>
+        <a href="/china-calendar/">China</a><span class="sep">›</span>
+        <a href="/thai-calendar/">Thailand</a><span class="sep">›</span>
+        <a href="/oversea-calendar/">Oversea</a><span class="sep">›</span>
+        <a href="/About/">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <button class="back-btn" onclick="goBack()" title="返回">
+      <i class="ti ti-arrow-left"></i>
+    </button>
+  </div>
+
+  <main class="page">
+    <div class="card view-mode" id="account-card">
+      
+      <!-- 卡片头部：头像 + 标题 -->
+      <div class="card-header">
+        <div class="header-left">
+          <div class="header-title">个人档案</div>
+          <div class="header-sub" id="header-email">加载中…</div>
+        </div>
+        <div class="avatar-section">
+          <div class="avatar" id="avatar-display"></div>
+          <button class="avatar-change-btn" onclick="switchMode('edit')">更换</button>
+        </div>
+      </div>
+
+      <!-- 卡片内容 -->
+      <div class="card-body">
+        <div class="alert alert-error" id="error-msg"></div>
+        <div class="alert alert-success" id="success-msg"></div>
+
+        <!-- 头像风格选择（编辑模式） -->
+        <div class="form-group avatar-style-selector" id="avatar-style-selector">
+          <label class="form-label">选择头像风格</label>
+          <div class="style-grid" id="avatar-style-grid"></div>
+        </div>
+
+        <!-- 账号字段 -->
+        <div class="form-group">
+          <label class="form-label">账号</label>
+          <div class="form-value" id="account-value">——</div>
+        </div>
+
+        <!-- 用户名字段 -->
+        <div class="form-group">
+          <label class="form-label">用户名称</label>
+          <div class="form-value view-mode" id="username-value">——</div>
+          <input class="form-input edit-mode" type="text" id="username-input" placeholder="输入用户名" maxlength="12">
+          <div class="form-hint edit-mode">
+            <span>最多 12 个字符</span>
+            <span id="username-count">0/12</span>
+          </div>
+        </div>
+
+        <!-- 个人简介字段 -->
+        <div class="form-group">
+          <label class="form-label">个人简介</label>
+          <div class="form-value view-mode" id="bio-value">——</div>
+          <textarea class="form-input edit-mode" id="bio-input" placeholder="写点简介…" maxlength="100" rows="3"></textarea>
+          <div class="form-hint edit-mode">
+            <span>最多 100 字</span>
+            <span id="bio-count">0/100</span>
+          </div>
+        </div>
+
+        <!-- 心肝（兴趣标签）- 独立编辑模式 -->
+        <div class="form-group favorites-group favorites-view-mode" id="favorites-group">
+          <label class="form-label">
+            <span>心肝</span>
+            <button class="edit-favorites-btn" onclick="enterFavoritesEdit()" title="编辑心肝">
+              <i class="ti ti-edit"></i>
+            </button>
+          </label>
+
+          <!-- 查看模式：显示标签 -->
+          <div class="favorites-display">
+            <div class="tags-container" id="favorites-view">
+              <span style="color: var(--muted); font-size: 12px;">——</span>
+            </div>
+          </div>
+
+          <!-- 编辑模式：可以添加/删除 -->
+          <div class="favorites-edit" id="favorites-edit-section">
+            <div class="tags-container" id="favorites-list"></div>
+            <div class="tag-input-group">
+              <input class="tag-input" type="text" id="tag-input" placeholder="最多 20 英文字符" maxlength="20">
+              <button class="tag-btn" id="tag-add-btn" onclick="addTag()">添加</button>
+            </div>
+            <div class="form-hint">
+              <span id="tag-count">0/10 个标签</span>
+            </div>
+            <div class="favorites-action-btns">
+              <button class="btn favorites-confirm-btn" onclick="confirmFavoritesEdit()">确认</button>
+              <button class="btn favorites-cancel-btn" onclick="cancelFavoritesEdit()">取消</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 按钮组 -->
+      <div class="card-footer">
+        <div class="btn-group">
+          <button class="btn btn-primary btn-edit" onclick="switchMode('edit')">
+            <i class="ti ti-edit"></i> 编辑
+          </button>
+          <button class="btn btn-primary btn-save" onclick="saveProfile()">
+            <span id="save-btn-text">保存</span>
+          </button>
+          <button class="btn btn-ghost btn-cancel" onclick="switchMode('view')">取消</button>
+        </div>
+
+        <button class="btn btn-ghost" onclick="openChangePasswordModal()">
+          <i class="ti ti-lock"></i> 修改密码
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- 修改密码弹窗 -->
+  <div class="overlay" id="password-modal" onclick="if(event.target===this)closePasswordModal()">
+    <div class="modal">
+      <div style="padding: 20px; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 16px; font-weight: 700;">修改密码</div>
+        <button onclick="closePasswordModal()" style="background: none; border: none; cursor: pointer; font-size: 16px;">✕</button>
+      </div>
+      <div style="padding: 20px;">
+        <div class="alert alert-error" id="pwd-error-msg"></div>
+        <div class="alert alert-success" id="pwd-success-msg"></div>
+
+        <div class="form-group">
+          <label class="form-label">当前密码</label>
+          <input class="form-input" type="password" id="old-password" placeholder="输入当前密码" autocomplete="current-password">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">新密码</label>
+          <input class="form-input" type="password" id="new-password" placeholder="输入新密码（至少 6 位）" autocomplete="new-password">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">确认新密码</label>
+          <input class="form-input" type="password" id="confirm-password" placeholder="再次输入新密码" autocomplete="new-password">
+        </div>
+      </div>
+      <div style="padding: 20px; border-top: 1px solid var(--border-soft); display: flex; gap: 12px;">
+        <button class="btn btn-ghost" onclick="closePasswordModal()" style="flex: 1;">取消</button>
+        <button class="btn btn-primary" id="pwd-submit-btn" onclick="changePassword()" style="flex: 1;">确认修改</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 样式：弹窗容器 -->
+  <style>
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.15);
+    }
+  </style>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { 
+      getAuth, 
+      onAuthStateChanged, 
+      reauthenticateWithCredential, 
+      EmailAuthProvider,
+      updatePassword
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      updateDoc, 
+      setDoc,
+      serverTimestamp 
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAv4v5B1HXotOABmIcc5TOi3uzqPmLnvNs",
+      authDomain: "chob-calendar.firebaseapp.com",
+      projectId: "chob-calendar",
+      storageBucket: "chob-calendar.firebasestorage.app",
+      messagingSenderId: "629896393980",
+      appId: "1:629896393980:web:d8800df187ba495b895379"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // 头像风格配置 - 20个备选，每次随机显示10个
+    const ALL_AVATAR_STYLES = [
+      { id: 'avataaars', name: '卡通人物', emoji: '👤' },
+      { id: 'adventurer', name: '冒险家', emoji: '🧑‍🦱' },
+      { id: 'big-smile', name: '大笑', emoji: '😊' },
+      { id: 'bottts', name: '机器人', emoji: '🤖' },
+      { id: 'croodles', name: '涂鸦', emoji: '✏️' },
+      { id: 'fun-emoji', name: '表情', emoji: '😜' },
+      { id: 'lorelei', name: '浮空城', emoji: '✨' },
+      { id: 'micah', name: '麦卡', emoji: '🐸' },
+      { id: 'miniavs', name: '迷你', emoji: '🎨' },
+      { id: 'pixel-art', name: '像素', emoji: '🎮' },
+      { id: 'personas', name: '角色', emoji: '🎭' },
+      { id: 'rings', name: '戒指', emoji: '💍' },
+      { id: 'shapes', name: '形状', emoji: '⭐' },
+      { id: 'thumbs', name: '拇指', emoji: '👍' },
+      { id: 'identicon', name: '几何码', emoji: '⬜' },
+      { id: 'jdenticon', name: '万花筒', emoji: '🟫' },
+      { id: 'initials', name: '首字母', emoji: '🔤' },
+      { id: 'notionists', name: '概念', emoji: '💡' },
+      { id: 'beam', name: '光束', emoji: '✨' },
+      { id: 'animated', name: '动画', emoji: '🎬' },
+    ];
+
+    // 当前会话显示的10个风格（每次编辑时随机选择）
+    let AVATAR_STYLES = [];
+
+    // 全局状态
+    let currentUser = null;
+    let userData = null;
+    let editingTags = [];
+    let selectedAvatarStyle = 'avataaars';
+    let favoritesEditMode = false;
+
+    // ════════════════════════════════════════════════════════════════════
+    // 返回按钮
+    // ════════════════════════════════════════════════════════════════════
+    window.goBack = function() {
+      history.back();
+    };
+
+    // ════════════════════════════════════════════════════════════════════
+    // 初始化：检查登录状态
+    // ════════════════════════════════════════════════════════════════════
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        location.href = '/login/';
+        return;
+      }
+      currentUser = user;
+      await loadUserData();
+      // 初始化时随机选择10个风格
+      randomSelectStyles();
+      renderProfile();
+      renderAvatarStyleGrid();
+    });
+
+    // ════════════════════════════════════════════════════════════════════
+    // 1. 从 Firestore 加载用户数据
+    // ════════════════════════════════════════════════════════════════════
+    async function loadUserData() {
+      try {
+        const userRef = doc(db, 'users', currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        
+        if (userSnap.exists()) {
+          userData = userSnap.data();
+        } else {
+          userData = {
+            uid: currentUser.uid,
+            email: currentUser.email,
+            displayName: currentUser.displayName || '',
+            avatarStyle: 'avataaars',
+            bio: '',
+            favorites: [],
+            createdAt: serverTimestamp(),
+          };
+        }
+      } catch (e) {
+        console.error('加载用户数据失败:', e);
+        showError('无法加载数据，请刷新重试');
+      }
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    // 2. 生成 DiceBear 头像 URL
+    // ════════════════════════════════════════════════════════════════════
+    function getAvatarUrl(style, seed) {
+      return `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}&scale=80&mood=happy`;
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    // 3. 渲染页面
+    // ════════════════════════════════════════════════════════════════════
+    function renderProfile() {
+      const email = currentUser.email;
+      document.getElementById('header-email').textContent = email;
+      document.getElementById('account-value').textContent = email;
+
+      // 头像
+      const displayName = userData.displayName || '用户';
+      const avatarStyle = userData.avatarStyle || 'avataaars';
+      const avatarUrl = getAvatarUrl(avatarStyle, displayName);
+      const avatarEl = document.getElementById('avatar-display');
+      
+      avatarEl.innerHTML = `<img src="${avatarUrl}" alt="${displayName}的头像">`;
+      
+      selectedAvatarStyle = avatarStyle;
+
+      // 用户名
+      document.getElementById('username-value').textContent = displayName || '暂未设置';
+      document.getElementById('username-input').value = displayName;
+      updateUsernameCount();
+
+      // 个人简介
+      const bio = userData.bio || '';
+      document.getElementById('bio-value').textContent = bio || '暂未设置';
+      document.getElementById('bio-input').value = bio;
+      updateBioCount();
+
+      // 心肝标签
+      editingTags = [...(userData.favorites || [])];
+      renderTags();
+      favoritesEditMode = false;
+      document.getElementById('favorites-group').classList.remove('favorites-edit-mode');
+      document.getElementById('favorites-group').classList.add('favorites-view-mode');
+
+      hideAlerts();
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    // 3.5 随机选择10个风格
+    // ════════════════════════════════════════════════════════════════════
+    function randomSelectStyles() {
+      // 从20个风格中随机选择10个
+      const shuffled = [...ALL_AVATAR_STYLES].sort(() => Math.random() - 0.5);
+      AVATAR_STYLES = shuffled.slice(0, 10);
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    // 4. 头像风格网格
+    // ════════════════════════════════════════════════════════════════════
+    function renderAvatarStyleGrid() {
+      const grid = document.getElementById('avatar-style-grid');
+      const displayName = userData.displayName || '用户';
+      
+      grid.innerHTML = AVATAR_STYLES.map((style) => `
+        <div class="style-option ${style.id === selectedAvatarStyle ? 'selected' : ''}" 
+             onclick="selectAvatarStyle('${style.id}')"
+             title="${style.name}">
+          <img src="${getAvatarUrl(style.id, displayName)}" alt="${style.name}">
+        </div>
+      `).join('');
+    }
+
+    window.selectAvatarStyle = async function(styleId) {
+      selectedAvatarStyle = styleId;
+      const displayName = userData.displayName || '用户';
+      const avatarUrl = getAvatarUrl(styleId, displayName);
+      const avatarEl = document.getElementById('avatar-display');
+      
+      avatarEl.innerHTML = `<img src="${avatarUrl}" alt="${displayName}的头像">`;
+      renderAvatarStyleGrid();
+      
+      // 直接保存头像风格到 Firestore
+      try {
+        const userRef = doc(db, 'users', currentUser.uid);
+        await setDoc(userRef, {
+          avatarStyle: styleId,
+          updatedAt: serverTimestamp(),
+        }, { merge: true });
+        showAvatarSavedTip();
+      } catch (e) {
+        console.error('保存头像风格失败:', e);
+      }
+    };
+
+    function showAvatarSavedTip() {
+      const el = document.getElementById('success-msg');
+      el.textContent = '头像已保存';
+      el.classList.add('show');
+      setTimeout(() => {
+        el.classList.remove('show');
+      }, 3000);
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    // 5. 编辑模式切换
+    // ════════════════════════════════════════════════════════════════════
+    window.switchMode = function(mode) {
+      const card = document.getElementById('account-card');
+      if (mode === 'edit') {
+        card.classList.remove('view-mode');
+        card.classList.add('edit-mode');
+        document.getElementById('avatar-style-selector').classList.add('visible');
+        // 进入编辑模式时，随机选择10个风格
+        randomSelectStyles();
+        renderAvatarStyleGrid();
+      } else {
+        card.classList.remove('edit-mode');
+        card.classList.add('view-mode');
+        document.getElementById('avatar-style-selector').classList.remove('visible');
+        // 取消心肝编辑模式
+        cancelFavoritesEdit();
+      }
+    };
+
+    // ════════════════════════════════════════════════════════════════════
+    // 6. 字符计数
+    // ════════════════════════════════════════════════════════════════════
+    document.getElementById('username-input').addEventListener('input', function() {
+      updateUsernameCount();
+      // 实时更新头像
+      const displayName = this.value || '用户';
+      const avatarUrl = getAvatarUrl(selectedAvatarStyle, displayName);
+      document.getElementById('avatar-display').innerHTML = `<img src="${avatarUrl}" alt="${displayName}的头像">`;
+      renderAvatarStyleGrid();
+    });
+
+    function updateUsernameCount() {
+      const len = document.getElementById('username-input').value.length;
+      document.getElementById('username-count').textContent = len + '/12';
+    }
+
+    document.getElementById('bio-input').addEventListener('input', updateBioCount);
+    function updateBioCount() {
+      const len = document.getElementById('bio-input').value.length;
+      document.getElementById('bio-count').textContent = len + '/100';
+    }
+
+    // ════════════════════════════════════════════════════════════════════
+    // 7. 心肝标签管理
+    // ════════════════════════════════════════════════════════════════════
+    window.enterFavoritesEdit = function() {
+      favoritesEditMode = true;
+      document.getElementById('favorites-group').classList.remove('favorites-view-mode');
+      document.getElementById('favorites-group').classList.add('favorites-edit-mode');
+      document.getElementById('tag-input').focus();
+    };
+
+    window.confirmFavoritesEdit = async function() {
+      favoritesEditMode = false;
+      document.getElementById('favorites-group').classList.remove('favorites-edit-mode');
+      document.getElementById('favorites-group').classList.add('favorites-view-mode');
+      renderTags();
+      
+      try {
+        const userRef = doc(db, 'users', currentUser.uid);
+        await setDoc(userRef, {
+          uid: currentUser.uid,
+          email: currentUser.email,
+          favorites: editingTags,
+          updatedAt: serverTimestamp(),
+        }, { merge: true });
+        userData.favorites = editingTags;
+        showSuccess('心肝已保存');
+      } catch (e) {
+        console.error('保存心肝失败:', e);
+        showError('保存失败，请重试');
+      }
+    };
+
+    window.cancelFavoritesEdit = function() {
+      favoritesEditMode = false;
+      editingTags = [...(userData.favorites || [])];
+      document.getElementById('favorites-group').classList.remove('favorites-edit-mode');
+      document.getElementById('favorites-group').classList.add('favorites-view-mode');
+      document.getElementById('tag-input').value = '';
+      renderTags();
+    };
+
+    window.addTag = function() {
+      const input = document.getElementById('tag-input');
+      const tag = input.value.trim();
+
+      if (!tag) {
+        showError('请输入标签');
+        return;
+      }
+
+      if (!/^[a-zA-Z0-9]*$/.test(tag)) {
+        showError('标签只支持英文字母和数字');
+        return;
+      }
+
+      if (tag.length > 20) {
+        showError('标签最多 20 个英文字符');
+        return;
+      }
+
+      if (editingTags.includes(tag)) {
+        showError('该标签已存在');
+        return;
+      }
+
+      if (editingTags.length >= 10) {
+        showError('最多只能添加 10 个标签');
+        return;
+      }
+
+      editingTags.push(tag);
+      input.value = '';
+      renderTags();
+      input.focus();
+    };
+
+    window.removeTag = function(tag) {
+      editingTags = editingTags.filter(t => t !== tag);
+      renderTags();
+    };
+
+    function renderTags() {
+      const viewEl = document.getElementById('favorites-view');
+      if (editingTags.length > 0) {
+        viewEl.innerHTML = editingTags
+          .map(t => `<span class="tag">${t}</span>`)
+          .join('');
+      } else {
+        viewEl.innerHTML = '<span style="color: var(--muted); font-size: 12px;">——</span>';
+      }
+
+      const listEl = document.getElementById('favorites-list');
+      listEl.innerHTML = editingTags
+        .map(t => `<span class="tag">${t}<button class="tag-remove" onclick="removeTag('${t}')">×</button></span>`)
+        .join('');
+
+      document.getElementById('tag-count').textContent = editingTags.length + '/10 个标签';
+      document.getElementById('tag-add-btn').disabled = editingTags.length >= 10;
+    }
+
+    document.getElementById('tag-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        window.addTag();
+      }
+    });
+
+    // ════════════════════════════════════════════════════════════════════
+    // 8. 保存档案
+    // ════════════════════════════════════════════════════════════════════
+    window.saveProfile = async function() {
+      hideAlerts();
+
+      const username = document.getElementById('username-input').value.trim();
+      const bio = document.getElementById('bio-input').value.trim();
+
+      if (!username) {
+        showError('用户名不能为空');
+        return;
+      }
+
+      const btn = document.querySelector('.btn-save');
+      const btnText = document.getElementById('save-btn-text');
+      btn.disabled = true;
+      btnText.textContent = '保存中…';
+
+      try {
+        const userRef = doc(db, 'users', currentUser.uid);
+        await setDoc(userRef, {
+          uid: currentUser.uid,
+          email: currentUser.email,
+          displayName: username,
+          avatarStyle: selectedAvatarStyle,
+          bio: bio,
+          favorites: editingTags,
+          updatedAt: serverTimestamp(),
+        }, { merge: true });
+
+        userData.displayName = username;
+        userData.avatarStyle = selectedAvatarStyle;
+        userData.bio = bio;
+        userData.favorites = editingTags;
+
+        renderProfile();
+        switchMode('view');
+        showSuccess('档案已保存');
+      } catch (e) {
+        console.error('保存失败:', e);
+        showError('保存失败，请重试');
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = '保存';
+      }
+    };
+
+    // ════════════════════════════════════════════════════════════════════
+    // 9. 修改密码
+    // ════════════════════════════════════════════════════════════════════
+    window.openChangePasswordModal = function() {
+      document.getElementById('password-modal').classList.add('show');
+      document.getElementById('old-password').value = '';
+      document.getElementById('new-password').value = '';
+      document.getElementById('confirm-password').value = '';
+      document.getElementById('pwd-error-msg').classList.remove('show');
+      document.getElementById('pwd-success-msg').classList.remove('show');
+    };
+
+    window.closePasswordModal = function() {
+      document.getElementById('password-modal').classList.remove('show');
+    };
+
+    window.changePassword = async function() {
+      const oldPwd = document.getElementById('old-password').value;
+      const newPwd = document.getElementById('new-password').value;
+      const confirmPwd = document.getElementById('confirm-password').value;
+
+      const errorEl = document.getElementById('pwd-error-msg');
+      const successEl = document.getElementById('pwd-success-msg');
+      errorEl.classList.remove('show');
+      successEl.classList.remove('show');
+
+      if (!oldPwd || !newPwd || !confirmPwd) {
+        errorEl.textContent = '请填写所有字段';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      if (newPwd.length < 6) {
+        errorEl.textContent = '新密码至少需要 6 个字符';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      if (newPwd !== confirmPwd) {
+        errorEl.textContent = '两次输入的密码不一致';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      const btn = document.getElementById('pwd-submit-btn');
+      btn.disabled = true;
+
+      try {
+        const credential = EmailAuthProvider.credential(currentUser.email, oldPwd);
+        await reauthenticateWithCredential(currentUser, credential);
+        await updatePassword(currentUser, newPwd);
+
+        successEl.textContent = '密码已修改';
+        successEl.classList.add('show');
+
+        setTimeout(() => {
+          closePasswordModal();
+        }, 1500);
+      } catch (e) {
+        if (e.code === 'auth/wrong-password') {
+          errorEl.textContent = '当前密码错误';
+        } else {
+          errorEl.textContent = '修改失败，请重试';
+        }
+        errorEl.classList.add('show');
+      } finally {
+        btn.disabled = false;
+      }
+    };
+
+    // ════════════════════════════════════════════════════════════════════
+    // 10. 提示框
+    // ════════════════════════════════════════════════════════════════════
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.classList.add('show');
+      document.getElementById('success-msg').classList.remove('show');
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById('success-msg');
+      el.textContent = msg;
+      el.classList.add('show');
+      document.getElementById('error-msg').classList.remove('show');
+      setTimeout(() => {
+        el.classList.remove('show');
+      }, 3000);
+    }
+
+    function hideAlerts() {
+      document.getElementById('error-msg').classList.remove('show');
+      document.getElementById('success-msg').classList.remove('show');
+    }
+  </script>
+
+</body>
+</html>
