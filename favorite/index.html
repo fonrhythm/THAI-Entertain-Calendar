@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的收藏 — Chob Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf9f7;--surface:#fff;--border:#e8e4de;--border-soft:#f0ece6;
+  --text:#1a1a1a;--sub:#6b6b6b;--muted:#999;
+  --c-bl:#142b4b;--t-bl:#fff;
+  --c-gl:#d7ccba;--t-gl:#7a5c3a;
+  --c-band:#2b4779;--t-band:#fff;
+  --c-singer:#c4b59c;--t-singer:#fff;
+  --c-group:#6e8dbb;--t-group:#fff;
+  --c-actor:#d0c5af;--t-actor:#fff;
+  --c-other:#9db1ca;--t-other:#fff;
+}
+body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px;width:100%}
+.sticky-shell{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--surface);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.site-nav{background:var(--surface);border-bottom:1px solid var(--border-soft);padding:8px 0}
+.site-nav-inner{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.site-nav a{font-family:'Lato',sans-serif;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;flex-shrink:0}
+.site-nav a:hover{color:var(--text);background:var(--bg)}
+.site-nav a.active{color:var(--text);font-weight:700}
+.sep{color:#bbb;font-size:10px;flex-shrink:0}
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:52px 0 16px}
+.header-inner{display:flex;align-items:center}
+.nav-btn{background:none;border:none;cursor:pointer;width:36px;color:var(--muted);font-size:17px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:color .15s,background .15s;flex-shrink:0}
+.nav-btn:hover{color:var(--text);background:var(--bg)}
+.month-block{flex:1;padding:0 6px}
+.year-lbl{font-family:'Lato',sans-serif;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:3px;margin-bottom:1px}
+.month-row{display:flex;align-items:baseline;gap:10px;line-height:1}
+.month-cn{font-size:72px;font-weight:700;color:var(--text);line-height:.88;letter-spacing:-2px}
+.month-en{font-family:'Lato',sans-serif;font-size:32px;font-weight:300;color:#888;letter-spacing:1px}
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 0}
+.toolbar-inner{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.view-group{display:flex;gap:2px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px;flex-shrink:0}
+.view-btn{background:none;border:none;padding:4px 13px;border-radius:16px;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;color:var(--sub);transition:all .15s;white-space:nowrap}
+.view-btn.active{background:var(--text);color:#fff}
+.back-link{display:flex;align-items:center;gap:6px;color:var(--sub);text-decoration:none;font-size:13px;margin-left:auto;padding:6px 12px;border-radius:6px;transition:all .15s}
+.back-link:hover{background:var(--bg);color:var(--text)}
+.page-content{padding-top:0;flex:1}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.stat{padding:13px 16px;text-align:center;border-right:1px solid var(--border-soft)}
+.stat:last-child{border-right:none}
+.stat-n{font-size:26px;font-weight:700;font-family:'Lato',sans-serif;line-height:1}
+.stat-l{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.3px}
+.cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:0;border-bottom:10px solid var(--border)}
+.dow-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--border-soft)}
+.dow{text-align:center;padding:8px 0;font-size:10px;font-weight:500;letter-spacing:1.5px;color:var(--muted);border-right:1px solid var(--border-soft)}
+.dow:last-child{border-right:none}
+.dow.sun{color:#c0524e}.dow.sat{color:#5E7B9B}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:110px}
+.cell{overflow:hidden;min-width:0;min-height:0;padding:6px 5px 4px;border-right:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);background:var(--surface);transition:background .1s;display:flex;flex-direction:column}
+.cell:nth-child(7n){border-right:none}
+.cell.empty{background:#fcfbf9}
+.cell.today{background:#fffbf5}
+.cell.past-day{opacity:.5}
+.cell:not(.empty):hover{background:#fdfcfa}
+.cell-num{font-size:11px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:var(--sub);flex-shrink:0;margin-bottom:2px}
+.cell-num.sun{color:#c0524e}.cell-num.sat{color:#5E7B9B}
+.today .cell-num{background:var(--text);color:#fff;font-weight:700}
+.chip{font-size:10px;padding:2px 5px;border-radius:4px;margin-bottom:2px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5;flex-shrink:0;min-width:0;width:100%;border:none;text-align:left;font-family:inherit;transition:filter .1s;display:block}
+.chip.bl{background:var(--c-bl);color:var(--t-bl)}
+.chip.gl{background:var(--c-gl);color:var(--t-gl)}
+.chip.band{background:var(--c-band);color:var(--t-band)}
+.chip.singer{background:var(--c-singer);color:var(--t-singer)}
+.chip.group{background:var(--c-group);color:var(--t-group)}
+.chip.actor{background:var(--c-actor);color:var(--t-actor)}
+.chip.other{background:var(--c-other);color:var(--t-other)}
+.more{font-size:9px;color:var(--muted);cursor:pointer;padding:0 2px;display:block;margin-top:2px}
+.coming-soon-wrap{display:flex;justify-content:center;padding:10px 0}
+.coming-soon-badge{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 18px;font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:border-color .2s,color .2s}
+.coming-soon-badge:hover{border-color:#c9b8a8;color:var(--sub)}
+.empty-state{text-align:center;padding:60px 24px}
+.empty-icon{font-size:64px;margin-bottom:16px}
+.empty-title{font-size:20px;font-weight:700;margin-bottom:8px}
+.empty-text{font-size:14px;color:var(--sub);line-height:1.6;margin-bottom:32px}
+.upgrade-banner{background:linear-gradient(135deg, #142b4b 0%, #2b4779 100%);color:#fff;padding:40px 24px;border-radius:12px;text-align:center;margin-bottom:24px}
+.upgrade-title{font-size:24px;font-weight:700;margin-bottom:12px}
+.upgrade-text{font-size:14px;line-height:1.6;margin-bottom:20px;opacity:0.95}
+.upgrade-btn{display:inline-block;background:#fff;color:#142b4b;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;transition:all .2s;cursor:pointer;border:none;font-size:14px}
+.upgrade-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:85vh;overflow:hidden}
+.modal-bar{height:8px;flex-shrink:0;border-radius:16px 16px 0 0}
+.modal-pic-container{background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.modal-pic{width:100%;height:auto;display:block}
+.modal-pic-error{width:100%;height:200px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:var(--muted);font-size:14px}
+.modal-body{padding:0;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.modal-body::-webkit-scrollbar{display:none}
+.modal-x{position:absolute;top:13px;right:13px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--sub);z-index:10}
+.modal-info{padding:24px 20px 0;border-bottom:none}
+.modal-badge{display:inline-block;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:500;margin-bottom:12px}
+.modal-name{font-size:28px;font-weight:700;margin-bottom:6px;line-height:1.2}
+.modal-activity{font-size:14px;color:var(--sub);margin-bottom:20px;line-height:1.4}
+.modal-content{padding:20px}
+.modal-field{margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;font-size:13px}
+.modal-field i{color:var(--muted);font-size:16px;flex-shrink:0;margin-top:2px;width:16px;text-align:center}
+.modal-field-value{color:var(--text);line-height:1.6;display:inline}
+.modal-foot{border-top:1px solid var(--border-soft);padding:16px 20px 20px;display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+.btn{display:block;width:100%;padding:12px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border:none;text-align:center;background:var(--text);color:#fff;transition:opacity .2s}
+.btn:hover{opacity:0.9}
+.modal-day{background:var(--surface);border:1px solid var(--border);border-radius:16px;max-height:80vh;display:flex;flex-direction:column;width:380px;max-width:100%}
+.modal-day-header{padding:20px 20px 16px;border-bottom:1px solid var(--border-soft);position:relative;flex-shrink:0}
+.modal-day-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.modal-day-count{font-size:12px;color:var(--muted)}
+.modal-day-body{padding:16px 20px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;text-align:center;font-size:10px;color:var(--muted);background:var(--surface)}
+@media(max-width:768px){.cal-grid{grid-auto-rows:82px}}
+@media(max-width:480px){.wrap{padding:0 10px}.header{padding:42px 0 10px}.month-cn{font-size:50px;letter-spacing:-1px}.month-en{font-size:20px}.cal-grid{grid-auto-rows:62px}.cell{padding:1px 2px 2px}.cell-num{font-size:10px;width:15px;height:15px;margin-bottom:1px}.chip{font-size:9px;padding:1px 2px;line-height:11px}.more{font-size:8px}.dow{font-size:9px;letter-spacing:.3px}.modal{width:90%;max-width:380px}.upgrade-banner{padding:30px 16px}.upgrade-title{font-size:18px}}
+</style>
+</head>
+<body>
+
+<div class="sticky-shell">
+  <div class="site-nav">
+    <div class="wrap">
+      <div class="site-nav-inner">
+        <a href="/">Chob Calendar</a><span class="sep">›</span>
+        <a href="/china-calendar/">China</a><span class="sep">›</span>
+        <a href="/thai-calendar/">Thailand</a><span class="sep">›</span>
+        <a href="/oversea-calendar/">Oversea</a><span class="sep">›</span>
+        <a href="/About/">About</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="header">
+  <div class="wrap">
+    <div class="header-inner">
+      <button class="nav-btn" onclick="changeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
+      <div class="month-block">
+        <div class="year-lbl" id="y-lbl">2026</div>
+        <div class="month-row">
+          <span class="month-cn" id="m-cn">五月</span>
+          <span class="month-en" id="m-en">May</span>
+        </div>
+      </div>
+      <button class="nav-btn" onclick="changeMonth(1)"><i class="ti ti-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<div class="page-content" id="page-content">
+  <div class="toolbar">
+    <div class="wrap">
+      <div class="toolbar-inner">
+        <div class="view-group">
+          <button class="view-btn active" onclick="setView(this,'perform')">演出日期</button>
+          <button class="view-btn" onclick="setView(this,'sale')">开售日期</button>
+        </div>
+        <a href="../main/" class="back-link">
+          <i class="ti ti-arrow-left"></i>
+          返回日历
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" style="flex:1;padding-top:16px">
+    <div id="content-wrapper">
+      <!-- 由 JavaScript 动态生成 -->
+    </div>
+  </div>
+</div>
+
+<!-- 活动详情弹窗 -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-bar" id="m-bar"></div>
+    <div class="modal-body">
+      <button class="modal-x" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      
+      <div class="modal-pic-container" id="m-pic-container"></div>
+      
+      <div class="modal-info">
+        <div class="modal-badge" id="m-badge"></div>
+        <div class="modal-name" id="m-name"></div>
+        <div class="modal-activity" id="m-activity"></div>
+      </div>
+      
+      <div class="modal-content">
+        <div class="modal-field" id="m-venue-city-container" style="display:none">
+          <i class="ti ti-map-pin"></i>
+          <span class="modal-field-value" id="m-venue-city"></span>
+        </div>
+        <div class="modal-field" id="m-price-container" style="display:none">
+          <i class="ti ti-cash"></i>
+          <span class="modal-field-value" id="m-price"></span>
+        </div>
+        <div class="modal-field" id="m-time-container" style="display:none">
+          <i class="ti ti-clock"></i>
+          <span class="modal-field-value" id="m-time"></span>
+        </div>
+        <div class="modal-field" id="m-sale-container" style="display:none">
+          <i class="ti ti-calendar-event"></i>
+          <span class="modal-field-value" id="m-sale"></span>
+        </div>
+        <div class="modal-field" id="m-ticket-container" style="display:none">
+          <i class="ti ti-ticket"></i>
+          <span class="modal-field-value" id="m-ticket"></span>
+        </div>
+        <div class="modal-field" id="m-note-container" style="display:none">
+          <i class="ti ti-info-circle"></i>
+          <span class="modal-field-value" id="m-note"></span>
+        </div>
+        <div class="modal-field" id="m-tag-container" style="display:none">
+          <i class="ti ti-hash"></i>
+          <span class="modal-field-value" id="m-tag"></span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-foot">
+      <button class="btn" id="m-remind" onclick="addToCalendar()" style="display:none">设置售票提醒</button>
+      <div id="m-empty-block" style="display:none;height:52px;background:var(--bg);border-radius:10px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 某天的所有活动弹窗 -->
+<div class="overlay" id="day-overlay" onclick="if(event.target===this)closeDayModal()">
+  <div class="modal-day">
+    <div class="modal-day-header">
+      <button class="modal-x" onclick="closeDayModal()"><i class="ti ti-x"></i></button>
+      <div class="modal-day-title" id="day-title">日期详情</div>
+      <div class="modal-day-count" id="day-count"></div>
+    </div>
+    <div class="modal-day-body" id="day-body"></div>
+  </div>
+</div>
+
+<footer>Copyright &copy; 2026 — All rights reserved by SomenStjerne</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+const CN_M = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+const EN_M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const CAT = {
+  bl: {label:'泰腐', bg:'#142b4b', fg:'#fff'},
+  gl: {label:'泰百', bg:'#d7ccba', fg:'#fff'},
+  band: {label:'乐队', bg:'#2b4779', fg:'#fff'},
+  singer: {label:'歌手', bg:'#c4b59c', fg:'#fff'},
+  group: {label:'男女团', bg:'#6e8dbb', fg:'#fff'},
+  actor: {label:'演员', bg:'#d0c5af', fg:'#fff'},
+  other: {label:'其他艺人', bg:'#9db1ca', fg:'#fff'}
+};
+
+let yr = new Date().getFullYear();
+let mo = new Date().getMonth() + 1;
+let events = [];
+let currentEvent = null;
+let currentUser = null;
+let userSubscribed = false;
+let view = 'perform';
+
+let userFavorites = { events: [], artists: [] };
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateHeader();
+  checkAuthAndRender();
+});
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAv4v5B1HXotOABmIcc5TOi3uzqPmLnvNs",
+  authDomain: "chob-calendar.firebaseapp.com",
+  projectId: "chob-calendar",
+  storageBucket: "chob-calendar.firebasestorage.app",
+  messagingSenderId: "629896393980",
+  appId: "1:629896393980:web:d8800df187ba495b895379"
+};
+
+const app = firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+async function checkAuthAndRender() {
+  auth.onAuthStateChanged(async user => {
+    currentUser = user;
+    
+    if (!user) {
+      // 未登录 → 跳转到登录
+      location.href = '/login/?redirect=../favorite/';
+      return;
+    }
+    
+    // ✅ 读取订阅状态
+    try {
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      userSubscribed = userDoc.exists ? (userDoc.data().subscription || false) : false;
+    } catch (e) {
+      console.error('读取订阅状态失败:', e);
+      userSubscribed = false;
+    }
+    
+    if (!userSubscribed) {
+      // 已登录但未付费 → 显示升级提示
+      showUpgradePrompt();
+      return;
+    }
+    
+    // ✅ 已登录且付费 → 加载数据并显示
+    try {
+      const favStr = localStorage.getItem('userFavorites');
+      userFavorites = favStr ? JSON.parse(favStr) : { events: [], artists: [] };
+    } catch (e) {
+      userFavorites = { events: [], artists: [] };
+    }
+    
+    loadAllEvents();
+  });
+}
+
+function showUpgradePrompt() {
+  document.getElementById('content-wrapper').innerHTML = `
+    <div class="upgrade-banner">
+      <div class="upgrade-title">🔒 仅限订阅用户</div>
+      <div class="upgrade-text">
+        我的收藏功能仅对付费订阅用户开放<br>
+        升级以开启个性化收藏体验
+      </div>
+      <button class="upgrade-btn" onclick="location.href='../main/'">返回日历</button>
+    </div>
+  `;
+}
+
+function updateHeader() {
+  document.getElementById('y-lbl').textContent = yr;
+  document.getElementById('m-cn').textContent = CN_M[mo - 1];
+  document.getElementById('m-en').textContent = EN_M[mo - 1];
+}
+
+function changeMonth(d) {
+  mo += d;
+  if (mo > 12) { mo = 1; yr++; }
+  if (mo < 1) { mo = 12; yr--; }
+  updateHeader();
+  render();
+}
+
+function setView(btn, v) {
+  view = v;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function getDate(ev) {
+  return view === 'sale' ? (ev.sale_date || '').trim() || null : (ev.date || '').trim() || null;
+}
+
+function loadAllEvents() {
+  try {
+    const evStr = localStorage.getItem('allEvents');
+    events = evStr ? JSON.parse(evStr) : [];
+  } catch (e) {
+    events = [];
+  }
+  render();
+}
+
+function render() {
+  const favorited_events = events.filter(ev => {
+    const eventId = ev.id || (ev.name + '_' + ev.date);
+    if (userFavorites.events.includes(eventId)) return true;
+    const artistsInEvent = extractArtistsFromEvent(ev);
+    return artistsInEvent.some(artist => userFavorites.artists.includes(artist));
+  });
+  
+  const byDay = {};
+  favorited_events.forEach(ev => {
+    const ds = getDate(ev);
+    if (!ds) return;
+    const parts = ds.split(' ')[0].split('-');
+    if (parts.length < 3) return;
+    if (parseInt(parts[0]) !== yr || parseInt(parts[1]) !== mo) return;
+    const d = parseInt(parts[2]);
+    if (!byDay[d]) byDay[d] = [];
+    byDay[d].push(ev);
+  });
+
+  if (favorited_events.length === 0) {
+    document.getElementById('content-wrapper').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">♡</div>
+        <div class="empty-title">还没有收藏任何行程</div>
+        <div class="empty-text">返回日历，点击爱心按钮收藏你喜欢的艺人和活动吧！</div>
+        <a href="../main/" class="coming-soon-badge">返回日历</a>
+      </div>
+    `;
+    return;
+  }
+
+  const fd = new Date(yr, mo - 1, 1).getDay();
+  const dim = new Date(yr, mo, 0).getDate();
+  const tod = new Date();
+  const isNow = tod.getFullYear() === yr && tod.getMonth() + 1 === mo;
+
+  let html = `
+    <div class="stats" style="margin:0px 0 12px">
+      <div class="stat"><div class="stat-n">${favorited_events.filter(e => new Date(getDate(e) || '').getMonth() + 1 === mo).length}</div><div class="stat-l">本月收藏</div></div>
+      <div class="stat"><div class="stat-n">${favorited_events.length}</div><div class="stat-l">总收藏数</div></div>
+      <div class="stat"><div class="stat-n">${userFavorites.artists.length}</div><div class="stat-l">关注艺人</div></div>
+      <div class="stat"><div class="stat-n">★</div><div class="stat-l">我的收藏</div></div>
+    </div>
+    <div class="cal">
+      <div class="dow-row">
+        <div class="dow sun">SUN</div>
+        <div class="dow">MON</div>
+        <div class="dow">TUE</div>
+        <div class="dow">WED</div>
+        <div class="dow">THU</div>
+        <div class="dow">FRI</div>
+        <div class="dow sat">SAT</div>
+      </div>
+      <div class="cal-grid" id="grid"></div>
+    </div>
+    <div class="coming-soon-wrap">
+      <a href="/About/" class="coming-soon-badge">About</a>
+    </div>
+  `;
+  
+  document.getElementById('content-wrapper').innerHTML = html;
+
+  let gridHtml = '';
+  for (let i = 0; i < fd; i++) gridHtml += '<div class="cell empty"></div>';
+
+  for (let d = 1; d <= dim; d++) {
+    const dow = (fd + d - 1) % 7;
+    const isT = isNow && d === tod.getDate();
+    const evs = byDay[d] || [];
+    const nc = dow === 0 ? 'sun' : dow === 6 ? 'sat' : '';
+    
+    const currentDate = new Date(yr, mo - 1, d);
+    const todayZero = new Date(tod.getFullYear(), tod.getMonth(), tod.getDate());
+    const isPast = currentDate < todayZero;
+
+    const hasMore = evs.length > 3;
+    let cellClass = 'cell';
+    if (isT) cellClass += ' today';
+    else if (isPast) cellClass += ' past-day';
+
+    let cellHtml = `<div class="${cellClass}" ${hasMore ? `onclick="openDayModal(${d})"` : ''} style="${hasMore ? 'cursor:pointer' : ''}">`;
+    cellHtml += `<div class="cell-num ${nc}">${d}</div>`;
+    
+    const displayEvs = evs.slice(0, hasMore ? 2 : 3);
+    displayEvs.forEach(ev => {
+      const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
+      cellHtml += `<button class="chip ${ev.category || 'other'}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+    });
+
+    if (hasMore) {
+      cellHtml += `<span class="more">还有 ${evs.length - displayEvs.length} 个</span>`;
+    }
+    cellHtml += '</div>';
+    gridHtml += cellHtml;
+  }
+
+  const rem = (fd + dim) % 7;
+  if (rem > 0) for (let i = rem; i < 7; i++) gridHtml += '<div class="cell empty"></div>';
+
+  document.getElementById('grid').innerHTML = gridHtml;
+  document.querySelectorAll('.cell').forEach(cell => {
+    const dayNum = parseInt(cell.querySelector('.cell-num')?.textContent);
+    if (dayNum && byDay[dayNum]) {
+      cell.dataset.events = JSON.stringify(byDay[dayNum]);
+    }
+  });
+}
+
+function openModal(enc) {
+  const ev = JSON.parse(decodeURIComponent(atob(enc)));
+  currentEvent = ev;
+
+  const cat = CAT[ev.category || 'other'] || CAT.other;
+  document.getElementById('m-bar').style.background = cat.bg;
+
+  const badge = document.getElementById('m-badge');
+  badge.textContent = cat.label;
+  badge.style.background = cat.bg;
+  badge.style.color = cat.fg;
+
+  document.getElementById('m-name').textContent = ev.name || '未命名';
+  
+  const activityEl = document.getElementById('m-activity');
+  if (ev.activity) {
+    activityEl.textContent = ev.activity;
+    activityEl.style.display = 'block';
+  } else {
+    activityEl.style.display = 'none';
+  }
+
+  const picContainer = document.getElementById('m-pic-container');
+  if (ev.picture_url && ev.picture_url.trim()) {
+    picContainer.innerHTML = `<img class="modal-pic" src="${ev.picture_url.trim()}" alt="活动图片" onerror="this.parentElement.innerHTML='<div class=\\'modal-pic-error\\'>图片加载失败</div>'" />`;
+  } else {
+    picContainer.innerHTML = '<div class="modal-pic-error">暂无图片</div>';
+  }
+
+  const venueCityContainer = document.getElementById('m-venue-city-container');
+  if (ev.venue || ev.city) {
+    const parts = [];
+    if (ev.venue) parts.push(ev.venue);
+    if (ev.city) parts.push(ev.city);
+    document.getElementById('m-venue-city').textContent = parts.join(' · ');
+    venueCityContainer.style.display = 'flex';
+  } else {
+    venueCityContainer.style.display = 'none';
+  }
+
+  if (ev.price) {
+    document.getElementById('m-price').textContent = ev.price;
+    document.getElementById('m-price-container').style.display = 'block';
+  } else {
+    document.getElementById('m-price-container').style.display = 'none';
+  }
+
+  if (ev.time) {
+    document.getElementById('m-time').textContent = ev.time;
+    document.getElementById('m-time-container').style.display = 'block';
+  } else {
+    document.getElementById('m-time-container').style.display = 'none';
+  }
+
+  if (ev.sale_date) {
+    const saleTime = ev.sale_time ? ` ${ev.sale_time}` : '';
+    document.getElementById('m-sale').textContent = `${ev.sale_date}${saleTime}`;
+    document.getElementById('m-sale-container').style.display = 'block';
+  } else {
+    document.getElementById('m-sale-container').style.display = 'none';
+  }
+
+  if (ev.ticket_url) {
+    document.getElementById('m-ticket').innerHTML = `<a href="${ev.ticket_url}" target="_blank" style="color:#142b4b;text-decoration:underline">点击购票 →</a>`;
+    document.getElementById('m-ticket-container').style.display = 'block';
+  } else {
+    document.getElementById('m-ticket-container').style.display = 'none';
+  }
+
+  if (ev.note) {
+    document.getElementById('m-note').innerHTML = ev.note.replace(/\n/g, '<br>');
+    document.getElementById('m-note-container').style.display = 'block';
+  } else {
+    document.getElementById('m-note-container').style.display = 'none';
+  }
+
+  if (ev.tag) {
+    document.getElementById('m-tag').textContent = ev.tag;
+    document.getElementById('m-tag-container').style.display = 'block';
+  } else {
+    document.getElementById('m-tag-container').style.display = 'none';
+  }
+
+  const remindBtn = document.getElementById('m-remind');
+  const emptyBlock = document.getElementById('m-empty-block');
+  if (ev.sale_date || ev.sale_time) {
+    remindBtn.style.display = 'block';
+    emptyBlock.style.display = 'none';
+  } else {
+    remindBtn.style.display = 'none';
+    emptyBlock.style.display = 'block';
+    emptyBlock.style.background = cat.bg;
+  }
+
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function openDayModal(day) {
+  const cell = event.target.closest('.cell');
+  const evs = cell.dataset.events ? JSON.parse(cell.dataset.events) : [];
+
+  document.getElementById('day-title').textContent = `${mo}月${day}日 全部活动`;
+  document.getElementById('day-count').textContent = `共 ${evs.length} 个行程`;
+
+  document.getElementById('day-body').innerHTML = evs.map(ev => {
+    const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
+    return `<button class="chip ${ev.category || 'other'}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+  }).join('');
+
+  document.getElementById('day-overlay').classList.add('open');
+}
+
+function closeDayModal() {
+  document.getElementById('day-overlay').classList.remove('open');
+}
+
+function addToCalendar() {
+  if (!currentEvent) return;
+  const ev = currentEvent;
+  
+  const saleDateStr = ev.sale_date || ev.date;
+  const saleTimeStr = ev.sale_time || '10:00';
+  const [sh, sm] = (saleTimeStr + ':00').split(':').map(Number);
+  
+  const sd = new Date(saleDateStr.split(' ')[0]);
+  sd.setHours(sh, sm, 0, 0);
+  const ed = new Date(sd.getTime() + 30 * 60000);
+
+  const title = `[开售提醒] ${ev.activity || ev.name}`;
+  const desc = `演出日期：${ev.date}\n场地：${ev.venue || ''}${ev.city ? '，' + ev.city : ''}\n票价：${ev.price || '免费'}`;
+  const fmt = dt => dt.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//SomenStjerne//ChobCalendar//EN', 'BEGIN:VEVENT',
+    `UID:${Date.now()}@somenstjerne`, `DTSTAMP:${fmt(new Date())}`, `DTSTART:${fmt(sd)}`, `DTEND:${fmt(ed)}`,
+    `SUMMARY:${title}`, `DESCRIPTION:${desc}`, 'BEGIN:VALARM', 'TRIGGER:-PT0M', 'ACTION:DISPLAY', `DESCRIPTION:${title}`, 'END:VALARM',
+    'END:VEVENT', 'END:VCALENDAR'
+  ].join('\r\n');
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+  a.download = `${(ev.name || '提醒').replace(/\s/g, '_')}_开售提醒.ics`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }, 1000);
+
+  closeModal();
+}
+
+function extractArtists(text) {
+  if (!text || typeof text !== 'string') return [];
+  const stopwords = ['酒吧演出', '演唱会', '剧集宣传', '免费', '售票', '演出', '宣传', '活动', '行程', '直播', '工作坊', '粉丝见面会', '签售会', '见面会', '舞台', '表演', '出镜', '现场', '特别出演', '特别演出', '嘉宾', '特邀', '合作', '共同', '联合'];
+  let parts = text.split(/[,，、]/);
+  const cleaned = parts.map(s => s.trim()).filter(s => {
+    if (!s) return false;
+    if (stopwords.some(w => s.includes(w))) return false;
+    if (/^\d+$/.test(s)) return false;
+    return true;
+  });
+  return Array.from(new Set(cleaned));
+}
+
+function extractArtistsFromEvent(event) {
+  const textFields = [event.name || '', event.activity || '', event.note || ''];
+  return textFields.flatMap(field => extractArtists(field)).filter((v, i, a) => a.indexOf(v) === i);
+}
+
+window.addEventListener('resize', () => render());
+</script>
+</body>
+</html>
