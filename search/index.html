@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>搜索 — Chob Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf9f7;--surface:#fff;--border:#e8e4de;--border-soft:#f0ece6;
+  --text:#1a1a1a;--sub:#6b6b6b;--muted:#999;--accent:#142b4b;
+}
+body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px;width:100%}
+
+/* NAV */
+.sticky-shell{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--surface);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.site-nav{background:var(--surface);border-bottom:1px solid var(--border-soft);padding:8px 0}
+.site-nav-inner{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.site-nav a{font-family:'Lato',sans-serif;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;flex-shrink:0}
+.site-nav a:hover{color:var(--text);background:var(--bg)}
+.site-nav a.active{color:var(--text)}
+.sep{color:#bbb;font-size:10px;flex-shrink:0}
+
+/* SEARCH BAR */
+.search-section{padding:32px 0 24px}
+.search-title{font-family:'Lato',sans-serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:20px;letter-spacing:-0.5px}
+.search-bar{display:flex;gap:10px;align-items:center}
+.search-input-wrap{flex:1;position:relative}
+.search-input{width:100%;padding:12px 16px 12px 42px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);outline:none;transition:border-color .15s}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--muted)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px;pointer-events:none}
+.search-btn{padding:12px 20px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;white-space:nowrap;flex-shrink:0}
+.search-btn:hover{opacity:.88}
+.search-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* FILTERS */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.filter-label{font-size:11px;color:var(--muted);font-family:'Lato',sans-serif;letter-spacing:.5px;white-space:nowrap}
+.filter-chip{padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);font-size:11px;font-family:inherit;cursor:pointer;color:var(--sub);transition:all .15s;white-space:nowrap}
+.filter-chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.filter-chip:hover:not(.on){background:var(--bg)}
+
+/* LOGIN NOTICE */
+.login-notice{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:20px;font-size:13px;color:var(--sub)}
+.login-notice i{font-size:18px;color:var(--muted);flex-shrink:0}
+.login-notice a{color:var(--accent);text-decoration:none;font-weight:500}
+.login-notice a:hover{text-decoration:underline}
+
+/* RESULTS */
+.results-section{padding-bottom:48px}
+.results-meta{font-size:12px;color:var(--muted);margin-bottom:16px;font-family:'Lato',sans-serif;letter-spacing:.3px}
+.results-meta strong{color:var(--text)}
+
+/* SECTION DIVIDER */
+.results-section-divider{margin:28px 0 16px;padding-top:16px;border-top:1px solid var(--border-soft)}
+.results-section-title{font-size:13px;font-weight:600;color:var(--text);font-family:'Lato',sans-serif;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+
+/* CARD LIST */
+.card-list{display:flex;flex-direction:column;gap:10px}
+
+/* 分组容器 */
+.event-group{display:flex;flex-direction:column;gap:10px}
+
+/* 过去行程透明度 */
+.event-card.past{opacity:0.7;background:var(--surface)}
+.event-card.past .card-date{background:rgba(250,249,247,0.7)}
+
+.event-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:border-color .15s,box-shadow .15s;text-decoration:none;color:inherit}
+.event-card:hover{border-color:#c9b8a8;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.event-card.cancelled{opacity:.5}
+
+/* 日期块 */
+.card-date{flex-shrink:0;width:48px;text-align:center;background:var(--bg);border-radius:8px;padding:8px 4px}
+.card-date-m{font-family:'Lato',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.card-date-d{font-family:'Lato',sans-serif;font-size:22px;font-weight:700;color:var(--text);line-height:1.1}
+.card-date-y{font-family:'Lato',sans-serif;font-size:9px;color:var(--muted);margin-top:1px}
+
+/* 内容 */
+.card-content{flex:1;min-width:0}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
+.card-name{font-size:15px;font-weight:700;color:var(--text);line-height:1.3;flex:1;min-width:0}
+.card-cat{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.card-activity{font-size:12px;color:var(--sub);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.card-meta-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+.card-meta-item i{font-size:12px}
+.card-source{font-size:10px;font-family:'Lato',sans-serif;letter-spacing:.5px;color:var(--border);text-transform:uppercase;margin-left:auto;flex-shrink:0}
+
+/* 颜色映射 */
+.cat-bl{background:#142b4b;color:#fff}
+.cat-gl{background:#d7ccba;color:#7a5c3a}
+.cat-band{background:#2b4779;color:#fff}
+.cat-singer{background:#c4b59c;color:#fff}
+.cat-group{background:#6e8dbb;color:#fff}
+.cat-actor{background:#d0c5af;color:#fff}
+.cat-other{background:#9db1ca;color:#fff}
+.cat-pop{background:#B46C72;color:#fff}
+.cat-indie{background:#6E2E34;color:#fff}
+.cat-artist{background:#A65B27;color:#fff}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px}
+.empty-icon{font-size:40px;color:var(--border);margin-bottom:16px}
+.empty-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.empty-sub{font-size:13px;color:var(--sub);line-height:1.7;margin-bottom:20px}
+.empty-about{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:'Lato',sans-serif;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:border-color .2s,color .2s}
+.empty-about:hover{border-color:#c9b8a8;color:var(--sub)}
+
+/* LOADING */
+.loading{text-align:center;padding:48px 20px}
+.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:12px;color:var(--muted)}
+
+/* CANCELLED badge */
+.cancelled-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(0,0,0,.08);color:var(--sub);margin-left:6px;text-decoration:none;vertical-align:middle}
+
+footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;text-align:center;font-size:10px;color:var(--muted);background:var(--surface)}
+
+@media(max-width:480px){
+  .wrap{padding:0 16px}
+  .search-title{font-size:22px;margin-bottom:16px}
+  .search-bar{flex-wrap:wrap}
+  .search-btn{width:100%}
+  .card-source{display:none}
+  .filter-row{gap:6px}
+}
+</style>
+</head>
+<body>
+
+<div class="sticky-shell">
+  <div class="site-nav">
+    <div class="wrap">
+      <div class="site-nav-inner">
+        <a href="/">Chob Calendar</a><span class="sep">›</span>
+        <a href="/china-calendar/">China</a><span class="sep">›</span>
+        <a href="/thai-calendar/">Thailand</a><span class="sep">›</span>
+        <a href="/oversea-calendar/">Oversea</a><span class="sep">›</span>
+        <a href="/About/">About</a><span class="sep">›</span>
+        <a href="/search/" class="active">搜索</a>
+        <span class="sep">›</span>
+        <div id="nav-auth" style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <a href="/login/" style="font-family:'Lato',sans-serif;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:6px;white-space:nowrap" id="nav-login">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-content" style="flex:1;padding-top:0">
+  <div class="wrap">
+    <div class="search-section">
+      <div class="search-title">搜索行程</div>
+
+
+      <div class="search-bar">
+        <div class="search-input-wrap">
+          <i class="ti ti-search search-icon"></i>
+          <input class="search-input" type="text" id="search-input"
+            placeholder="搜索艺人名字、活动名称、场地…"
+            autocomplete="off" id="search-input">
+        </div>
+        <button class="search-btn" id="search-btn" onclick="doSearch()">搜索</button>
+      </div>
+
+      <!-- 筛选来源 -->
+      <div class="filter-row">
+        <span class="filter-label">范围：</span>
+        <button class="filter-chip on" data-src="all" onclick="toggleSrc(this)">全部</button>
+        <button class="filter-chip" data-src="thailand" onclick="toggleSrc(this)">Thailand</button>
+        <button class="filter-chip" data-src="china" onclick="toggleSrc(this)">China</button>
+        <button class="filter-chip" data-src="oversea" onclick="toggleSrc(this)">Oversea</button>
+      </div>
+    </div>
+
+    <div class="results-section" id="results-section" style="display:none">
+      <div class="results-meta" id="results-meta"></div>
+      <div id="results-container"></div>
+    </div>
+
+    <div class="loading" id="loading" style="display:none">
+      <div class="spinner"></div>
+      <div class="loading-txt">正在搜索…</div>
+    </div>
+
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="empty-icon"><i class="ti ti-mood-empty"></i></div>
+      <div class="empty-title">暂未有相关行程</div>
+      <div class="empty-sub">找不到「<span id="empty-keyword"></span>」相关的行程<br>如需了解更多，请关注官方渠道或联系我</div>
+      <a href="/About/" class="empty-about">联系我 →</a>
+    </div>
+  </div>
+</div>
+
+<footer>Copyright &copy; 2026 — All rights reserved by SomenStjerne</footer>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAv4v5B1HXotOABmIcc5TOi3uzqPmLnvNs",
+  authDomain: "chob-calendar.firebaseapp.com",
+  projectId: "chob-calendar",
+  storageBucket: "chob-calendar.firebasestorage.app",
+  messagingSenderId: "629896393980",
+  appId: "1:629896393980:web:d8800df187ba495b895379"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// GAS 配置
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec';
+const GAS_KEY = 'thenorthremenbersandhighgardengrowingstrong'; // 【修复】补上密钥常量
+const ORIGIN = 'chobcalendar.pages.dev';
+const SOURCES = {
+  thailand: { id: '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU', label: 'Thailand' },
+  china:    { id: '1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA', label: 'China' },
+  oversea:  { id: '1Irbm_DlW63XjhS54qbopw18WnpJpo_s3gbrDKqkmyvY', label: 'Oversea' },
+};
+
+const CAT_LABEL = {
+  bl:'泰腐',gl:'泰百',band:'乐队',singer:'歌手',group:'男女团',
+  actor:'演员',other:'其他艺人',pop:'流行音乐',indie:'独立音乐',artist:'艺人活动'
+};
+
+let currentUser = null;
+let activeSrc = 'all';
+let allData = {}; // 缓存已加载的数据
+
+// 登录状态
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  const searchBtn = document.getElementById('search-btn');
+  const input = document.getElementById('search-input');
+  const navLogin = document.getElementById('nav-login');
+
+  if (user) {
+    searchBtn.disabled = false;
+    input.disabled = false;
+    input.placeholder = '搜索艺人名字、活动名称、场地…';
+    // 导航栏更新
+    if (navLogin) {
+      navLogin.textContent = user.displayName || user.email.split('@')[0];
+      navLogin.href = '/account/';
+      navLogin.style.color = 'var(--text)';
+      const wrap = document.getElementById('nav-auth');
+      const sep = document.createElement('span');
+      sep.textContent = '·'; sep.style.cssText = 'color:#bbb;font-size:10px;flex-shrink:0';
+      const out = document.createElement('button');
+      out.textContent = '登出';
+      out.style.cssText = 'font-family:Lato,sans-serif;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px 6px';
+      out.onclick = () => signOut(auth);
+      wrap.appendChild(sep); wrap.appendChild(out);
+    }
+    // 如果 URL 有 q 参数，自动执行搜索
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      document.getElementById('search-input').value = q;
+      doSearch();
+    }
+  } else {
+    location.href = '/login/?redirect=/search/';
+    return;
+  }
+});
+
+// 来源筛选
+window.toggleSrc = function(btn) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('on'));
+  btn.classList.add('on');
+  activeSrc = btn.dataset.src;
+};
+
+// 加载单个 Sheet 数据（带缓存）
+async function loadSheet(key) {
+  if (allData[key]) return allData[key];
+  const { id } = SOURCES[key];
+  // 【修复】补上 key= 参数，否则 GAS 后端第一步密钥校验就会失败，导致搜索必定报错
+  const url = `${GAS_URL}?id=${id}&key=${GAS_KEY}&origin=${ORIGIN}`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const rows = await r.json();
+  const events = rows.map(row => {
+    const obj = {};
+    Object.keys(row).forEach(k => { obj[k.trim().toLowerCase()] = String(row[k] ?? '').trim(); });
+    return { ...obj, _source: key };
+  }).filter(o => o.date || o.sale_date);
+  allData[key] = events;
+  return events;
+}
+
+// 判断行程是否为过去的
+function isPastEvent(dateStr) {
+  if (!dateStr) return false;
+  const eventDate = new Date(dateStr);
+  const today = new Date();
+  // 将今天的日期设置为0时0分0秒，用于比较
+  today.setHours(0, 0, 0, 0);
+  eventDate.setHours(0, 0, 0, 0);
+  return eventDate < today;
+}
+
+// 搜索
+window.doSearch = async function() {
+  if (!currentUser) return;
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) return;
+
+  // 更新 URL
+  const url = new URL(location.href);
+  url.searchParams.set('q', q);
+  history.replaceState({}, '', url);
+
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('search-btn').disabled = true;
+
+  try {
+    // 决定要搜哪些来源
+    const srcs = activeSrc === 'all' ? Object.keys(SOURCES) : [activeSrc];
+
+    // 并行加载
+    const loaded = await Promise.all(srcs.map(k => loadSheet(k)));
+    const pool = loaded.flat();
+
+    // 搜索：name、full_name、activity、note、venue、city
+    const kw = q.toLowerCase();
+    const results = pool.filter(ev => {
+      const fields = [ev.name, ev.full_name, ev.activity, ev.note, ev.venue, ev.city];
+      return fields.some(f => f && f.toLowerCase().includes(kw));
+    });
+
+    // 按日期排序（有日期的排前面，从近到远）
+    results.sort((a, b) => {
+      const da = a.date ? new Date(a.date) : new Date('9999-12-31');
+      const db = b.date ? new Date(b.date) : new Date('9999-12-31');
+      return da - db;
+    });
+
+    // 区分过去和未来的行程
+    const futureEvents = [];
+    const pastEvents = [];
+    
+    results.forEach(ev => {
+      if (isPastEvent(ev.date)) {
+        pastEvents.push(ev);
+      } else {
+        futureEvents.push(ev);
+      }
+    });
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('search-btn').disabled = false;
+
+    if (results.length === 0) {
+      document.getElementById('empty-keyword').textContent = q;
+      document.getElementById('empty-state').style.display = 'block';
+    } else {
+      // 过去行程只显示最近 5 个（已按日期排序，所以后面的是最近的）
+      const recentPastEvents = pastEvents.slice(-5);
+      renderResults(futureEvents, recentPastEvents, q, results.length);
+    }
+  } catch(e) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('search-btn').disabled = false;
+    document.getElementById('results-section').style.display = 'block';
+    document.getElementById('results-meta').textContent = '搜索失败，请重试';
+    console.error(e);
+  }
+};
+
+const EN_M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function renderResults(futureEvents, pastEvents, q, totalCount) {
+  const meta = document.getElementById('results-meta');
+  meta.innerHTML = `找到 <strong>${totalCount}</strong> 条结果，关键词：<strong>${escHtml(q)}</strong>`;
+
+  const container = document.getElementById('results-container');
+  let html = '';
+
+  // 未来行程
+  if (futureEvents.length > 0) {
+    html += `<div class="event-group">`;
+    html += futureEvents.map(ev => renderEventCard(ev, false)).join('');
+    html += `</div>`;
+  }
+
+  // 过去行程
+  if (pastEvents.length > 0) {
+    html += `<div class="results-section-divider"><div class="results-section-title">过去的行程</div></div>`;
+    html += `<div class="event-group">`;
+    html += pastEvents.map(ev => renderEventCard(ev, true)).join('');
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+  document.getElementById('results-section').style.display = 'block';
+
+  // 滚动到结果
+  document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// 渲染单个事件卡片
+function renderEventCard(ev, isPast) {
+  const d = ev.date ? new Date(ev.date) : null;
+  const mon = d ? EN_M[d.getMonth()] : '—';
+  const day = d ? d.getDate() : '—';
+  const yr  = d ? d.getFullYear() : '';
+  const cat = ev.category || 'other';
+  const catLabel = CAT_LABEL[cat] || cat;
+  const srcLabel = SOURCES[ev._source]?.label || ev._source;
+  const cancelled = ev.status === 'cancelled';
+  const venue = [ev.venue, ev.city].filter(Boolean).join(' · ') || '待公布';
+  const activity = ev.activity || ev.full_name || '';
+  const q = document.getElementById('search-input').value.trim();
+
+  return `
+    <div class="event-card${isPast ? ' past' : ''}${cancelled ? ' cancelled' : ''}" onclick="openDetail('${escAttr(JSON.stringify(ev))}')">
+      <div class="card-date">
+        <div class="card-date-m">${mon}</div>
+        <div class="card-date-d">${day}</div>
+        <div class="card-date-y">${yr}</div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <div class="card-name">${highlight(escHtml(ev.name||'未命名'), q)}${cancelled?'<span class="cancelled-badge">已取消</span>':''}</div>
+          <span class="card-cat cat-${cat}">${catLabel}</span>
+        </div>
+        ${activity?`<div class="card-activity">${highlight(escHtml(activity), q)}</div>`:''}
+        <div class="card-meta">
+          <span class="card-meta-item"><i class="ti ti-map-pin"></i>${highlight(escHtml(venue), q)}</span>
+          ${ev.time?`<span class="card-meta-item"><i class="ti ti-clock"></i>${escHtml(ev.time)}</span>`:''}
+          <span class="card-source">${srcLabel}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+// 高亮关键词
+function highlight(html, kw) {
+  if (!kw) return html;
+  const safe = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return html.replace(new RegExp(`(${safe})`, 'gi'), '<mark style="background:#fff3cd;border-radius:2px;padding:0 1px">$1</mark>');
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function escAttr(s){ return s.replace(/"/g,'&quot;').replace(/'/g,'&#39;') }
+
+// 点击卡片打开详情（暂时用 alert，后续可做弹窗）
+window.openDetail = function(evJson) {
+  // 日后可接入详情弹窗，现在先跳转对应日历页
+  try {
+    const ev = JSON.parse(evJson);
+    const src = ev._source;
+    const date = ev.date;
+    if (src && date) {
+      const d = new Date(date);
+      const paths = { thailand: '/thai-calendar/', china: '/china-calendar/', oversea: '/oversea-calendar/' };
+      if (paths[src]) location.href = paths[src];
+    }
+  } catch(e) {}
+};
+
+// 回车搜索
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') window.doSearch();
+});
+
+// 页面偏移
+function setOffset(){
+  const s=document.querySelector('.sticky-shell'),c=document.getElementById('page-content');
+  if(s&&c)c.style.paddingTop=s.offsetHeight+'px';
+}
+window.addEventListener('resize', setOffset);
+requestAnimationFrame(()=>{ setOffset(); setTimeout(setOffset,300); });
+</script>
+</body>
+</html>
