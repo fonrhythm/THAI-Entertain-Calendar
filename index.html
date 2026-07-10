@@ -1,309 +1,61 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>网站维护公告 - Chob泰娱行程日历</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chob泰娱行程日历</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#faf9f7;--surface:#fff;--border:#e8e4de;--border-soft:#f0ece6;
+      --text:#1a1a1a;--sub:#6b6b6b;--muted:#999;--accent:#142b4b;
+    }
+    html,body{height:100%;height:100dvh;background:var(--bg)}
+    body{font-family:'Noto Sans SC','Lato',sans-serif;color:var(--text);display:flex;flex-direction:column;position:relative}
+    .main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 24px;z-index:2}
+    .logo-wrap{display:inline-flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+    .logo-en{font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:5px;color:var(--muted);text-transform:uppercase}
+    .logo-title{font-family:'Lato',sans-serif;font-size:52px;font-weight:700;letter-spacing:-2px;color:var(--text);line-height:1;margin:8px 0 4px}
+    .logo-sub{font-family:'Lato',sans-serif;font-size:11px;font-weight:300;letter-spacing:4px;color:var(--muted);text-transform:uppercase}
+    .divider{width:40px;height:1px;background:var(--border);margin:30px auto}
+    .nav{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:420px}
+    .nav-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:16px 24px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);font-family:'Lato',sans-serif;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;transition:background .15s,border-color .15s,transform .1s;pointer-events:auto}
+    .nav-btn:hover{background:#f5f3f0;border-color:#d4cfc8;transform:translateX(3px)}
+    .nav-btn .arrow{font-size:16px;color:var(--muted);transition:color .15s;font-weight:300;flex-shrink:0}
+    .nav-btn:hover .arrow{color:var(--text)}
+    .nav-btn .tag{font-size:9px;font-weight:400;letter-spacing:1px;color:var(--muted);background:var(--bg);border:1px solid var(--border-soft);border-radius:20px;padding:2px 8px;margin-left:10px;white-space:nowrap}
+    .btn-left{display:flex;align-items:center;gap:10px}
 
-:root {
-  --bg: #faf9f7;
-  --surface: #ffffff;
-  --border: #e8e4de;
-  --border-soft: #f0ece6;
-  --text: #1a1a1a;
-  --sub: #6b6b6b;
-  --muted: #999;
-  
-  /* 維護頁面專屬高亮色 */
-  --primary: #6c5ce7;
-  --primary-light: #f1f0fe;
-  --warning: #e67e22;
-  --warning-light: #fdf6f0;
-}
+    /* 登录状态区域 */
+    .auth-links-wrap{display:flex;align-items:center;justify-content:center;gap:20px;margin-top:28px;width:100%}
+    .auth-txt-link{text-decoration:none;font-family:'Lato',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);transition:color .15s;cursor:pointer;background:none;border:none;padding:0;font-family:inherit}
+    .auth-txt-link:hover{color:var(--text)}
+    .auth-line-sep{width:1px;height:12px;background:var(--border)}
 
-html, body {
-  min-height: 100%;
-  background: var(--bg);
-}
+    /* 已登录状态 */
+    .user-greeting{font-family:'Lato',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+    .user-avatar{width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border)}
+    .user-name{color:var(--sub);font-weight:700}
 
-body {
-  font-family: 'Noto Sans SC', 'Lato', sans-serif;
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  line-height: 1.6;
-}
+    footer{border-top:1px solid var(--border-soft);padding:14px 0;text-align:center;font-size:10px;color:var(--muted);background:var(--surface);flex-shrink:0;z-index:1}
 
-/* ── MAIN 內容容器 ── */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 24px; 
-}
-
-.logo-wrap {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  text-align: center;
-}
-
-.logo-en {
-  font-family: 'Lato', sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 5px;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-
-.logo-title {
-  font-family: 'Lato', sans-serif;
-  font-size: 46px;
-  font-weight: 700;
-  letter-spacing: -1px;
-  color: var(--text);
-  line-height: 1;
-  margin: 6px 0 2px;
-}
-
-.logo-sub {
-  font-family: 'Lato', sans-serif;
-  font-size: 11px;
-  font-weight: 300;
-  letter-spacing: 4px;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-
-.divider {
-  width: 40px;
-  height: 1px;
-  background: var(--border);
-  margin: 24px auto; 
-}
-
-/* ── 公告核心容器 ── */
-.chob-notice-container {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* 狀態 Banner */
-.status-banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: var(--warning-light);
-  border: 1px solid #fadbd8;
-  padding: 16px;
-  border-radius: 12px;
-  color: #c0392b;
-}
-
-.status-icon {
-  font-size: 20px;
-}
-
-.status-title {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-/* 升級詳情板塊 */
-.update-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 24px;
-}
-
-.update-title {
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.update-text {
-  font-size: 14px;
-  color: var(--sub);
-  margin-bottom: 18px;
-  text-align: justify;
-}
-
-.update-highlight {
-  color: #d35400;
-  font-weight: 700;
-  background: #fef5ec;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.feature-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-left: 4px;
-}
-
-.feature-list li {
-  font-size: 13.5px;
-  color: var(--sub);
-  position: relative;
-  padding-left: 18px;
-}
-
-.feature-list li::before {
-  content: "•";
-  position: absolute;
-  left: 4px;
-  color: var(--primary);
-  font-weight: bold;
-}
-
-/* 留言板塊 */
-.letter-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 24px;
-}
-
-.letter-title {
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 14px;
-  color: var(--text);
-}
-
-.letter-content {
-  font-size: 14px;
-  color: var(--sub);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  text-align: justify;
-}
-
-.reason-box {
-  background: var(--bg);
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
-  padding: 14px 14px 14px 28px;
-  margin: 4px 0;
-}
-
-.reason-box ol {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.reason-box li {
-  font-size: 13px;
-  color: #555;
-}
-
-.cooperate-call {
-  background: var(--primary-light);
-  border: 1px dashed var(--primary);
-  padding: 14px;
-  border-radius: 8px;
-  color: #4834d4;
-  font-size: 13px;
-  margin-top: 6px;
-}
-
-/* ── 社媒聯繫卡片網格 ── */
-.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  width: 100%;
-}
-
-.contact-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-decoration: none; /* 清除連結預設底線 */
-  transition: background .15s, border-color .15s, transform .1s;
-}
-
-/* 卡片懸停與點擊動效 */
-.contact-card:hover {
-  background: #f5f3f0;
-  border-color: #d4cfc8;
-  transform: translateY(-2px); /* 懸停時微微上浮 */
-}
-
-.platform-name {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.platform-handle {
-  font-family: 'Lato', sans-serif;
-  font-size: 11px;
-  color: var(--muted);
-}
-
-/* 底部感謝 */
-.footer-thanks {
-  text-align: center;
-  padding: 10px 0;
-  font-size: 13px;
-  color: var(--sub);
-  font-weight: 500;
-}
-
-/* ── FOOTER ── */
-footer {
-  border-top: 1px solid var(--border-soft);
-  padding: 14px 0;
-  text-align: center;
-  font-size: 10px;
-  color: var(--muted);
-  background: var(--surface);
-  flex-shrink: 0;
-  margin-top: 20px;
-}
-
-/* ── MOBILE 行動端適配 ── */
-@media(max-width:480px){
-  .main { padding: 24px 16px; }
-  .logo-title { font-size: 38px; }
-  .divider { margin: 16px auto; }
-  .status-title { font-size: 14px; }
-  .update-box, .letter-section { padding: 18px; }
-  .contact-grid { grid-template-columns: 1fr; gap: 8px; }
-  .contact-card { flex-direction: row; justify-content: space-between; padding: 12px 16px; }
-  .contact-card:hover { transform: translateX(3px); } /* 行動端改為向右微動 */
-}
-</style>
+    @media(max-width:480px){
+      .main{padding:15px 20px}
+      .logo-title{font-size:38px}
+      .divider{margin:15px auto}
+      .nav-btn{padding:12px 18px;font-size:12px}
+      .nav{gap:8px}
+      .auth-links-wrap{margin-top:20px}
+    }
+    @media(max-height:660px){
+      .logo-title{font-size:32px}
+      .divider{margin:10px auto}
+      .nav-btn{padding:10px 16px}
+      .nav{gap:6px}
+      .auth-links-wrap{margin-top:14px}
+    }
+  </style>
 </head>
 <body>
 
@@ -316,78 +68,84 @@ footer {
 
   <div class="divider"></div>
 
-  <div class="chob-notice-container">
-    
-    <div class="status-banner">
-      <span class="status-icon">⚠️</span>
-      <h2 class="status-title">网站暂时关闭通知</h2>
-      <span class="status-icon">⚠️</span>
-    </div>
+  <nav class="nav">
+    <a class="nav-btn" href="/th-cn-calendar/">
+      <div class="btn-left">China Schedule<span class="tag">来华行程</span></div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="nav-btn" href="/thai-local-calendar/">
+      <div class="btn-left">Thailand Schedule<span class="tag">泰国行程</span></div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="nav-btn" href="/oversea-calendar/">
+      <div class="btn-left">Oversea Schedule<span class="tag">海外行程</span></div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="nav-btn" href="/About/">
+      <div class="btn-left">about<span class="tag">联系我</span></div>
+      <span class="arrow">→</span>
+    </a>
 
-    <div class="update-box">
-      <h3 class="update-title">网页重新调正升级中</h3>
-      <p class="update-text">
-        由于升级期间涉及日程数据库的同步连接，为了保证使用体验，我决定暂时关闭网页行程同步。原定预计将关闭 <span class="update-highlight">1 ~ 2 日</span>。但随着这两天的处理，我发现细节部份的调整比我想象中要复杂，所以还需要再多加时间去继续调整，我会尽快将细节做好，预计是延长 <span class="update-highlight">1 ~ 2 日</span>去处理，周末很多活动，我尽量会在中国时间 <span class="update-highlight">周六早上08:00</span>恢复网站使用，谢谢大家支持。
-      </p>
-      <h3 class="update-title" style="font-size: 14px; margin-bottom: 8px;">本次升级主要包含三个功能：</h3>
-      <ul class="feature-list">
-        <li>增加 <strong>「行程图」</strong> 展示区域（方便各位确认行程）</li>
-        <li>增加 <strong>「搜索功能」</strong>（快速查找特定艺人或活动）</li>
-        <li>增加 <strong>「登陆」与「收藏」</strong>功能（便于大家安排行程）</li>
-        <li>Maybe 或许会增加 <strong>“微信小程序”</strong> ，这样会更加方便大家使用，所以打算在关闭期间去探索一下，但只是maybe会有</li>
-      </ul>
-    </div>
-
-    <div class="letter-section">
-      <h3 class="letter-title"> 想说的话 </h3>
-      <div class="letter-content">
-        <p style="margin-top: 0;">
-          大家好，我是网页的管理员 <strong>ChobJaii</strong>。我建立这个网站的初衷，是希望能为大家线下追星提供一些实用的便利。
-        </p>
-        <p>
-          相信细心的各位已经发现，目前的行程更新有时会不太及时。这主要是因为：
-        </p>
-        
-        <div class="reason-box">
-          <ol>
-            <li>目前我主要关注艺人经纪公司的官方行程，很容易漏掉一些提前公布的商务、代言或活动变更等细节内容。</li>
-            <li>由于个人的时间和精力关系，目前很难做到全天候、高细节地实时同步。</li>
-          </ol>
+    <!-- 登录状态区域，JS 控制显示 -->
+    <div class="auth-links-wrap" id="auth-area">
+      <!-- 未登录时显示 -->
+      <div id="auth-guest" style="display:flex;align-items:center;gap:20px">
+        <a class="auth-txt-link" href="/login/">Login</a>
+        <div class="auth-line-sep"></div>
+        <a class="auth-txt-link" href="/register/">Register</a>
+      </div>
+      <!-- 已登录时显示 -->
+      <div id="auth-user" style="display:none;align-items:center;gap:16px">
+        <div class="user-greeting">
+          <img class="user-avatar" id="user-avatar" src="" alt="" onerror="this.style.display='none'">
+          <span id="user-name" class="user-name"></span>
         </div>
-
-        <p>
-          一个人负责整个网站，难免会有疏忽和遗漏。为了带给大家更准确、好用的体验，我真诚地邀请各家粉丝或站子一起合作， <strong>协同更新</strong>！
-        </p>
-
-        <div class="cooperate-call">
-          <strong>协同共建邀请：</strong>如果你愿意和我一起建设这个行程网站，或是有更多问题，欢迎通过下方的帐号随时与我联系。
-        </div>
+        <div class="auth-line-sep"></div>
+        <button class="auth-txt-link" onclick="handleSignOut()">登出</button>
       </div>
     </div>
-
-    <div class="contact-grid">
-      <a class="contact-card" href="https://www.xiaohongshu.com/user/profile/5ff48d99000000000101df2d?xsec_token=YBskWbDiBKVT_4USMuG6xXAG9ytpdRWfYrx0sjERweymU=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=N0o0RUg2NEE2NzUyOTgwNjc5OThIS0o9&apptime=1783376917&share_id=8afaf979f1414a6db5e1c1d2d703b723" target="_blank">
-        <span class="platform-name" style="color: #ff2442;">小紅書</span>
-        <span class="platform-handle">SomenStjerne</span>
-      </a>
-      <a class="contact-card" href="https://www.threads.net/@somenstjerne?igshid=NTc4MTIwNjQ2YQ==" target="_blank">
-        <span class="platform-name" style="color: #000000;">Threads</span>
-        <span class="platform-handle">SomenStjerne</span>
-      </a>
-      <a class="contact-card" href="https://x.com/chobcalendar?s=11&t=Qn0SXFPWEp3no2_UZXXBug" target="_blank">
-        <span class="platform-name" style="color: #1da1f2;">X (Twitter)</span>
-        <span class="platform-handle">ChobCalendar</span>
-      </a>
-    </div>
-
-    <div class="footer-thanks">
-      <p>感谢大家的支持、包容和理解！รักนะคะ จุ๊บๆ</p>
-    </div>
-
-  </div>
+  </nav>
 </main>
 
 <footer>Copyright &copy; 2026 — All rights reserved by SomenStjerne</footer>
 
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAv4v5B1HXotOABmIcc5TOi3uzqPmLnvNs",
+  authDomain: "chob-calendar.firebaseapp.com",
+  projectId: "chob-calendar",
+  storageBucket: "chob-calendar.firebasestorage.app",
+  messagingSenderId: "629896393980",
+  appId: "1:629896393980:web:d8800df187ba495b895379"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, user => {
+  const guest = document.getElementById('auth-guest');
+  const userEl = document.getElementById('auth-user');
+  if (user) {
+    guest.style.display = 'none';
+    userEl.style.display = 'flex';
+    const name = user.displayName || user.email.split('@')[0];
+    document.getElementById('user-name').textContent = name;
+    const avatar = document.getElementById('user-avatar');
+    if (user.photoURL) { avatar.src = user.photoURL; avatar.style.display = 'block'; }
+    else avatar.style.display = 'none';
+  } else {
+    guest.style.display = 'flex';
+    userEl.style.display = 'none';
+  }
+});
+
+window.handleSignOut = async function() {
+  await signOut(auth);
+};
+</script>
 </body>
 </html>
