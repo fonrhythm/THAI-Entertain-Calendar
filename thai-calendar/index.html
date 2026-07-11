@@ -368,143 +368,13 @@ const DOW = {
   th: ['อา','จ','อ','พ','พฤ','ศ','ส']
 };
 
-// ========== 【修复】地区表格映射配置 ==========
-const REGION_SHEET_MAP = {
-  china: [
-    '1zU7BdQQ2qvCR80ku3WT6YQhu8s9aTCSf3UHLWlhKahc',
-    '1RSHC9A4T8OvT0XLFCdMbds9Z5ky2GsbLhtDqFhb4Pkw',
-    '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU',
-  ],
-  thailand: [
-    '1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA',
-    '1Irbm_DlW63XjhS54qbopw18WnpJpo_s3gbrDKqkmyvY',
-    '10S-flnjUlbZzQVBXmHKe7y7tXVfYc3Gg2O6KmSGDjMQ',
-  ],
-  oversea: [
-    '1H88jEc_anrOW63YsZsxdxb2sdH0mMV0Eemq0iW1Tr-Q',
-    '1umKIOnnCtnNHRQKQs-O3J9cHvamUZqtu8bY__SvgR3g',
-    '1gEwDgp7F_ACqWCu7qShCJkhRtMPZusO0USgMdaBTFmo',
-  ]
-};
-
-// ========== 【修复】检测当前页面所属地区 ==========
-function getCurrentRegion() {
-  const pathname = window.location.pathname;
-  if (pathname.includes('/china-calendar/')) return 'china';
-  if (pathname.includes('/thai-calendar/')) return 'thailand';
-  if (pathname.includes('/oversea-calendar/')) return 'oversea';
-  return 'thailand';
-}
-
-// ========== 【修复】动态获取该地区的表格IDs ==========
-function getSheetIdsForRegion() {
-  const region = getCurrentRegion();
-  const sheetIds = REGION_SHEET_MAP[region] || [];
-  console.log('当前地区:', region, '对应表格数:', sheetIds.length);
-  return sheetIds;
-}
-
-// ===== 三语字典（仅界面文字，活动数据不翻译） =====
-const I18N = {
-  view_perform: { zh:'演出日期', en:'Show Dates', th:'วันที่แสดง' },
-  view_sale: { zh:'开售日期', en:'Sale Dates', th:'วันที่เปิดขาย' },
-  cat_bl: { zh:'泰腐', en:'BL', th:'คู่จิ้นชายชาย' },
-  cat_gl: { zh:'泰百', en:'GL', th:'คู่จิ้นหญิงหญิง' },
-  cat_band: { zh:'乐队', en:'Band', th:'วงดนตรี' },
-  cat_singer: { zh:'歌手', en:'Singer', th:'นักร้อง' },
-  cat_group: { zh:'男女团', en:'T-POP Group', th:'ไอดอลกรุ๊ป' },
-  cat_actor: { zh:'演员', en:'Actor', th:'นักแสดง' },
-  cat_other: { zh:'其他艺人', en:'Other Artists', th:'ศิลปินอื่นๆ' },
-  stat_0: { zh:'站台活动', en:'Appearance', th:'อีเวนต์' },
-  stat_1: { zh:'剧集宣传', en:'Drama Promo', th:'โปรโมทซีรีส์' },
-  stat_2: { zh:'舞台演出', en:'Stage Show', th:'การแสดงสด' },
-  stat_3: { zh:'其他', en:'Other', th:'อื่นๆ' },
-  search_title: { zh:'搜索', en:'Search', th:'ค้นหา' },
-  login_title: { zh:'登录', en:'Login', th:'เข้าสู่ระบบ' },
-  sync_loading: { zh:'同步中…', en:'Loading…', th:'กำลังโหลด…' },
-  sync_synced: { zh:'已同步', en:'Synced', th:'ซิงค์แล้ว' },
-  sync_error: { zh:'同步失败', en:'Sync Failed', th:'ซิงค์ล้มเหลว' },
-  favorite_title: { zh:'收藏', en:'Favorite', th:'บันทึกรายการโปรด' },
-  remind_btn: { zh:'设置售票提醒', en:'Set Ticket Alert', th:'ตั้งเตือนเปิดขายบัตร' },
-  day_default_title: { zh:'日期详情', en:'Date Details', th:'รายละเอียดวันที่' },
-  choice_title: { zh:'选择收藏方式', en:'Choose how to save', th:'เลือกวิธีการบันทึก' },
-  choice_event: { zh:'仅收藏此场活动', en:'Save this event only', th:'บันทึกเฉพาะกิจกรรมนี้' },
-  choice_artist: { zh:'收藏相关艺人全部行程', en:'Follow all events by this artist', th:'ติดตามกิจกรรมทั้งหมดของศิลปินนี้' },
-  choice_cancel: { zh:'取消', en:'Cancel', th:'ยกเลิก' },
-  artist_modal_title: { zh:'选择要关注的艺人', en:'Select artist to follow', th:'เลือกศิลปินที่จะติดตาม' },
-  buy_now: { zh:'立即购票 →', en:'Buy Now →', th:'ซื้อบัตรตอนนี้ →' },
-  pic_error: { zh:'图片加载失败', en:'Image failed to load', th:'โหลดรูปไม่สำเร็จ' },
-  pic_empty: { zh:'暂无图片', en:'No image', th:'ไม่มีรูปภาพ' },
-  account: { zh:'个人账户', en:'Account', th:'บัญชีของฉัน' },
-  favorites: { zh:'我的收藏', en:'My Favorites', th:'รายการโปรด' },
-  logout: { zh:'登出', en:'Logout', th:'ออกจากระบบ' },
-  need_login_search: { zh:'请先登录才能使用搜索功能', en:'Please log in to use search', th:'กรุณาเข้าสู่ระบบเพื่อใช้การค้นหา' },
-  need_login_fav: { zh:'请先登录才能收藏行程', en:'Please log in to save favorites', th:'กรุณาเข้าสู่ระบบเพื่อบันทึกรายการโปรด' },
-  no_artist_found: { zh:'无法从此活动信息中识别艺人', en:'Could not identify an artist from this event', th:'ไม่สามารถระบุศิลปินจากกิจกรรมนี้ได้' },
-  fav_event_ok: { zh:'✓ 已收藏此场活动', en:'✓ Event saved to favorites', th:'✓ บันทึกกิจกรรมนี้แล้ว' },
-  fav_artist_ok: { zh:'✓ 已关注艺人：', en:'✓ Following artist: ', th:'✓ ติดตามศิลปิน: ' },
-  logout_fail: { zh:'登出失败，请重试', en:'Logout failed, please try again', th:'ออกจากระบบไม่สำเร็จ กรุณาลองใหม่' },
-  more_events: { zh:'还有 {n} 个活动', en:'{n} more', th:'อีก {n} กิจกรรม' },
-  day_title: { zh:'{mo}月{day}日 全部活动', en:'{mo}/{day} All Events', th:'{day}/{mo} กิจกรรมทั้งหมด' },
-  day_count: { zh:'共 {n} 个行程', en:'{n} events total', th:'รวม {n} กิจกรรม' },
-  ics_alert_prefix: { zh:'[开售提醒] ', en:'[Ticket Alert] ', th:'[แจ้งเตือนเปิดขายบัตร] ' },
-  ics_show_date: { zh:'演出日期：', en:'Show Date: ', th:'วันที่แสดง: ' },
-  ics_venue: { zh:'场地：', en:'Venue: ', th:'สถานที่: ' },
-  ics_price: { zh:'票价：', en:'Price: ', th:'ราคา: ' },
-  ics_free: { zh:'免费', en:'Free', th:'ฟรี' }
-};
-
-let LANG = localStorage.getItem('lang') || 'zh';
-
-function t(key, vars) {
-  let s = (I18N[key] && I18N[key][LANG]) || (I18N[key] && I18N[key].zh) || key;
-  if (vars) Object.keys(vars).forEach(k => { s = s.replace('{' + k + '}', vars[k]); });
-  return s;
-}
-
-function applyStaticI18n() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.getAttribute('data-i18n'));
-  });
-  document.querySelectorAll('[data-i18n-title]').forEach(el => {
-    el.title = t(el.getAttribute('data-i18n-title'));
-  });
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.getAttribute('data-lang') === LANG);
-  });
-  const dow = DOW[LANG] || DOW.zh;
-  document.querySelectorAll('#dow-row .dow').forEach(el => {
-    el.textContent = dow[parseInt(el.getAttribute('data-dow'))];
-  });
-  const dot = document.getElementById('sync-dot');
-  const txt = document.getElementById('sync-txt');
-  if (dot && txt) {
-    if (dot.classList.contains('err')) txt.textContent = t('sync_error');
-    else if (dot.classList.contains('busy')) txt.textContent = t('sync_loading');
-    else txt.textContent = t('sync_synced');
-  }
-}
-
-function setLang(l) {
-  LANG = l;
-  localStorage.setItem('lang', l);
-  applyStaticI18n();
-  updateHeader();
-  render();
-  if (document.getElementById('overlay').classList.contains('open') && currentEvent) {
-    openModal(btoa(encodeURIComponent(JSON.stringify(currentEvent))));
-  }
-}
-
-const CAT = {
-  bl: {label:'泰腐', bg:'#142b4b', fg:'#fff', key:'cat_bl'},
-  gl: {label:'泰百', bg:'#d7ccba', fg:'#fff', key:'cat_gl'},
-  band: {label:'乐队', bg:'#2b4779', fg:'#fff', key:'cat_band'},
-  singer: {label:'歌手', bg:'#c4b59c', fg:'#fff', key:'cat_singer'},
-  group: {label:'男女团', bg:'#6e8dbb', fg:'#fff', key:'cat_group'},
-  actor: {label:'演员', bg:'#d0c5af', fg:'#fff', key:'cat_actor'},
-  other: {label:'其他艺人', bg:'#9db1ca', fg:'#fff', key:'cat_other'}
-};
+// ========== 【Thailand专属配置】只加载Thailand的4个表格 ==========
+const SHEET_IDS = [
+  '1zU7BdQQ2qvCR80ku3WT6YQhu8s9aTCSf3UHLWlhKahc',  // Thailand表格1
+  '10S-flnjUlbZzQVBXmHKe7y7tXVfYc3Gg2O6KmSGDjMQ',  // Thailand表格2 (有镶边)
+  '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU',  // Thailand表格3
+  '1umKIOnnCtnNHRQKQs-O3J9cHvamUZqtu8bY__SvgR3g'   // Thailand表格4
+];
 
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec';
 
@@ -947,16 +817,6 @@ async function loadFromSheets() {
     document.getElementById('sync-dot').className = 'sync-dot busy';
     document.getElementById('sync-txt').textContent = t('sync_loading');
 
-    // 【修复】只加载当前地区的表格
-    const SHEET_IDS = getSheetIdsForRegion();
-
-    if (SHEET_IDS.length === 0) {
-      console.warn('⚠️ 当前地区没有配置表格');
-      document.getElementById('sync-dot').className = 'sync-dot err';
-      document.getElementById('sync-txt').textContent = t('sync_error');
-      return;
-    }
-
     const requests = SHEET_IDS.map(id => {
       const url = `${GAS_URL}?id=${id}&key=thenorthremenbersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
       
@@ -1155,41 +1015,107 @@ function nextPicture() {
   setPicture(currentPictureIndex + 1);
 }
 
-// ========== 【诊断函数】在 Console 中使用 ==========
-function diagnose() {
-  console.log('========== 诊断信息 ==========');
-  console.log('当前地区:', getCurrentRegion());
-  console.log('该地区的表格IDs:', getSheetIdsForRegion());
-  console.log('已加载事件数:', events.length);
-  
-  if (events.length > 0) {
-    console.log('样本事件:', events[0]);
-    const categories = new Set(events.map(e => e.category));
-    console.log('包含的分类:', Array.from(categories));
+// ===== 三语字典（仅界面文字，活动数据不翻译） =====
+const I18N = {
+  view_perform: { zh:'演出日期', en:'Show Dates', th:'วันที่แสดง' },
+  view_sale: { zh:'开售日期', en:'Sale Dates', th:'วันที่เปิดขาย' },
+  cat_bl: { zh:'泰腐', en:'BL', th:'คู่จิ้นชายชาย' },
+  cat_gl: { zh:'泰百', en:'GL', th:'คู่จิ้นหญิงหญิง' },
+  cat_band: { zh:'乐队', en:'Band', th:'วงดนตรี' },
+  cat_singer: { zh:'歌手', en:'Singer', th:'นักร้อง' },
+  cat_group: { zh:'男女团', en:'T-POP Group', th:'ไอดอลกรุ๊ป' },
+  cat_actor: { zh:'演员', en:'Actor', th:'นักแสดง' },
+  cat_other: { zh:'其他艺人', en:'Other Artists', th:'ศิลปินอื่นๆ' },
+  stat_0: { zh:'站台活动', en:'Appearance', th:'อีเวนต์' },
+  stat_1: { zh:'剧集宣传', en:'Drama Promo', th:'โปรโมทซีรีส์' },
+  stat_2: { zh:'舞台演出', en:'Stage Show', th:'การแสดงสด' },
+  stat_3: { zh:'其他', en:'Other', th:'อื่นๆ' },
+  search_title: { zh:'搜索', en:'Search', th:'ค้นหา' },
+  login_title: { zh:'登录', en:'Login', th:'เข้าสู่ระบบ' },
+  sync_loading: { zh:'同步中…', en:'Loading…', th:'กำลังโหลด…' },
+  sync_synced: { zh:'已同步', en:'Synced', th:'ซิงค์แล้ว' },
+  sync_error: { zh:'同步失败', en:'Sync Failed', th:'ซิงค์ล้มเหลว' },
+  favorite_title: { zh:'收藏', en:'Favorite', th:'บันทึกรายการโปรด' },
+  remind_btn: { zh:'设置售票提醒', en:'Set Ticket Alert', th:'ตั้งเตือนเปิดขายบัตร' },
+  day_default_title: { zh:'日期详情', en:'Date Details', th:'รายละเอียดวันที่' },
+  choice_title: { zh:'选择收藏方式', en:'Choose how to save', th:'เลือกวิธีการบันทึก' },
+  choice_event: { zh:'仅收藏此场活动', en:'Save this event only', th:'บันทึกเฉพาะกิจกรรมนี้' },
+  choice_artist: { zh:'收藏相关艺人全部行程', en:'Follow all events by this artist', th:'ติดตามกิจกรรมทั้งหมดของศิลปินนี้' },
+  choice_cancel: { zh:'取消', en:'Cancel', th:'ยกเลิก' },
+  artist_modal_title: { zh:'选择要关注的艺人', en:'Select artist to follow', th:'เลือกศิลปินที่จะติดตาม' },
+  buy_now: { zh:'立即购票 →', en:'Buy Now →', th:'ซื้อบัตรตอนนี้ →' },
+  pic_error: { zh:'图片加载失败', en:'Image failed to load', th:'โหลดรูปไม่สำเร็จ' },
+  pic_empty: { zh:'暂无图片', en:'No image', th:'ไม่มีรูปภาพ' },
+  account: { zh:'个人账户', en:'Account', th:'บัญชีของฉัน' },
+  favorites: { zh:'我的收藏', en:'My Favorites', th:'รายการโปรด' },
+  logout: { zh:'登出', en:'Logout', th:'ออกจากระบบ' },
+  need_login_search: { zh:'请先登录才能使用搜索功能', en:'Please log in to use search', th:'กรุณาเข้าสู่ระบบเพื่อใช้การค้นหา' },
+  need_login_fav: { zh:'请先登录才能收藏行程', en:'Please log in to save favorites', th:'กรุณาเข้าสู่ระบบเพื่อบันทึกรายการโปรด' },
+  no_artist_found: { zh:'无法从此活动信息中识别艺人', en:'Could not identify an artist from this event', th:'ไม่สามารถระบุศิลปินจากกิจกรรมนี้ได้' },
+  fav_event_ok: { zh:'✓ 已收藏此场活动', en:'✓ Event saved to favorites', th:'✓ บันทึกกิจกรรมนี้แล้ว' },
+  fav_artist_ok: { zh:'✓ 已关注艺人：', en:'✓ Following artist: ', th:'✓ ติดตามศิลปิน: ' },
+  logout_fail: { zh:'登出失败，请重试', en:'Logout failed, please try again', th:'ออกจากระบบไม่สำเร็จ กรุณาลองใหม่' },
+  more_events: { zh:'还有 {n} 个活动', en:'{n} more', th:'อีก {n} กิจกรรม' },
+  day_title: { zh:'{mo}月{day}日 全部活动', en:'{mo}/{day} All Events', th:'{day}/{mo} กิจกรรมทั้งหมด' },
+  day_count: { zh:'共 {n} 个行程', en:'{n} events total', th:'รวม {n} กิจกรรม' },
+  ics_alert_prefix: { zh:'[开售提醒] ', en:'[Ticket Alert] ', th:'[แจ้งเตือนเปิดขายบัตร] ' },
+  ics_show_date: { zh:'演出日期：', en:'Show Date: ', th:'วันที่แสดง: ' },
+  ics_venue: { zh:'场地：', en:'Venue: ', th:'สถานที่: ' },
+  ics_price: { zh:'票价：', en:'Price: ', th:'ราคา: ' },
+  ics_free: { zh:'免费', en:'Free', th:'ฟรี' }
+};
+
+let LANG = localStorage.getItem('lang') || 'zh';
+
+function t(key, vars) {
+  let s = (I18N[key] && I18N[key][LANG]) || (I18N[key] && I18N[key].zh) || key;
+  if (vars) Object.keys(vars).forEach(k => { s = s.replace('{' + k + '}', vars[k]); });
+  return s;
+}
+
+function applyStaticI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.getAttribute('data-i18n-title'));
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === LANG);
+  });
+  const dow = DOW[LANG] || DOW.zh;
+  document.querySelectorAll('#dow-row .dow').forEach(el => {
+    el.textContent = dow[parseInt(el.getAttribute('data-dow'))];
+  });
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-txt');
+  if (dot && txt) {
+    if (dot.classList.contains('err')) txt.textContent = t('sync_error');
+    else if (dot.classList.contains('busy')) txt.textContent = t('sync_loading');
+    else txt.textContent = t('sync_synced');
   }
 }
 
-async function checkSheet(sheetId) {
-  const url = `${GAS_URL}?id=${sheetId}&key=thenorthremenbersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-    console.log(`表格 ${sheetId.substring(0, 10)}... 返回 ${Array.isArray(data) ? data.length : '错误'} 条数据`);
-    if (Array.isArray(data) && data.length > 0) {
-      console.log('样本数据:', data[0]);
-    }
-  } catch (err) {
-    console.error('检查失败:', err);
+function setLang(l) {
+  LANG = l;
+  localStorage.setItem('lang', l);
+  applyStaticI18n();
+  updateHeader();
+  render();
+  if (document.getElementById('overlay').classList.contains('open') && currentEvent) {
+    openModal(btoa(encodeURIComponent(JSON.stringify(currentEvent))));
   }
 }
 
-async function checkAllSheets() {
-  console.log('检查所有表格...');
-  const SHEET_IDS = getSheetIdsForRegion();
-  for (const id of SHEET_IDS) {
-    await checkSheet(id);
-  }
-}
+const CAT = {
+  bl: {label:'泰腐', bg:'#142b4b', fg:'#fff', key:'cat_bl'},
+  gl: {label:'泰百', bg:'#d7ccba', fg:'#fff', key:'cat_gl'},
+  band: {label:'乐队', bg:'#2b4779', fg:'#fff', key:'cat_band'},
+  singer: {label:'歌手', bg:'#c4b59c', fg:'#fff', key:'cat_singer'},
+  group: {label:'男女团', bg:'#6e8dbb', fg:'#fff', key:'cat_group'},
+  actor: {label:'演员', bg:'#d0c5af', fg:'#fff', key:'cat_actor'},
+  other: {label:'其他艺人', bg:'#9db1ca', fg:'#fff', key:'cat_other'}
+};
 
 window.addEventListener('resize', () => render());
   
