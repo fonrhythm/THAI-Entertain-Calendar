@@ -368,6 +368,42 @@ const DOW = {
   th: ['อา','จ','อ','พ','พฤ','ศ','ส']
 };
 
+// ========== 【修复】地区表格映射配置 ==========
+const REGION_SHEET_MAP = {
+  china: [
+    '1zU7BdQQ2qvCR80ku3WT6YQhu8s9aTCSf3UHLWlhKahc',
+    '1RSHC9A4T8OvT0XLFCdMbds9Z5ky2GsbLhtDqFhb4Pkw',
+    '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU',
+  ],
+  thailand: [
+    '1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA',
+    '1Irbm_DlW63XjhS54qbopw18WnpJpo_s3gbrDKqkmyvY',
+    '10S-flnjUlbZzQVBXmHKe7y7tXVfYc3Gg2O6KmSGDjMQ',
+  ],
+  oversea: [
+    '1H88jEc_anrOW63YsZsxdxb2sdH0mMV0Eemq0iW1Tr-Q',
+    '1umKIOnnCtnNHRQKQs-O3J9cHvamUZqtu8bY__SvgR3g',
+    '1gEwDgp7F_ACqWCu7qShCJkhRtMPZusO0USgMdaBTFmo',
+  ]
+};
+
+// ========== 【修复】检测当前页面所属地区 ==========
+function getCurrentRegion() {
+  const pathname = window.location.pathname;
+  if (pathname.includes('/china-calendar/')) return 'china';
+  if (pathname.includes('/thai-calendar/')) return 'thailand';
+  if (pathname.includes('/oversea-calendar/')) return 'oversea';
+  return 'thailand';
+}
+
+// ========== 【修复】动态获取该地区的表格IDs ==========
+function getSheetIdsForRegion() {
+  const region = getCurrentRegion();
+  const sheetIds = REGION_SHEET_MAP[region] || [];
+  console.log('当前地区:', region, '对应表格数:', sheetIds.length);
+  return sheetIds;
+}
+
 // ===== 三语字典（仅界面文字，活动数据不翻译） =====
 const I18N = {
   view_perform: { zh:'演出日期', en:'Show Dates', th:'วันที่แสดง' },
@@ -470,17 +506,6 @@ const CAT = {
   other: {label:'其他艺人', bg:'#9db1ca', fg:'#fff', key:'cat_other'}
 };
 
-const SHEET_IDS = [
-  '1zU7BdQQ2qvCR80ku3WT6YQhu8s9aTCSf3UHLWlhKahc',
-    '1RSHC9A4T8OvT0XLFCdMbds9Z5ky2GsbLhtDqFhb4Pkw',
-    '1UvY0Fd5lmgRhPlSdIKn1Clfywo3yU7qcrLTwrRWosuU',
-    '1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA',
-    '1Irbm_DlW63XjhS54qbopw18WnpJpo_s3gbrDKqkmyvY',
-    '10S-flnjUlbZzQVBXmHKe7y7tXVfYc3Gg2O6KmSGDjMQ',
-    '1H88jEc_anrOW63YsZsxdxb2sdH0mMV0Eemq0iW1Tr-Q',
-    '1umKIOnnCtnNHRQKQs-O3J9cHvamUZqtu8bY__SvgR3g',
-    '1gEwDgp7F_ACqWCu7qShCJkhRtMPZusO0USgMdaBTFmo'
-];
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec';
 
 const ALL_TAGS = ['bl','gl','band','singer','group','actor','other'];
@@ -522,7 +547,6 @@ auth.onAuthStateChanged(async user => {
   const btn = document.getElementById('nav-menu-btn');
   
   if (user) {
-    // 搜索、收藏现在只需登录即可使用，不再需要订阅
     btn.style.color = 'var(--text)';
     btn.title = user.displayName || user.email.split('@')[0];
     btn.onclick = () => openUserMenu();
@@ -539,7 +563,7 @@ auth.onAuthStateChanged(async user => {
 });
 
 function openUserMenu() {
-  if (isGuest) return; // 游客无菜单
+  if (isGuest) return;
   const oldMenu = document.querySelector('.user-menu');
   if (oldMenu) oldMenu.remove();
   
@@ -555,7 +579,6 @@ function openUserMenu() {
     <a href="/account/" class="user-menu-item">${t('account')}</a>
   `;
   
-  // 登录用户均可查看"我的收藏"
   menuHTML += `<a href="../favorite/" class="user-menu-item">${t('favorites')}</a>`;
   
   menuHTML += `<button class="user-menu-item" onclick="logout()">${t('logout')}</button>`;
@@ -657,15 +680,13 @@ function render() {
     return parseInt(parts[0]) === yr && parseInt(parts[1]) === mo;
   });
   
-  // 替换前端 render() 里的这一段：
-const STAT_TYPES = ['站台活动', '剧集宣传', '舞台演出', '其他'];
-STAT_TYPES.forEach((tp, i) => {
-  document.getElementById('s-' + i).textContent = mo_all.filter(e => {
-    // 兼容可能出现的大小写 Type/type 字段，并强行去掉两端空格再做比较
-    const currentType = (e.type || e.Type || '').toString().trim();
-    return currentType === tp;
-  }).length;
-});
+  const STAT_TYPES = ['站台活动', '剧集宣传', '舞台演出', '其他'];
+  STAT_TYPES.forEach((tp, i) => {
+    document.getElementById('s-' + i).textContent = mo_all.filter(e => {
+      const currentType = (e.type || e.Type || '').toString().trim();
+      return currentType === tp;
+    }).length;
+  });
   
   const mo_evs = events.filter(ev => {
     if (!active.has(ev.category || 'other')) return false;
@@ -711,16 +732,14 @@ STAT_TYPES.forEach((tp, i) => {
     cellHtml += `<div class="cell-num ${nc}">${d}</div>`;
     
     const displayEvs = evs.slice(0, hasMore ? 2 : 3);
-displayEvs.forEach(ev => {
-  const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
-  if (hasMore) {
-    // 超过3个活动：点击chip不再直接开单个活动，而是冒泡到格子，进入当日列表
-    cellHtml += `<button class="chip ${ev.category || 'other'}">${ev.name}</button>`;
-  } else {
-    // 3个及以下：保留直接点开单个活动的行为
-    cellHtml += `<button class="chip ${ev.category || 'other'}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
-  }
-});
+    displayEvs.forEach(ev => {
+      const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
+      if (hasMore) {
+        cellHtml += `<button class="chip ${ev.category || 'other'}">${ev.name}</button>`;
+      } else {
+        cellHtml += `<button class="chip ${ev.category || 'other'}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+      }
+    });
 
     if (hasMore) {
       cellHtml += `<span class="more">${t('more_events', {n: evs.length - displayEvs.length})}</span>`;
@@ -763,30 +782,29 @@ function openModal(enc) {
     activityEl.style.display = 'none';
   }
 
- // 处理多张图片
-currentPictures = [];
-const pictureUrls = ev.picture_urls || ev.picture_url;
+  currentPictures = [];
+  const pictureUrls = ev.picture_urls || ev.picture_url;
 
-if (pictureUrls) {
-  if (Array.isArray(pictureUrls)) {
-    currentPictures = pictureUrls.filter(u => u && u.trim()).slice(0, 6);
-  } else if (typeof pictureUrls === 'string') {
-    currentPictures = pictureUrls.split(/[;；]/).map(u => u.trim()).filter(u => u).slice(0, 6);
+  if (pictureUrls) {
+    if (Array.isArray(pictureUrls)) {
+      currentPictures = pictureUrls.filter(u => u && u.trim()).slice(0, 6);
+    } else if (typeof pictureUrls === 'string') {
+      currentPictures = pictureUrls.split(/[;；]/).map(u => u.trim()).filter(u => u).slice(0, 6);
+    }
   }
-}
 
-document.getElementById('pic-prev').style.display = currentPictures.length > 1 ? 'flex' : 'none';
-document.getElementById('pic-next').style.display = currentPictures.length > 1 ? 'flex' : 'none';
-document.getElementById('pic-counter').style.display = currentPictures.length > 1 ? 'block' : 'none';
+  document.getElementById('pic-prev').style.display = currentPictures.length > 1 ? 'flex' : 'none';
+  document.getElementById('pic-next').style.display = currentPictures.length > 1 ? 'flex' : 'none';
+  document.getElementById('pic-counter').style.display = currentPictures.length > 1 ? 'block' : 'none';
 
-if (currentPictures.length > 0) {
-  currentPictureIndex = 0;
-  setPicture(0);
-} else {
-  document.getElementById('modal-pic').style.display = 'none';
-  document.getElementById('modal-pic-error').textContent = t('pic_empty');
-  document.getElementById('modal-pic-error').style.display = 'block';
-}
+  if (currentPictures.length > 0) {
+    currentPictureIndex = 0;
+    setPicture(0);
+  } else {
+    document.getElementById('modal-pic').style.display = 'none';
+    document.getElementById('modal-pic-error').textContent = t('pic_empty');
+    document.getElementById('modal-pic-error').style.display = 'block';
+  }
 
   const venueCityContainer = document.getElementById('m-venue-city-container');
   if (ev.venue || ev.city) {
@@ -840,7 +858,6 @@ if (currentPictures.length > 0) {
   const buyBtn = document.getElementById('m-buy');
   const infoNote = document.getElementById('m-info-note');
 
-  // 先全部隐藏，再按 ticket_type 决定显示哪一个
   remindBtn.style.display = 'none';
   emptyBlock.style.display = 'none';
   buyBtn.style.display = 'none';
@@ -857,9 +874,9 @@ if (currentPictures.length > 0) {
   } else if (ev.sale_date || ev.sale_time) {
     remindBtn.style.display = 'block';
   } else {
-  emptyBlock.style.display = 'block';
-  emptyBlock.style.height = '4px';
-}
+    emptyBlock.style.display = 'block';
+    emptyBlock.style.height = '4px';
+  }
 
   updateHeartButton();
   document.getElementById('overlay').classList.add('open');
@@ -930,12 +947,19 @@ async function loadFromSheets() {
     document.getElementById('sync-dot').className = 'sync-dot busy';
     document.getElementById('sync-txt').textContent = t('sync_loading');
 
-    // 1. 将 4 个 ID 映射为 4 个并发的 fetch 请求
+    // 【修复】只加载当前地区的表格
+    const SHEET_IDS = getSheetIdsForRegion();
+
+    if (SHEET_IDS.length === 0) {
+      console.warn('⚠️ 当前地区没有配置表格');
+      document.getElementById('sync-dot').className = 'sync-dot err';
+      document.getElementById('sync-txt').textContent = t('sync_error');
+      return;
+    }
+
     const requests = SHEET_IDS.map(id => {
-      // 【优化】主动拼接密钥、域名以及基础参数，提升 GAS 校验通过率
       const url = `${GAS_URL}?id=${id}&key=thenorthremenbersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
       
-      // 使用 Promise.resolve().then() 包裹，确保单个表格请求失败不熔断整体流程
       return fetch(url)
         .then(res => {
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -943,23 +967,19 @@ async function loadFromSheets() {
         })
         .catch(err => {
           console.warn(`⚠️ 表格 [${id.substring(0, 8)}...] 加载失败，已自动跳过:`, err);
-          return null; // 发生错误时返回 null，不让 Promise.all 崩溃
+          return null;
         });
     });
 
-    // 2. 等待 4 个表格的数据全部返回
     const allSheetsData = await Promise.all(requests);
 
-    // 3. 循环合并并清洗这 4 个表格的数据
     let combinedEvents = [];
     
     allSheetsData.forEach((rows) => {
-      // 排除加载失败(null)或返回格式不对的非数组数据
       if (!rows || !Array.isArray(rows)) return; 
       
       const cleanedRows = rows.map((row, index) => {
         const obj = {};
-        // 将每一行数据的键名全部转小写，彻底消除 "Date" 与 "date"、"Type" 与 "type" 的不一致
         Object.keys(row).forEach(k => {
           obj[k.trim().toLowerCase()] = typeof row[k] === 'string' ? row[k].trim() : row[k];
         });
@@ -968,27 +988,22 @@ async function loadFromSheets() {
           obj.id = (obj.name || '未命名') + '_' + (obj.date || index);
         }
 
-        // 统一提取可能出现的 type 字段，并拔掉首尾空格
         const rawType = (obj.type || '').toString().trim();
 
         return {
           ...obj,
           category: (obj.category || '').toLowerCase(),
           status: (obj.status || '').toLowerCase(),
-          // 【核心修复】为 type 注入清洗后的干净字符串，保障 render() 里的 STAT_TYPES 精确命中
           type: rawType 
         };
       }).filter(o => o.date || o.sale_date);
 
-      // 将当前表格清洗后的数据追加到总数组中
       combinedEvents = combinedEvents.concat(cleanedRows);
     });
 
-    // 4. 将合并后的总数据赋值给全局变量并持久化
     events = combinedEvents;
     localStorage.setItem('allEvents', JSON.stringify(events));
     
-    // 5. 渲染页面并更新同步状态
     render();
     document.getElementById('sync-dot').className = 'sync-dot';
     document.getElementById('sync-txt').textContent = t('sync_synced');
@@ -1020,7 +1035,6 @@ function extractArtistsFromEvent(event) {
 function handleFavoriteClick(e) {
   if (e && e.stopPropagation) e.stopPropagation();
   
-  // 只需要登录，不需要付费
   if (isGuest) {
     alert('请先登录才能收藏行程');
     location.href = '/login/?redirect=/thai-calendar/';
@@ -1140,7 +1154,43 @@ function prevPicture() {
 function nextPicture() {
   setPicture(currentPictureIndex + 1);
 }
+
+// ========== 【诊断函数】在 Console 中使用 ==========
+function diagnose() {
+  console.log('========== 诊断信息 ==========');
+  console.log('当前地区:', getCurrentRegion());
+  console.log('该地区的表格IDs:', getSheetIdsForRegion());
+  console.log('已加载事件数:', events.length);
   
+  if (events.length > 0) {
+    console.log('样本事件:', events[0]);
+    const categories = new Set(events.map(e => e.category));
+    console.log('包含的分类:', Array.from(categories));
+  }
+}
+
+async function checkSheet(sheetId) {
+  const url = `${GAS_URL}?id=${sheetId}&key=thenorthremenbersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(`表格 ${sheetId.substring(0, 10)}... 返回 ${Array.isArray(data) ? data.length : '错误'} 条数据`);
+    if (Array.isArray(data) && data.length > 0) {
+      console.log('样本数据:', data[0]);
+    }
+  } catch (err) {
+    console.error('检查失败:', err);
+  }
+}
+
+async function checkAllSheets() {
+  console.log('检查所有表格...');
+  const SHEET_IDS = getSheetIdsForRegion();
+  for (const id of SHEET_IDS) {
+    await checkSheet(id);
+  }
+}
+
 window.addEventListener('resize', () => render());
   
 </script>
