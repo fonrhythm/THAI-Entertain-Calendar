@@ -5,7 +5,8 @@
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+// 修改这一行，加上 collection, doc, setDoc, serverTimestamp
+import { getFirestore, doc, getDoc, collection, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAv4v5B1HXotOABmIcc5TOi3uzqPmLnvNs",
@@ -131,3 +132,30 @@ if (document.readyState === 'loading') {
 } else {
   injectSidebar();
 }
+
+// ============ 数据追踪模块 ============
+const ANALYTICS_CONFIG = { enabled: true };
+let eventQueue = [];
+
+// 追踪事件函数
+window.trackEvent = async function(eventType, artistName, metadata = {}) {
+  if (!ANALYTICS_CONFIG.enabled) return;
+  
+  const today = new Date().toISOString().split('T')[0];
+  const eventData = {
+    eventType,
+    artistName,
+    metadata,
+    timestamp: serverTimestamp(),
+    userAgent: navigator.userAgent.substring(0, 100)
+  };
+
+  try {
+    // 存入 analytics_events 集合，按日期归档
+    const eventRef = collection(db, 'analytics_events', today, 'events');
+    await addDoc(eventRef, eventData);
+    console.log(`✅ Analytics tracked: ${eventType} for ${artistName}`);
+  } catch (error) {
+    console.error('❌ Analytics error:', error);
+  }
+};
