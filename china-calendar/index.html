@@ -22,11 +22,11 @@
 :root{
   --bg:#faf9f7;--surface:#fff;--border:#e6e2dc;--border-soft:#f1eee8;
   --text:#1a1a1a;--sub:#666;--muted:#8a8a8a;
-  --c-bl:#520105;--t-bl:#fff;
-  --c-gl:#B4C4D1;--t-gl:#1a1a1a;
-  --c-actor:#C6B89F;--t-actor:#1a1a1a;
-  --c-music:#768693;--t-music:#fff;
-  --c-other:#6A2E30;--t-other:#fff;
+  --c-bl:#533A33;--t-bl:#fff;
+  --c-gl:#C96D8A;--t-gl:#1a1a1a;
+  --c-actor:#F9D4DA;--t-actor:#1a1a1a;
+  --c-music:#B5ACA3;--t-music:#fff;
+  --c-other:#F5E6D1;--t-other:#fff;
 }
 body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .wrap{max-width:1100px;margin:0 auto;padding:0 24px;width:100%}
@@ -104,11 +104,11 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.cancelled{opacity:.38!important;text-decoration:line-through;position:relative}
 .chip.cancelled::after{content:'已取消';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none}
 .chip.postponed::after{content:'已延期';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.35);color:#fff;text-decoration:none}
-.chip.bl.official{background:transparent;border:1.5px solid #520105;color:#520105}
-.chip.gl.official{background:transparent;border:1.5px solid #B4C4D1;color:#B4C4D1}
-.chip.actor.official{background:transparent;border:1.5px solid #C6B89F;color:#C6B89F}
-.chip.music.official{background:transparent;border:1.5px solid #768693;color:#768693}
-.chip.other.official{background:transparent;border:1.5px solid #6A2E30;color:#6A2E30}
+.chip.bl.official{background:transparent;border:1.5px solid #533A33;color:#533A33}
+.chip.gl.official{background:transparent;border:1.5px solid #C96D8A;color:#C96D8A}
+.chip.actor.official{background:transparent;border:1.5px solid #F9D4DA;color:#F9D4DA}
+.chip.music.official{background:transparent;border:1.5px solid #B5ACA3;color:#B5ACA3}
+.chip.other.official{background:transparent;border:1.5px solid #F5E6D1;color:#F5E6D1}
 .chip.official::before{content:'★';position:absolute;top:50%;right:2px;transform:translateY(-50%);font-size:10px;color:currentColor;text-decoration:none}
 .more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
 .more:hover{color:var(--text)}
@@ -493,11 +493,11 @@ function setLang(l) {
 }
 
 const CAT = {
-  bl: {label:'BL', bg:'#520105', fg:'#fff', key:'cat_bl'},
-  gl: {label:'GL', bg:'#B4C4D1', fg:'#1a1a1a', key:'cat_gl'},
-  actor: {label:'演员', bg:'#C6B89F', fg:'#1a1a1a', key:'cat_actor'},
-  music: {label:'音乐', bg:'#768693', fg:'#fff', key:'cat_music'},
-  other: {label:'其他', bg:'#6A2E30', fg:'#fff', key:'cat_other'}
+  bl: {label:'BL', bg:'#533A33', fg:'#fff', key:'cat_bl'},
+  gl: {label:'GL', bg:'#C96D8A', fg:'#1a1a1a', key:'cat_gl'},
+  actor: {label:'演员', bg:'#F9D4DA', fg:'#1a1a1a', key:'cat_actor'},
+  music: {label:'音乐', bg:'#B5ACA3', fg:'#fff', key:'cat_music'},
+  other: {label:'其他', bg:'#F5E6D1', fg:'#fff', key:'cat_other'}
 };
 
 // stat_type（重命名为 type）四类统计口径
