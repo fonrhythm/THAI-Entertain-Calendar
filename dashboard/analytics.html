@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 艺人数据统计 - fonrhythm</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/firebase@9.0.0/dist/firebase-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/firebase@9.0.0/dist/firebase-firestore.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* 控制面板 */
+        .control-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: end;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-export {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-export:hover {
+            background: #45a049;
+        }
+
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-card.total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stat-card h3 {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-card.total .number {
+            color: white;
+        }
+
+        /* 图表容器 */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .chart-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.3em;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+
+        /* 表格 */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .table-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.3em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background: #f5f5f5;
+        }
+
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: 700;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+        .rank-2 { background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%); }
+        .rank-3 { background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%); }
+        .rank-other { background: #9C9C9C; }
+
+        .comparison-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .comparison-up {
+            background: #FFE0E0;
+            color: #D32F2F;
+        }
+
+        .comparison-down {
+            background: #E0F2E0;
+            color: #388E3C;
+        }
+
+        .comparison-stable {
+            background: #F0F0F0;
+            color: #666;
+        }
+
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 时间标签 */
+        .time-label {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .control-row {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-wrapper {
+                height: 300px;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            table th, table td {
+                padding: 10px 8px;
+            }
+        }
+
+        .error-message {
+            background: #FFEBEE;
+            color: #C62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #C62828;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 艺人数据统计中心</h1>
+            <p>实时监测艺人搜索、浏览、收藏数据</p>
+        </header>
+
+        <div class="control-panel">
+            <div class="control-row">
+                <div class="control-group">
+                    <label for="dateStart">开始日期</label>
+                    <input type="date" id="dateStart">
+                </div>
+                <div class="control-group">
+                    <label for="dateEnd">结束日期</label>
+                    <input type="date" id="dateEnd">
+                </div>
+                <div class="control-group">
+                    <label for="eventType">事件类型</label>
+                    <select id="eventType">
+                        <option value="all">全部</option>
+                        <option value="search">🔍 搜索</option>
+                        <option value="view">👁️ 浏览</option>
+                        <option value="favorite">❤️ 收藏</option>
+                        <option value="click">🖱️ 点击</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-group">
+                    <label for="topN">前 N 名艺人</label>
+                    <select id="topN">
+                        <option value="10">前 10</option>
+                        <option value="20">前 20</option>
+                        <option value="30">前 30</option>
+                        <option value="50">前 50</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="comparisonPeriod">对比周期</label>
+                    <select id="comparisonPeriod">
+                        <option value="none">不对比</option>
+                        <option value="previous">与上个时期对比</option>
+                        <option value="last_month">与上月对比</option>
+                        <option value="last_year">与去年同期对比</option>
+                    </select>
+                </div>
+                <div class="button-group" style="align-self: flex-end;">
+                    <button class="btn-primary" onclick="loadAnalytics()">📊 加载数据</button>
+                    <button class="btn-export" onclick="exportToCSV()">📥 导出 CSV</button>
+                    <button class="btn-secondary" onclick="resetFilters()">🔄 重置</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsContainer" class="stats-grid"></div>
+
+        <div id="chartsContainer" class="charts-grid"></div>
+
+        <div id="tableContainer" class="table-container" style="display:none;">
+            <h2>📋 详细数据表</h2>
+            <table id="detailTable">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>艺人名称</th>
+                        <th>搜索次数</th>
+                        <th>浏览次数</th>
+                        <th>收藏次数</th>
+                        <th>总互动</th>
+                        <th>与上期对比</th>
+                    </tr>
+                </thead>
+                <tbody id="detailTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+        import { getFirestore, collection, query, where, getDocs, orderBy } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
+        // 替换为你的 Firebase 配置
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let analyticsData = {};
+        let comparisonData = {};
+        let charts = {};
+
+        // 初始化日期选择器 - 默认显示本月
+        function initializeDatePickers() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            document.getElementById('dateEnd').valueAsDate = today;
+            document.getElementById('dateStart').valueAsDate = firstDay;
+        }
+
+        // 加载分析数据
+        async function loadAnalytics() {
+            const startDate = document.getElementById('dateStart').value;
+            const endDate = document.getElementById('dateEnd').value;
+            const eventType = document.getElementById('eventType').value;
+            const topN = parseInt(document.getElementById('topN').value);
+            const comparisonPeriod = document.getElementById('comparisonPeriod').value;
+
+            if (!startDate || !endDate) {
+                alert('请选择日期范围');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // 加载主数据
+                analyticsData = await fetchAnalyticsData(startDate, endDate, eventType);
+                
+                // 加载对比数据
+                if (comparisonPeriod !== 'none') {
+                    comparisonData = await fetchComparisonData(startDate, endDate, eventType, comparisonPeriod);
+                }
+
+                // 渲染统计卡片
+                renderStats(analyticsData, topN);
+
+                // 渲染图表
+                renderCharts(analyticsData, topN);
+
+                // 渲染详细表格
+                renderDetailTable(analyticsData, comparisonData, topN);
+
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                document.querySelector('.container').innerHTML += `
+                    <div class="error-message">❌ 加载数据失败: ${error.message}</div>
+                `;
+            }
+        }
+
+        // 从 Firestore 获取分析数据
+        async function fetchAnalyticsData(startDate, endDate, eventType) {
+            const data = {
+                search: {},
+                view: {},
+                favorite: {},
+                click: {},
+                total: 0,
+                dateRange: { start: startDate, end: endDate }
+            };
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                const dateStr = d.toISOString().split('T')[0];
+                
+                try {
+                    const docRef = collection(db, 'analytics_events', dateStr, 'events');
+                    const querySnapshot = await getDocs(docRef);
+
+                    querySnapshot.forEach(doc => {
+                        const batch = doc.data().batch || [];
+                        
+                        batch.forEach(event => {
+                            if (eventType !== 'all' && event.eventType !== eventType) {
+                                return;
+                            }
+
+                            const eventData = data[event.eventType] || {};
+                            eventData[event.artistName] = (eventData[event.artistName] || 0) + 1;
+                            data[event.eventType] = eventData;
+                            data.total++;
+                        });
+                    });
+                } catch (error) {
+                    console.warn(`无法加载 ${dateStr} 的数据:`, error);
+                }
+            }
+
+            return data;
+        }
+
+        // 获取对比数据
+        async function fetchComparisonData(startDate, endDate, eventType, period) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+
+            let compStart, compEnd;
+
+            if (period === 'previous') {
+                compEnd = new Date(start);
+                compEnd.setDate(compEnd.getDate() - 1);
+                compStart = new Date(compEnd);
+                compStart.setDate(compStart.getDate() - diffDays);
+            } else if (period === 'last_month') {
+                compEnd = new Date(start);
+                compEnd.setMonth(compEnd.getMonth() - 1);
+                compStart = new Date(start);
+                compStart.setMonth(compStart.getMonth() - 1);
+                compStart.setDate(startDate.split('-')[2]);
+            } else if (period === 'last_year') {
+                compStart = new Date(start);
+                compStart.setFullYear(compStart.getFullYear() - 1);
+                compEnd = new Date(end);
+                compEnd.setFullYear(compEnd.getFullYear() - 1);
+            }
+
+            return fetchAnalyticsData(
+                compStart.toISOString().split('T')[0],
+                compEnd.toISOString().split('T')[0],
+                eventType
+            );
+        }
+
+        // 渲染统计卡片
+        function renderStats(data, topN) {
+            const statsHtml = `
+                <div class="stat-card total">
+                    <h3>📊 总互动数</h3>
+                    <div class="number">${data.total.toLocaleString()}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>🔍 搜索次数</h3>
+                    <div class="number">${Object.values(data.search).reduce((a,b)=>a+b,0)}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>👁️ 浏览次数</h3>
+                    <div class="number">${Object.values(data.view).reduce((a,b)=>a+b,0)}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>❤️ 收藏次数</h3>
+                    <div class="number">${Object.values(data.favorite).reduce((a,b)=>a+b,0)}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>🎯 热门艺人</h3>
+                    <div class="number">${Object.keys(data.search).length}</div>
+                </div>
+            `;
+
+            document.getElementById('statsContainer').innerHTML = statsHtml;
+        }
+
+        // 渲染图表
+        function renderCharts(data, topN) {
+            const chartsContainer = document.getElementById('chartsContainer');
+            chartsContainer.innerHTML = '';
+
+            const chartTypes = ['search', 'view', 'favorite'];
+            const chartLabels = ['🔍 搜索排行', '👁️ 浏览排行', '❤️ 收藏排行'];
+
+            chartTypes.forEach((type, index) => {
+                const topArtists = Object.entries(data[type])
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, topN);
+
+                if (topArtists.length === 0) return;
+
+                const html = `
+                    <div class="chart-container">
+                        <h2>${chartLabels[index]} (前 ${topN})</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="chart_${type}"></canvas>
+                        </div>
+                    </div>
+                `;
+
+                chartsContainer.innerHTML += html;
+
+                // 创建图表
+                setTimeout(() => {
+                    const ctx = document.getElementById(`chart_${type}`).getContext('2d');
+                    
+                    if (charts[type]) {
+                        charts[type].destroy();
+                    }
+
+                    charts[type] = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: topArtists.map(a => a[0]),
+                            datasets: [{
+                                label: chartLabels[index],
+                                data: topArtists.map(a => a[1]),
+                                backgroundColor: [
+                                    'rgba(102, 126, 234, 0.8)',
+                                    'rgba(118, 75, 162, 0.8)',
+                                    'rgba(237, 100, 166, 0.8)',
+                                    ...Array(topN - 3).fill('rgba(158, 158, 158, 0.6)')
+                                ],
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                                borderWidth: 1,
+                                borderRadius: 8,
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    padding: 12,
+                                    titleFont: { size: 13 },
+                                    bodyFont: { size: 12 },
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `互动: ${context.parsed.x}`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                                },
+                                y: {
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+            });
+        }
+
+        // 渲染详细表格
+        function renderDetailTable(data, comparisonData, topN) {
+            // 合并所有艺人数据
+            const allArtists = new Set();
+            Object.values(data).forEach(typeData => {
+                if (typeof typeData === 'object' && typeData !== null && !typeData.start) {
+                    Object.keys(typeData).forEach(artist => allArtists.add(artist));
+                }
+            });
+
+            // 计算每个艺人的总互动
+            const artistStats = Array.from(allArtists).map(artist => ({
+                name: artist,
+                search: data.search[artist] || 0,
+                view: data.view[artist] || 0,
+                favorite: data.favorite[artist] || 0,
+                click: data.click[artist] || 0
+            }));
+
+            artistStats.forEach(stat => {
+                stat.total = stat.search + stat.view + stat.favorite + stat.click;
+                if (comparisonData && comparisonData[stat.name]) {
+                    const compTotal = (comparisonData.search[stat.name] || 0) + 
+                                    (comparisonData.view[stat.name] || 0) + 
+                                    (comparisonData.favorite[stat.name] || 0);
+                    stat.comparison = stat.total - compTotal;
+                }
+            });
+
+            // 排序并取前 N
+            artistStats.sort((a, b) => b.total - a.total);
+            const topArtists = artistStats.slice(0, topN);
+
+            // 生成表格行
+            let tableHtml = topArtists.map((stat, index) => {
+                const comparisonHtml = stat.comparison !== undefined ? `
+                    <td>
+                        <span class="comparison-badge ${stat.comparison > 0 ? 'comparison-up' : stat.comparison < 0 ? 'comparison-down' : 'comparison-stable'}">
+                            ${stat.comparison > 0 ? '📈 +' : stat.comparison < 0 ? '📉 ' : '→ '}${Math.abs(stat.comparison)}
+                        </span>
+                    </td>
+                ` : '<td>-</td>';
+
+                return `
+                    <tr>
+                        <td><span class="rank-badge rank-${index + 1 <= 3 ? index + 1 : 'other'}">${index + 1}</span></td>
+                        <td><strong>${stat.name}</strong></td>
+                        <td>${stat.search}</td>
+                        <td>${stat.view}</td>
+                        <td>${stat.favorite}</td>
+                        <td><strong>${stat.total}</strong></td>
+                        ${comparisonHtml}
+                    </tr>
+                `;
+            }).join('');
+
+            if (comparisonData && comparisonData.total > 0) {
+                document.getElementById('detailTable').querySelector('thead tr').innerHTML += '<th>与上期对比</th>';
+            }
+
+            document.getElementById('detailTableBody').innerHTML = tableHtml;
+            document.getElementById('tableContainer').style.display = 'block';
+        }
+
+        // 导出为 CSV
+        function exportToCSV() {
+            const table = document.getElementById('detailTable');
+            let csv = [];
+
+            // 表头
+            const headers = [];
+            table.querySelectorAll('thead th').forEach(th => {
+                headers.push(`"${th.textContent}"`);
+            });
+            csv.push(headers.join(','));
+
+            // 数据行
+            table.querySelectorAll('tbody tr').forEach(tr => {
+                const row = [];
+                tr.querySelectorAll('td').forEach(td => {
+                    row.push(`"${td.textContent.trim()}"`);
+                });
+                csv.push(row.join(','));
+            });
+
+            // 下载
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', `艺人统计_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 重置过滤器
+        function resetFilters() {
+            initializeDatePickers();
+            document.getElementById('eventType').value = 'all';
+            document.getElementById('topN').value = '10';
+            document.getElementById('comparisonPeriod').value = 'none';
+            document.getElementById('statsContainer').innerHTML = '';
+            document.getElementById('chartsContainer').innerHTML = '';
+            document.getElementById('tableContainer').style.display = 'none';
+        }
+
+        // 显示加载状态
+        function showLoading() {
+            document.getElementById('statsContainer').innerHTML = `
+                <div class="loading" style="grid-column: 1/-1;">
+                    <div class="spinner"></div>
+                    <p>正在加载数据...</p>
+                </div>
+            `;
+            document.getElementById('chartsContainer').innerHTML = '';
+            document.getElementById('tableContainer').style.display = 'none';
+        }
+
+        // 初始化
+        initializeDatePickers();
+    </script>
+</body>
+</html>
