@@ -14,7 +14,7 @@
   
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oversea Calendar — Chob Calendar</title>
+<title>China Calendar — Chob Calendar</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <style>
@@ -237,11 +237,11 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
         </div>
         <div class="tb-div"></div>
         <div class="pills">
-          <button class="pill p-bl on" onclick="toggleTag(this,'bl')"><span class="dot"></span><span data-i18n="cat_bl">BL</span></button>
-          <button class="pill p-gl on" onclick="toggleTag(this,'gl')"><span class="dot"></span><span data-i18n="cat_gl">GL</span></button>
-          <button class="pill p-actor on" onclick="toggleTag(this,'actor')"><span class="dot"></span><span data-i18n="cat_actor">演员</span></button>
-          <button class="pill p-music on" onclick="toggleTag(this,'music')"><span class="dot"></span><span data-i18n="cat_music">音乐</span></button>
-          <button class="pill p-other on" onclick="toggleTag(this,'other')"><span class="dot"></span><span data-i18n="cat_other">其他</span></button>
+          <button class="pill p-bl on" onclick="toggleTag(this,'bl')"><span class="dot"></span><span data-i18n="cat_bl">泰腐见面会</span></button>
+          <button class="pill p-gl on" onclick="toggleTag(this,'gl')"><span class="dot"></span><span data-i18n="cat_gl">泰百见面会</span></button>
+          <button class="pill p-actor on" onclick="toggleTag(this,'actor')"><span class="dot"></span><span data-i18n="cat_actor">演员活动</span></button>
+          <button class="pill p-music on" onclick="toggleTag(this,'music')"><span class="dot"></span><span data-i18n="cat_music">音乐演出</span></button>
+          <button class="pill p-other on" onclick="toggleTag(this,'other')"><span class="dot"></span><span data-i18n="cat_other">其他艺人活动</span></button>
         </div>
         <div class="lang-group" id="lang-group">
           <button class="lang-btn active" data-lang="zh" onclick="setLang('zh')">中</button>
@@ -271,9 +271,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
       <div class="stat"><div class="stat-n" id="s-2">—</div><div class="stat-l" data-i18n="stat_2">商务活动</div></div>
       <div class="stat"><div class="stat-n" id="s-3">—</div><div class="stat-l" data-i18n="stat_3">其他</div></div>
     </div>
-    <div style="font-size:11px;color:#999;margin-bottom:8px;padding:0 2px;" data-i18n="tz_notice">
-      📍 🌍 本页行程均为活动当地时间，受您所在时区影响，日历单元格可能存在 ±1 天的显示偏差，请务必点击查看详情，核对准确时间。
-    </div>
+ 
     <div class="cal">
       <div class="dow-row" id="dow-row">
         <div class="dow sun" data-dow="0">SUN</div>
@@ -510,11 +508,11 @@ const SHEET_CONFIGS = [
   // 专属表格（直接显示，无需过滤source）
   { id: '1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA', isOfficial: false, isExclusive: true },
   
-  // 混合表格 - 官方表格（需过滤source=oversea）
+  // 混合表格 - 官方表格（需过滤source=china）
   { id: '1RSHC9A4T8OvT0XLFCdMbds9Z5ky2GsbLhtDqFhb4Pkw', isOfficial: true, isExclusive: false },
   { id: '1H88jEc_anrOW63YsZsxdxb2sdH0mMV0Eemq0iW1Tr-Q', isOfficial: true, isExclusive: false },
   
-  // 混合表格 - 非官方表格（需过滤source=oversea）
+  // 混合表格 - 非官方表格（需过滤source=china）
   { id: '1gEwDgp7F_ACqWCu7qShCJkhRtMPZusO0USgMdaBTFmo', isOfficial: false, isExclusive: false }
 ];
 
@@ -626,7 +624,7 @@ async function logout() {
 function handleSearch() {
   if (isGuest) {
     alert(t('need_login_search'));
-    location.href = '/login/?redirect=/oversea-calendar/';
+    location.href = '/login/?redirect=/china-calendar/';
     return;
   }
   location.href = '/search/';
@@ -1086,7 +1084,7 @@ function handleFavoriteClick(e) {
 
   if (isGuest) {
     alert(t('need_login_fav'));
-    location.href = '/login/?redirect=/oversea-calendar/';
+    location.href = '/login/?redirect=/china-calendar/';
     return;
   }
 
