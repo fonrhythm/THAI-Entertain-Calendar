@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  
-  <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-0VZ4MGL1YE"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -29,8 +28,6 @@
   --c-group:#907C6C;--t-group:#fff;
   --c-actor:#C9BEAD;--t-actor:#3a2a1e;
   --c-other:#a27d60;--t-other:#fff;
-  --c-official-border:#d4af37;
-  --c-official-glow:rgba(212, 175, 55, 0.4);
 }
 body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 .wrap{max-width:1100px;margin:0 auto;padding:0 24px;width:100%}
@@ -101,7 +98,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .cell-num{font-size:11px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:var(--sub);flex-shrink:0;margin-bottom:2px}
 .cell-num.sun{color:#c0524e}.cell-num.sat{color:#5E7B9B}
 .today .cell-num{background:var(--text);color:#fff;font-weight:700}
-.chip{font-size:10px;padding:2px 5px;border-radius:4px;margin-bottom:2px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5;flex-shrink:0;min-width:0;width:100%;border:none;text-align:left;font-family:inherit;transition:filter .1s,opacity .3s ease;display:block;position:relative}
+.chip{font-size:10px;padding:2px 5px;border-radius:4px;margin-bottom:2px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5;flex-shrink:0;min-width:0;width:100%;border:none;text-align:left;font-family:inherit;transition:filter .1s,opacity .3s ease;display:block}
 .chip.bl{background:var(--c-bl);color:var(--t-bl)}
 .chip.gl{background:var(--c-gl);color:var(--t-gl)}
 .chip.band{background:var(--c-band);color:var(--t-band)}
@@ -111,8 +108,6 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.other{background:var(--c-other);color:var(--t-other)}
 .chip.cancelled{opacity:.38!important;text-decoration:line-through;position:relative}
 .chip.cancelled::after{content:'已取消';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none}
-.chip.official{border: 1.5px solid color-mix(in srgb, var(--c-official-border), black 15%);
-.chip.official::before{content:'𖤐';position:absolute;top:-2px;right:0;font-size:7px;line-height:1;padding:2px 4px;border-radius:2px 0 4px 0;background:var(--c-official-border);color:#fff;text-decoration:none;font-weight:600;letter-spacing:.5px}
 .more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
 .more:hover{color:var(--text)}
 .coming-soon-wrap{display:flex;justify-content:center;align-items:center;padding:24px 0}
@@ -137,7 +132,6 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .modal-x{position:absolute;top:13px;right:13px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--sub);z-index:10}
 .modal-info{padding:20px 20px 0}
 .modal-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:500;margin-bottom:10px}
-.modal-badge.official{background:var(--c-official-border);color:#fff;border:1px solid var(--c-official-border);padding:5px 12px;font-size:11px;font-weight:600;box-shadow:0 0 8px var(--c-official-glow)}
 .modal-name{font-size:20px;font-weight:700;margin-bottom:4px;line-height:1.3}
 .modal-activity{font-size:13px;color:var(--sub);margin-bottom:16px;line-height:1.5}
 .modal-content{padding:0 20px 16px}
@@ -193,7 +187,6 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
   .cell{padding:1px 2px 2px}
   .cell-num{font-size:10px;width:15px;height:15px;margin-bottom:1px;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
   .chip{font-size:9px;padding:1px 2px;letter-spacing:0;margin-bottom:1.5px;width:100%;overflow:hidden;text-overflow:ellipsis;display:block;line-height:11px;white-space:nowrap}
-  .chip.official::before{font-size:6px;padding:1px 3px}
   .more{font-size:9px;line-height:1;color:var(--muted);padding:1px;display:block;width:100%!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap!important;transform:scale(1);transform-origin:left center;margin-top:2px}
   .dow{font-size:9px;letter-spacing:.3px}
   .overlay{padding:16px;align-items:center;justify-content:center}
@@ -515,19 +508,9 @@ const CAT = {
 // stat_type（重命名为 type）四类统计口径
 const STAT_TYPES = ['见面会', '线下演出', '开放售票', '其他'];
 
-// ===== 表格配置：标注官方表格 =====
-const SHEET_CONFIGS = [
-  // 专属表格（直接显示，无需过滤source）
-  { id: '1Irbm_DlW63XjhS54qbopw18WnpJpo_s3gbrDKqkmyvY', isOfficial: false, isExclusive: true },
-  
-  // 混合表格 - 官方表格（需过滤source=oversea）
-  { id: '1RSHC9A4T8OvT0XLFCdMbds9Z5ky2GsbLhtDqFhb4Pkw', isOfficial: true, isExclusive: false },
-  { id: '1H88jEc_anrOW63YsZsxdxb2sdH0mMV0Eemq0iW1Tr-Q', isOfficial: true, isExclusive: false },
-  
-  // 混合表格 - 非官方表格（需过滤source=oversea）
-  { id: '1gEwDgp7F_ACqWCu7qShCJkhRtMPZusO0USgMdaBTFmo', isOfficial: false, isExclusive: false }
+const SHEET_IDS = [
+  '1Irbm_DlW63XjhS54qbopw18WnpJpo_s3gbrDKqkmyvY'
 ];
-
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec';
 
 const ALL_TAGS = ['bl','gl','band','singer','group','actor','other'];
@@ -768,11 +751,10 @@ function render() {
     evs.slice(0, maxVisible).forEach((ev, idx) => {
       const opStyle = view === 'sale' ? 'opacity:0.68;' : '';
       const cancelledCls = ev.status === 'cancelled' ? ' cancelled' : '';
-      const officialCls = ev.isOfficial ? ' official' : '';
       if (hasMore) {
-        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${officialCls}" style="pointer-events:none;${opStyle}" tabindex="-1">${ev.name}</button>`;
+        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}" style="pointer-events:none;${opStyle}" tabindex="-1">${ev.name}</button>`;
       } else {
-        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${officialCls}" style="${opStyle}" data-ev-key="${allKeys[idx]}">${ev.name}</button>`;
+        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}" style="${opStyle}" data-ev-key="${allKeys[idx]}">${ev.name}</button>`;
       }
     });
 
@@ -806,8 +788,7 @@ function openDayModal(day, dayEvs) {
   const listKeys = dayEvs.map(ev => storeEv(ev));
   document.getElementById('day-body').innerHTML = dayEvs.map((ev, i) => {
     const cancelledCls = ev.status === 'cancelled' ? ' cancelled' : '';
-    const officialCls = ev.isOfficial ? ' official' : '';
-    return `<button class="chip ${ev.category || 'other'}${cancelledCls}${officialCls}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" data-ev-key="${listKeys[i]}">${ev.name}</button>`;
+    return `<button class="chip ${ev.category || 'other'}${cancelledCls}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" data-ev-key="${listKeys[i]}">${ev.name}</button>`;
   }).join('');
   document.getElementById('day-overlay').classList.add('open');
 }
@@ -828,15 +809,9 @@ function openModal(ev) {
   document.getElementById('m-bar').style.background = cat.bg;
 
   const badge = document.getElementById('m-badge');
-  if (ev.isOfficial) {
-    badge.textContent = '官方行程';
-    badge.className = 'modal-badge official';
-  } else {
-    badge.textContent = t(cat.key);
-    badge.className = 'modal-badge';
-    badge.style.background = cat.bg;
-    badge.style.color = cat.fg;
-  }
+  badge.textContent = t(cat.key);
+  badge.style.background = cat.bg;
+  badge.style.color = cat.fg;
 
   document.getElementById('m-name').textContent = ev.name || '';
 
@@ -993,28 +968,27 @@ async function loadFromSheets() {
     document.getElementById('sync-dot').className = 'sync-dot busy';
     document.getElementById('sync-txt').textContent = t('sync_loading');
 
-    const requests = SHEET_CONFIGS.map(config => {
-      const url = `${GAS_URL}?id=${config.id}&key=thenorthremenbersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
+    const requests = SHEET_IDS.map(id => {
+      const url = `${GAS_URL}?id=${id}&key=thenorthremenbersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
       return fetch(url)
         .then(res => {
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           return res.json();
         })
-        .then(data => ({ data, config }))
         .catch(err => {
-          console.warn(`⚠️ 表格 [${config.id.substring(0, 8)}...] 加载失败，已自动跳过:`, err);
-          return { data: null, config };
+          console.warn(`⚠️ 表格 [${id.substring(0, 8)}...] 加载失败，已自动跳过:`, err);
+          return null;
         });
     });
 
-    const allResults = await Promise.all(requests);
+    const allSheetsData = await Promise.all(requests);
 
     let combinedEvents = [];
 
-    allResults.forEach(({ data, config }) => {
-      if (!data || !Array.isArray(data)) return;
+    allSheetsData.forEach((rows) => {
+      if (!rows || !Array.isArray(rows)) return;
 
-      const cleanedRows = data.map((row, index) => {
+      const cleanedRows = rows.map((row, index) => {
         const obj = {};
         Object.keys(row).forEach(k => {
           obj[k.trim().toLowerCase()] = typeof row[k] === 'string' ? row[k].trim() : row[k];
@@ -1024,30 +998,18 @@ async function loadFromSheets() {
           obj.id = (obj.name || '未命名') + '_' + (obj.date || index);
         }
 
+        // 表头字段为 stat_type，统一映射为 type，供统计逻辑使用
         const rawType = (obj.type || obj.stat_type || '').toString().trim();
 
         return {
           ...obj,
           category: (obj.category || '').toLowerCase(),
           status: (obj.status || '').toLowerCase(),
-          type: rawType,
-          isOfficial: config.isOfficial
+          type: rawType
         };
-      });
+      }).filter(o => o.date || o.sale_date);
 
-      // 如果不是专属表格，需要过滤 source 字段
-      let filtered = cleanedRows;
-      if (!config.isExclusive) {
-        filtered = cleanedRows.filter(o => {
-          const source = (o.source || '').toLowerCase().trim();
-          return source === 'oversea' || source === '';
-        });
-      }
-
-      // 确保至少有 date 或 sale_date
-      filtered = filtered.filter(o => o.date || o.sale_date);
-
-      combinedEvents = combinedEvents.concat(filtered);
+      combinedEvents = combinedEvents.concat(cleanedRows);
     });
 
     events = combinedEvents;
