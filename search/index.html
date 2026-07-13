@@ -314,6 +314,15 @@ window.doSearch = async function() {
   const q = document.getElementById('search-input').value.trim();
   if (!q) return;
 
+  // === 埋点逻辑：记录用户搜索行为 ===
+  if (window.trackEvent) {
+    window.trackEvent('search', 'ALL_ARTISTS', { 
+      searchTerm: q,
+      timestamp: new Date().toISOString() 
+    });
+  }
+  // =================================
+
   // 更新 URL
   const url = new URL(location.href);
   url.searchParams.set('q', q);
@@ -339,7 +348,7 @@ window.doSearch = async function() {
       return fields.some(f => f && f.toLowerCase().includes(kw));
     });
 
-    // 按日期排序（有日期的排前面，从近到远）
+    // 按日期排序
     results.sort((a, b) => {
       const da = a.date ? new Date(a.date) : new Date('9999-12-31');
       const db = b.date ? new Date(b.date) : new Date('9999-12-31');
@@ -365,7 +374,6 @@ window.doSearch = async function() {
       document.getElementById('empty-keyword').textContent = q;
       document.getElementById('empty-state').style.display = 'block';
     } else {
-      // 过去行程只显示最近 5 个（已按日期排序，所以后面的是最近的）
       const recentPastEvents = pastEvents.slice(-5);
       renderResults(futureEvents, recentPastEvents, q, results.length);
     }
