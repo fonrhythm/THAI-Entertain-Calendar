@@ -109,14 +109,15 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.other{background:var(--c-other);color:var(--t-other)}
 .chip.cancelled{opacity:.38!important;text-decoration:line-through;position:relative}
 .chip.cancelled::after{content:'已取消';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none}
-.chip.bl.official { border: 1.5px solid #2a1f11; }
-.chip.gl.official { border: 1.5px solid #4a1f0a; }
-.chip.band.official { border: 1.5px solid #2e2a22; }
-.chip.singer.official { border: 1.5px solid #42352a; }
-.chip.group.official { border: 1.5px solid #5a5249; }
-.chip.actor.official { border: 1.5px solid #8a7968; }
-.chip.other.official { border: 1.5px solid #6a5a48; }
-.chip.official::before{content:'official';position:absolute;top:-2px;right:2px;font-size:7px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.3);color:#fff;text-decoration:none;font-weight:600;letter-spacing:.5px}
+.chip.postponed::after{content:'已延期';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.35);color:#fff;text-decoration:none}
+.chip.bl.official{background:transparent;border:1.5px solid #442D1C;color:#442D1C}
+.chip.gl.official{background:transparent;border:1.5px solid #743014;color:#743014}
+.chip.band.official{background:transparent;border:1.5px solid #464336;color:#464336}
+.chip.singer.official{background:transparent;border:1.5px solid #674b3f;color:#674b3f}
+.chip.group.official{background:transparent;border:1.5px solid #907C6C;color:#907C6C}
+.chip.actor.official{background:transparent;border:1.5px solid #3a2a1e;color:#3a2a1e}
+.chip.other.official{background:transparent;border:1.5px solid #a27d60;color:#a27d60}
+.chip.official::before{content:'★';position:absolute;top:-4px;right:1px;font-size:10px;color:currentColor;text-decoration:none}
 .more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
 .more:hover{color:var(--text)}
 .coming-soon-wrap{display:flex;justify-content:center;align-items:center;padding:24px 0}
@@ -197,7 +198,6 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
   .cell{padding:1px 2px 2px}
   .cell-num{font-size:10px;width:15px;height:15px;margin-bottom:1px;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
   .chip{font-size:9px;padding:1px 2px;letter-spacing:0;margin-bottom:1.5px;width:100%;overflow:hidden;text-overflow:ellipsis;display:block;line-height:11px;white-space:nowrap}
-  .chip.official::before{font-size:6px;padding:1px 3px}
   .more{font-size:9px;line-height:1;color:var(--muted);padding:1px;display:block;width:100%!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap!important;transform:scale(1);transform-origin:left center;margin-top:2px}
   .dow{font-size:9px;letter-spacing:.3px}
   .overlay{padding:16px;align-items:center;justify-content:center}
@@ -772,21 +772,12 @@ function render() {
     evs.slice(0, maxVisible).forEach((ev, idx) => {
       const opStyle = view === 'sale' ? 'opacity:0.68;' : '';
       const cancelledCls = ev.status === 'cancelled' ? ' cancelled' : '';
+      const postponedCls = ev.status === 'postponed' ? ' postponed' : '';
       const officialCls = ev.isOfficial ? ' official' : '';
-      
-      // 调试：首次渲染时输出
-      if (d === 1 && idx === 0 && !window._debugged) {
-        window._debugged = true;
-        console.log('🔍 render() 调试信息 - 第一个事件:');
-        console.log('   事件名:', ev.name);
-        console.log('   isOfficial:', ev.isOfficial);
-        console.log('   officialCls:', officialCls);
-        console.log('   完整对象:', ev);
-      }
       if (hasMore) {
-        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${officialCls}" style="pointer-events:none;${opStyle}" tabindex="-1">${ev.name}</button>`;
+        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${postponedCls}${officialCls}" style="pointer-events:none;${opStyle}" tabindex="-1">${ev.name}</button>`;
       } else {
-        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${officialCls}" style="${opStyle}" data-ev-key="${allKeys[idx]}">${ev.name}</button>`;
+        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${postponedCls}${officialCls}" style="${opStyle}" data-ev-key="${allKeys[idx]}">${ev.name}</button>`;
       }
     });
 
@@ -820,8 +811,9 @@ function openDayModal(day, dayEvs) {
   const listKeys = dayEvs.map(ev => storeEv(ev));
   document.getElementById('day-body').innerHTML = dayEvs.map((ev, i) => {
     const cancelledCls = ev.status === 'cancelled' ? ' cancelled' : '';
+    const postponedCls = ev.status === 'postponed' ? ' postponed' : '';
     const officialCls = ev.isOfficial ? ' official' : '';
-    return `<button class="chip ${ev.category || 'other'}${cancelledCls}${officialCls}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" data-ev-key="${listKeys[i]}">${ev.name}</button>`;
+    return `<button class="chip ${ev.category || 'other'}${cancelledCls}${postponedCls}${officialCls}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" data-ev-key="${listKeys[i]}">${ev.name}</button>`;
   }).join('');
   document.getElementById('day-overlay').classList.add('open');
 }
@@ -1073,40 +1065,6 @@ async function loadFromSheets() {
 
     events = combinedEvents;
     localStorage.setItem('allEvents', JSON.stringify(events));
-
-    // 调试：输出官方事件数
-    const officialCount = events.filter(e => e.isOfficial).length;
-    console.log(`✓ 已加载 ${events.length} 条事件，其中官方事件 ${officialCount} 条`);
-    events.slice(0, 3).forEach((e, i) => {
-      console.log(`  [${i}] ${e.name} | 官方: ${e.isOfficial} | 分类: ${e.category}`);
-    });
-    
-    // 在页面上显示调试信息
-    const debugPanel = document.getElementById('debug-panel') || document.createElement('div');
-    debugPanel.id = 'debug-panel';
-    debugPanel.style.cssText = 'position:fixed;top:80px;right:10px;background:#222;color:#0f0;padding:10px;font-family:monospace;font-size:10px;max-width:350px;max-height:300px;overflow:auto;z-index:9999;border:1px solid #0f0;border-radius:4px;';
-    debugPanel.innerHTML = `
-      <div><strong>📊 数据加载状态</strong></div>
-      <div>总事件数: ${events.length}</div>
-      <div>官方事件: <span style="color:${officialCount > 0 ? '#0f0' : '#f00'}">${officialCount}</span></div>
-      <div style="margin-top:8px;border-top:1px solid #0f0;padding-top:8px;font-size:9px;">
-        <strong>各表格统计</strong>
-      </div>
-      ${sheetStats.map(s => `<div>${s}</div>`).join('')}
-      <div style="margin-top:8px;border-top:1px solid #0f0;padding-top:8px;">
-        <strong>首个事件</strong>
-      </div>
-      ${events.length > 0 ? `
-      <div>名称: ${events[0].name}</div>
-      <div>isOfficial: <span style="color:${events[0].isOfficial ? '#0f0' : '#f00'}">${events[0].isOfficial}</span></div>
-      <div>分类: ${events[0].category}</div>
-      ` : '<div style="color:#f00">无数据</div>'}
-    `;
-    if (!document.getElementById('debug-panel')) {
-      document.body.appendChild(debugPanel);
-    } else {
-      document.getElementById('debug-panel').innerHTML = debugPanel.innerHTML;
-    }
 
     render();
     document.getElementById('sync-dot').className = 'sync-dot';
