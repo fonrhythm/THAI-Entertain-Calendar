@@ -111,8 +111,8 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.other{background:var(--c-other);color:var(--t-other)}
 .chip.cancelled{opacity:.38!important;text-decoration:line-through;position:relative}
 .chip.cancelled::after{content:'已取消';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none}
-.chip.official {position: relative; display: inline-flex; align-items: center; padding: 0 12px; height: 28px; border-radius: 14px; font-size: 13px; font-weight: 600; border: 1.5px solid color-mix(in srgb, background-color, #000 15%); box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); color: color-mix(in srgb, background-color, #000 70%); }
-.chip.official::before {content: '★'; position: absolute; top: -7px; right: -6px; width: 18px; height: 18px; font-size: 12px;  color: color-mix(in srgb, background-color, #000 35%); background-color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.2); z-index: 1;
+.chip.official{border: 1.5px solid color-mix(in srgb, var(--c-official-border), black 15%);
+.chip.official::before{content:'𖤐';position:absolute;top:-2px;right:0;font-size:7px;line-height:1;padding:2px 4px;border-radius:2px 0 4px 0;background:var(--c-official-border);color:#fff;text-decoration:none;font-weight:600;letter-spacing:.5px}
 .more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
 .more:hover{color:var(--text)}
 .coming-soon-wrap{display:flex;justify-content:center;align-items:center;padding:24px 0}
@@ -769,16 +769,6 @@ function render() {
       const opStyle = view === 'sale' ? 'opacity:0.68;' : '';
       const cancelledCls = ev.status === 'cancelled' ? ' cancelled' : '';
       const officialCls = ev.isOfficial ? ' official' : '';
-      
-      // 调试：首次渲染时输出
-      if (d === 1 && idx === 0 && !window._debugged) {
-        window._debugged = true;
-        console.log('🔍 render() 调试信息 - 第一个事件:');
-        console.log('   事件名:', ev.name);
-        console.log('   isOfficial:', ev.isOfficial);
-        console.log('   officialCls:', officialCls);
-        console.log('   完整对象:', ev);
-      }
       if (hasMore) {
         cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${officialCls}" style="pointer-events:none;${opStyle}" tabindex="-1">${ev.name}</button>`;
       } else {
@@ -1020,15 +1010,9 @@ async function loadFromSheets() {
     const allResults = await Promise.all(requests);
 
     let combinedEvents = [];
-    
-    // 调试：记录每个表格的加载情况
-    const sheetStats = [];
 
     allResults.forEach(({ data, config }) => {
-      if (!data || !Array.isArray(data)) {
-        sheetStats.push(`❌ 表格 ${config.id.substring(0, 12)}... 无数据`);
-        return;
-      }
+      if (!data || !Array.isArray(data)) return;
 
       const cleanedRows = data.map((row, index) => {
         const obj = {};
@@ -1064,7 +1048,6 @@ async function loadFromSheets() {
       filtered = filtered.filter(o => o.date || o.sale_date);
 
       combinedEvents = combinedEvents.concat(filtered);
-      sheetStats.push(`表格 ${config.id.substring(0, 12)}... (官方:${config.isOfficial}): ${filtered.length} 条事件`);
     });
 
     events = combinedEvents;
