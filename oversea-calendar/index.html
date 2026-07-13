@@ -1020,9 +1020,15 @@ async function loadFromSheets() {
     const allResults = await Promise.all(requests);
 
     let combinedEvents = [];
+    
+    // 调试：记录每个表格的加载情况
+    const sheetStats = [];
 
     allResults.forEach(({ data, config }) => {
-      if (!data || !Array.isArray(data)) return;
+      if (!data || !Array.isArray(data)) {
+        sheetStats.push(`❌ 表格 ${config.id.substring(0, 12)}... 无数据`);
+        return;
+      }
 
       const cleanedRows = data.map((row, index) => {
         const obj = {};
@@ -1058,6 +1064,7 @@ async function loadFromSheets() {
       filtered = filtered.filter(o => o.date || o.sale_date);
 
       combinedEvents = combinedEvents.concat(filtered);
+      sheetStats.push(`表格 ${config.id.substring(0, 12)}... (官方:${config.isOfficial}): ${filtered.length} 条事件`);
     });
 
     events = combinedEvents;
@@ -1073,11 +1080,15 @@ async function loadFromSheets() {
     // 在页面上显示调试信息
     const debugPanel = document.getElementById('debug-panel') || document.createElement('div');
     debugPanel.id = 'debug-panel';
-    debugPanel.style.cssText = 'position:fixed;top:80px;right:10px;background:#222;color:#0f0;padding:10px;font-family:monospace;font-size:11px;max-width:300px;max-height:200px;overflow:auto;z-index:9999;border:1px solid #0f0;border-radius:4px;';
+    debugPanel.style.cssText = 'position:fixed;top:80px;right:10px;background:#222;color:#0f0;padding:10px;font-family:monospace;font-size:10px;max-width:350px;max-height:300px;overflow:auto;z-index:9999;border:1px solid #0f0;border-radius:4px;';
     debugPanel.innerHTML = `
       <div><strong>📊 数据加载状态</strong></div>
       <div>总事件数: ${events.length}</div>
-      <div>官方事件: ${officialCount}</div>
+      <div>官方事件: <span style="color:${officialCount > 0 ? '#0f0' : '#f00'}">${officialCount}</span></div>
+      <div style="margin-top:8px;border-top:1px solid #0f0;padding-top:8px;font-size:9px;">
+        <strong>各表格统计</strong>
+      </div>
+      ${sheetStats.map(s => `<div>${s}</div>`).join('')}
       <div style="margin-top:8px;border-top:1px solid #0f0;padding-top:8px;">
         <strong>首个事件</strong>
       </div>
