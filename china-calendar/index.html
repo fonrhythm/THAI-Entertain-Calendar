@@ -75,12 +75,11 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .user-menu-item:last-child{border-bottom:none}
 .user-menu-item:hover{background:#faf9f7}
 .page-content{padding-top:0;flex:1}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.stat{padding:16px 12px;text-align:center;border-right:1px solid var(--border-soft);transition:all .2s;background:linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0))}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.stat{padding:8px 16px;text-align:center;border-right:1px solid var(--border-soft)}
 .stat:last-child{border-right:none}
-.stat:hover{background:linear-gradient(135deg, rgba(0,0,0,0.02), rgba(0,0,0,0))}
-.stat-n{font-size:42px;font-weight:700;font-family:'Lato',sans-serif;line-height:1;color:var(--text);letter-spacing:-1px}
-.stat-l{font-size:12px;color:var(--sub);margin-top:8px;letter-spacing:.5px;font-weight:500}
+.stat-n{font-size:26px;font-weight:700;font-family:'Lato',sans-serif;line-height:1}
+.stat-l{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.3px}
 .cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:0;border-bottom:10px solid var(--border)}
 .dow-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--border-soft)}
 .dow{text-align:center;padding:8px 0;font-size:10px;font-weight:500;letter-spacing:1.5px;color:var(--muted);border-right:1px solid var(--border-soft);overflow:hidden}
@@ -123,15 +122,9 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:85vh;overflow:hidden}
 .modal-bar{height:8px;flex-shrink:0;border-radius:16px 16px 0 0}
-.modal-pic-container{background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;min-height:200px}
+.modal-pic-container{background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .modal-pic{width:100%;height:auto;display:block}
-.modal-pic-error{width:100%;min-height:180px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:var(--muted);font-size:13px;flex-direction:column;gap:12px}
-.pic-nav-btn{background:rgba(0,0,0,0.3);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .15s;z-index:5}
-.pic-nav-btn:hover{background:rgba(0,0,0,0.5)}
-.pic-nav-btn:disabled{opacity:0.5;cursor:not-allowed}
-.pic-counter{position:absolute;bottom:8px;right:12px;background:rgba(0,0,0,0.5);color:#fff;padding:4px 10px;border-radius:12px;font-size:11px;z-index:5}
-.pic-refresh-btn{background:rgba(0,0,0,0.3);border:none;color:#fff;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:background .15s;display:inline-flex;align-items:center;gap:4px}
-.pic-refresh-btn:hover{background:rgba(0,0,0,0.5)}
+.modal-pic-error{width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:var(--muted);font-size:13px}
 .modal-body{padding:0;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .modal-body::-webkit-scrollbar{display:none}
 .heart-btn{position:absolute;top:13px;right:45px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,0.06);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#999;transition:all 0.15s;z-index:10}
@@ -152,6 +145,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .btn:hover{opacity:0.9}
 .btn-dark{background:var(--text);color:#fff}
 .btn-ghost{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.ticket-info{font-size:12px;color:var(--sub);text-align:center;padding:6px 0}
 .modal-day{background:var(--surface);border:1px solid var(--border);border-radius:16px;max-height:80vh;display:flex;flex-direction:column;width:380px;max-width:100%}
 .modal-day-header{padding:20px 20px 16px;border-bottom:1px solid var(--border-soft);position:relative;flex-shrink:0}
 .modal-day-title{font-size:18px;font-weight:700;margin-bottom:4px}
@@ -178,9 +172,6 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
   .site-nav-inner{gap:3px;padding:0 8px}
   .site-nav a{font-size:10px;letter-spacing:.8px;padding:4px 8px}
   .stats{grid-template-columns:repeat(2,1fr)}
-  .stat{padding:14px 10px}
-  .stat-n{font-size:32px}
-  .stat-l{font-size:11px;margin-top:6px}
   .stat:nth-child(2){border-right:none}
   .stat:nth-child(3),.stat:nth-child(4){border-top:1px solid var(--border-soft)}
   .cal-grid{grid-auto-rows:82px}
@@ -194,10 +185,6 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
   .tb-div{display:none}
   .pills{order:3;flex-basis:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
   .sync{order:2}.view-group{order:1}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .stat{padding:12px 8px}
-  .stat-n{font-size:28px}
-  .stat-l{font-size:11px;margin-top:4px}
   .cal-grid{grid-auto-rows:62px}
   .cell{padding:1px 2px 2px}
   .cell-num{font-size:10px;width:15px;height:15px;margin-bottom:1px;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
@@ -314,11 +301,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
       </button>
       <button class="modal-x" onclick="closeModal()"><i class="ti ti-x"></i></button>
 
-      <div class="modal-pic-container" id="m-pic-container">
-        <button class="pic-nav-btn pic-prev" id="pic-prev" style="display:none;position:absolute;left:8px;top:50%;transform:translateY(-50%)" onclick="showPrevPicture(event)"><i class="ti ti-chevron-left"></i></button>
-        <button class="pic-nav-btn pic-next" id="pic-next" style="display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%)" onclick="showNextPicture(event)"><i class="ti ti-chevron-right"></i></button>
-        <div class="pic-counter" id="pic-counter" style="display:none"></div>
-      </div>
+      <div class="modal-pic-container" id="m-pic-container"></div>
 
       <div class="modal-info">
         <div class="modal-badge" id="m-badge"></div>
@@ -339,6 +322,10 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
           <i class="ti ti-clock"></i>
           <span class="modal-field-value" id="m-time"></span>
         </div>
+        <div class="modal-field" id="m-sale-container" style="display:none">
+          <i class="ti ti-calendar-event"></i>
+          <span class="modal-field-value" id="m-sale"></span>
+        </div>
         <div class="modal-field" id="m-note-container" style="display:none">
           <i class="ti ti-info-circle"></i>
           <span class="modal-field-value" id="m-note"></span>
@@ -353,6 +340,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
     <div class="modal-foot">
       <button class="btn btn-dark" id="m-buy" style="display:none"></button>
       <div class="ticket-info" id="m-ticket-info" style="display:none"></div>
+      <button class="btn btn-ghost" id="m-remind" onclick="addToCalendar()" style="display:none" data-i18n="remind_btn">设置售票提醒</button>
     </div>
   </div>
 </div>
@@ -406,10 +394,6 @@ const DOW = {
   th: ['อา','จ','อ','พ','พฤ','ศ','ส']
 };
 
-// 多图切换相关
-let currentPictureIndex = 0;
-let currentPictures = [];
-
 // ===== 三语字典（仅界面文字，活动数据不翻译） =====
 const I18N = {
   view_perform: { zh:'演出日期', en:'Show Dates', th:'วันที่แสดง' },
@@ -430,6 +414,7 @@ const I18N = {
   sync_synced: { zh:'已同步', en:'Synced', th:'ซิงค์แล้ว' },
   sync_error: { zh:'同步失败', en:'Sync Failed', th:'ซิงค์ล้มเหลว' },
   favorite_title: { zh:'收藏', en:'Favorite', th:'บันทึกรายการโปรด' },
+  remind_btn: { zh:'设置售票提醒', en:'Set Ticket Alert', th:'ตั้งเตือนเปิดขายบัตร' },
   day_default_title: { zh:'日期详情', en:'Date Details', th:'รายละเอียดวันที่' },
   choice_title: { zh:'选择收藏方式', en:'Choose how to save', th:'เลือกวิธีการบันทึก' },
   choice_event: { zh:'仅收藏此场活动', en:'Save this event only', th:'บันทึกเฉพาะกิจกรรมนี้' },
@@ -440,7 +425,6 @@ const I18N = {
   buy_now: { zh:'立即购票 →', en:'Buy Now →', th:'ซื้อบัตรตอนนี้ →' },
   fill_form: { zh:'填写报名表 →', en:'Fill Registration →', th:'กรอกแบบฟอร์ม →' },
   pic_error: { zh:'图片加载失败', en:'Image failed to load', th:'โหลดรูปไม่สำเร็จ' },
-  pic_refresh: { zh:'刷新图片', en:'Refresh', th:'รีเฟรช' },
   pic_empty: { zh:'暂无图片', en:'No image', th:'ไม่มีรูปภาพ' },
   account: { zh:'个人账户', en:'Account', th:'บัญชีของฉัน' },
   favorites: { zh:'我的收藏', en:'My Favorites', th:'รายการโปรด' },
@@ -454,6 +438,12 @@ const I18N = {
   more_events: { zh:'还有 {n} 个活动', en:'{n} more', th:'อีก {n} กิจกรรม' },
   day_title: { zh:'{mo}月{day}日 全部活动', en:'{mo}/{day} All Events', th:'{day}/{mo} กิจกรรมทั้งหมด' },
   day_count: { zh:'共 {n} 个行程', en:'{n} events total', th:'รวม {n} กิจกรรม' },
+  ics_alert_prefix: { zh:'[开售提醒] ', en:'[Ticket Alert] ', th:'[แจ้งเตือนเปิดขายบัตร] ' },
+  ics_show_date: { zh:'演出日期：', en:'Show Date: ', th:'วันที่แสดง: ' },
+  ics_venue: { zh:'场地：', en:'Venue: ', th:'สถานที่: ' },
+  ics_price: { zh:'票价：', en:'Price: ', th:'ราคา: ' },
+  ics_free: { zh:'免费', en:'Free', th:'ฟรี' },
+  ics_downloaded: { zh:'已下载「{name}」开售提醒', en:'Downloaded reminder for "{name}"', th:'ดาวน์โหลดการแจ้งเตือนสำหรับ "{name}" แล้ว' },
   date_tbd: { zh:'日期待定', en:'Date TBD', th:'วันที่ยังไม่กำหนด' },
   venue_tbd: { zh:'待公布', en:'TBA', th:'รอประกาศ' },
   local_time_suffix: { zh:'（当地时间）', en:' (local time)', th:' (เวลาท้องถิ่น)' }
@@ -512,6 +502,7 @@ const CAT = {
 // stat_type（重命名为 type）四类统计口径
 const STAT_TYPES = ['见面会', '音乐演出', '商务活动', '其他'];
 
+// ===== 表格配置：标注官方表格 =====
 const SHEET_CONFIGS = [
   // 专属表格（直接显示，无需过滤source）
   { id: '1HCaeRIunaianxgeyKQceselxyk1IxHzb5k9KBlfMsDA', isOfficial: false, isExclusive: true },
@@ -525,7 +516,7 @@ const SHEET_CONFIGS = [
 ];
 
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec';
-  
+
 const ALL_TAGS = ['bl','gl','actor','music','other'];
 let yr = new Date().getFullYear();
 let mo = new Date().getMonth() + 1;
@@ -819,115 +810,6 @@ function closeDayModal() {
   document.getElementById('day-overlay').classList.remove('open');
 }
 
-// ===== 多图切换功能 =====
-function parsePictures(pictureUrl) {
-  if (!pictureUrl || typeof pictureUrl !== 'string') return [];
-  // 支持分号、逗号分隔的多个URL
-  return pictureUrl.split(/[;；,，]/g)
-    .map(url => url.trim())
-    .filter(url => url && url.startsWith('http'));
-}
-
-function displayPicture(index) {
-  if (currentPictures.length === 0) {
-    document.getElementById('m-pic-container').innerHTML = `<div class="modal-pic-error">${t('pic_empty')}</div>`;
-    return;
-  }
-
-  if (index < 0) index = currentPictures.length - 1;
-  if (index >= currentPictures.length) index = 0;
-  currentPictureIndex = index;
-
-  const url = currentPictures[index];
-  const container = document.getElementById('m-pic-container');
-  
-  // 创建图片加载
-  const img = document.createElement('img');
-  img.className = 'modal-pic';
-  img.src = url;
-  img.alt = '活动图片';
-  
-  // 加载失败处理
-  img.onerror = () => {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'modal-pic-error';
-    errorDiv.innerHTML = `
-      <div>${t('pic_error')}</div>
-      <button class="pic-refresh-btn" onclick="retryLoadPicture(${currentPictureIndex})">
-        <i class="ti ti-refresh"></i> ${t('pic_refresh')}
-      </button>
-    `;
-    container.innerHTML = '';
-    container.appendChild(errorDiv);
-  };
-
-  // 成功加载
-  img.onload = () => {
-    container.innerHTML = '';
-    container.appendChild(img);
-    updatePictureNav();
-  };
-
-  // 添加导航和计数器
-  container.innerHTML = '';
-  const wrapper = document.createElement('div');
-  wrapper.style.position = 'relative';
-  wrapper.style.width = '100%';
-  wrapper.appendChild(img);
-  
-  // 导航按钮
-  if (currentPictures.length > 1) {
-    const prevBtn = document.getElementById('pic-prev');
-    const nextBtn = document.getElementById('pic-next');
-    prevBtn.style.display = 'block';
-    nextBtn.style.display = 'block';
-    
-    const counter = document.getElementById('pic-counter');
-    counter.textContent = `${index + 1}/${currentPictures.length}`;
-    counter.style.display = 'block';
-  } else {
-    document.getElementById('pic-prev').style.display = 'none';
-    document.getElementById('pic-next').style.display = 'none';
-    document.getElementById('pic-counter').style.display = 'none';
-  }
-
-  container.appendChild(wrapper);
-}
-
-function updatePictureNav() {
-  const prevBtn = document.getElementById('pic-prev');
-  const nextBtn = document.getElementById('pic-next');
-  const counter = document.getElementById('pic-counter');
-  
-  if (currentPictures.length > 1) {
-    prevBtn.style.display = 'block';
-    nextBtn.style.display = 'block';
-    counter.textContent = `${currentPictureIndex + 1}/${currentPictures.length}`;
-    counter.style.display = 'block';
-    prevBtn.disabled = false;
-    nextBtn.disabled = false;
-  } else {
-    prevBtn.style.display = 'none';
-    nextBtn.style.display = 'none';
-    counter.style.display = 'none';
-  }
-}
-
-function showPrevPicture(e) {
-  if (e) e.stopPropagation();
-  displayPicture(currentPictureIndex - 1);
-}
-
-function showNextPicture(e) {
-  if (e) e.stopPropagation();
-  displayPicture(currentPictureIndex + 1);
-}
-
-function retryLoadPicture(index) {
-  displayPicture(index);
-}
-
-// ===== 打开模态框 =====
 function openModal(ev) {
   currentEvent = ev;
 
@@ -955,17 +837,13 @@ function openModal(ev) {
     activityEl.style.display = 'none';
   }
 
-  // 处理多图
-  currentPictures = parsePictures(ev.picture_url);
-  currentPictureIndex = 0;
   const picContainer = document.getElementById('m-pic-container');
-  
-  if (currentPictures.length > 0) {
+  if (ev.picture_url && ev.picture_url.trim()) {
+    picContainer.innerHTML = `<img class="modal-pic" src="${ev.picture_url.trim()}" alt="活动图片" onerror="this.parentElement.innerHTML='<div class=\\'modal-pic-error\\'>${t('pic_error')}</div>'" />`;
     picContainer.style.display = 'flex';
-    displayPicture(0);
   } else {
-    picContainer.innerHTML = `<div class="modal-pic-error">${t('pic_empty')}</div>`;
-    picContainer.style.display = 'flex';
+    picContainer.innerHTML = '';
+    picContainer.style.display = 'none';
   }
 
   const venueCityContainer = document.getElementById('m-venue-city-container');
@@ -994,6 +872,14 @@ function openModal(ev) {
     document.getElementById('m-time-container').style.display = 'none';
   }
 
+  if (ev.sale_date) {
+    const saleTime = ev.sale_time ? ` ${ev.sale_time}` : '';
+    document.getElementById('m-sale').textContent = `${ev.sale_date}${saleTime}`;
+    document.getElementById('m-sale-container').style.display = 'block';
+  } else {
+    document.getElementById('m-sale-container').style.display = 'none';
+  }
+
   if (ev.note) {
     document.getElementById('m-note').innerHTML = ev.note.replace(/\n/g, '<br>');
     document.getElementById('m-note-container').style.display = 'block';
@@ -1009,10 +895,14 @@ function openModal(ev) {
   }
 
   const buyBtn = document.getElementById('m-buy');
+  const tInfo = document.getElementById('m-ticket-info');
+  const remindBtn = document.getElementById('m-remind');
   const url = (ev.ticket_url || '').trim();
   const ttype = (ev.ticket_type || '').trim().toLowerCase();
 
   buyBtn.style.display = 'none';
+  tInfo.style.display = 'none';
+  remindBtn.style.display = 'none';
 
   if (ttype === 'buy' && url) {
     buyBtn.textContent = t('buy_now');
@@ -1022,10 +912,15 @@ function openModal(ev) {
     buyBtn.textContent = t('fill_form');
     buyBtn.style.display = 'block';
     buyBtn.onclick = () => window.open(url, '_blank');
+  } else if (ttype === 'info' && url) {
+    tInfo.style.display = 'block';
+    tInfo.innerHTML = url.replace(/\n/g, '<br>');
   } else if (url.startsWith('http')) {
     buyBtn.textContent = t('buy_now');
     buyBtn.style.display = 'block';
     buyBtn.onclick = () => window.open(url, '_blank');
+  } else if (ev.sale_date || ev.sale_time) {
+    remindBtn.style.display = 'block';
   }
 
   updateHeartButton();
@@ -1035,6 +930,43 @@ function openModal(ev) {
 function closeModal() {
   document.getElementById('overlay').classList.remove('open');
   pendingFavorite = { type: null, artists: [] };
+}
+
+function addToCalendar() {
+  if (!currentEvent) return;
+  const ev = currentEvent;
+
+  const saleDateStr = ev.sale_date || ev.date;
+  const saleTimeStr = ev.sale_time || '10:00';
+  const [sh, sm] = (saleTimeStr + ':00').split(':').map(Number);
+
+  const sd = new Date(saleDateStr.split(' ')[0]);
+  sd.setHours(sh, sm, 0, 0);
+  const ed = new Date(sd.getTime() + 30 * 60000);
+
+  const title = `${t('ics_alert_prefix')}${ev.activity || ev.name}`;
+  const desc = `${t('ics_show_date')}${ev.date}\n${t('ics_venue')}${ev.venue || ''}${ev.city ? '，' + ev.city : ''}\n${t('ics_price')}${ev.price || t('ics_free')}`;
+  const fmt = dt => dt.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//SomenStjerne//ChobCalendar//EN', 'BEGIN:VEVENT',
+    `UID:${Date.now()}@somenstjerne`, `DTSTAMP:${fmt(new Date())}`, `DTSTART:${fmt(sd)}`, `DTEND:${fmt(ed)}`,
+    `SUMMARY:${title}`, `DESCRIPTION:${desc}`, 'BEGIN:VALARM', 'TRIGGER:-PT0M', 'ACTION:DISPLAY', `DESCRIPTION:${title}`, 'END:VALARM',
+    'END:VEVENT', 'END:VCALENDAR'
+  ].join('\r\n');
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+  a.download = `${(ev.name || '提醒').replace(/\s/g, '_')}_开售提醒.ics`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }, 1000);
+
+  closeModal();
+  showToast(t('ics_downloaded', {name: ev.name || ''}));
 }
 
 function showToast(msg) {
@@ -1051,52 +983,29 @@ async function loadFromSheets() {
     document.getElementById('sync-txt').textContent = t('sync_loading');
 
     const requests = SHEET_CONFIGS.map(config => {
-      const url = `${GAS_URL}?id=${config.id}&key=thenorthremembersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
-      
-      // 添加超时控制
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('请求超时')), 15000)
-      );
-
-      const fetchPromise = fetch(url, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        mode: 'cors',
-        cache: 'no-cache'
-      })
+      const url = `${GAS_URL}?id=${config.id}&key=thenorthremenbersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
+      return fetch(url)
         .then(res => {
-          if (!res.ok) {
-            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-          }
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
           return res.json();
         })
-        .then(data => {
-          if (!data || (Array.isArray(data) && data.length === 0)) {
-            console.warn(`⚠️ 表格 [${config.id.substring(0, 8)}...] 返回空数据`);
-          }
-          return { data, config };
-        })
+        .then(data => ({ data, config }))
         .catch(err => {
-          console.warn(`⚠️ 表格 [${config.id.substring(0, 8)}...] 加载失败:`, err.message);
+          console.warn(`⚠️ 表格 [${config.id.substring(0, 8)}...] 加载失败，已自动跳过:`, err);
           return { data: null, config };
         });
-
-      return Promise.race([fetchPromise, timeoutPromise]);
     });
 
-    const allResults = await Promise.all(requests.map(p => p.catch(err => {
-      console.warn('单个请求失败:', err);
-      return { data: null, config: {} };
-    })));
+    const allResults = await Promise.all(requests);
 
     let combinedEvents = [];
-    let totalLoaded = 0;
+    
+    // 调试：记录每个表格的加载情况
+    const sheetStats = [];
 
     allResults.forEach(({ data, config }) => {
       if (!data || !Array.isArray(data)) {
+        sheetStats.push(`❌ 表格 ${config.id.substring(0, 12)}... 无数据`);
         return;
       }
 
@@ -1121,6 +1030,7 @@ async function loadFromSheets() {
         };
       });
 
+      // 如果不是专属表格，需要过滤 source 字段
       let filtered = cleanedRows;
       if (!config.isExclusive) {
         filtered = cleanedRows.filter(o => {
@@ -1129,26 +1039,19 @@ async function loadFromSheets() {
         });
       }
 
+      // 确保至少有 date 或 sale_date
       filtered = filtered.filter(o => o.date || o.sale_date);
 
       combinedEvents = combinedEvents.concat(filtered);
-      totalLoaded += filtered.length;
+      sheetStats.push(`表格 ${config.id.substring(0, 12)}... (官方:${config.isOfficial}): ${filtered.length} 条事件`);
     });
 
     events = combinedEvents;
-    
-    if (events.length === 0) {
-      console.warn('⚠️ 未加载到任何数据，请检查表格配置或网络连接');
-      document.getElementById('sync-dot').className = 'sync-dot err';
-      document.getElementById('sync-txt').innerHTML = `${t('sync_error')} <a href="#" onclick="loadFromSheets();return false" style="color:#e53935;text-decoration:underline;margin-left:4px">重试</a>`;
-    } else {
-      localStorage.setItem('allEvents', JSON.stringify(events));
-      document.getElementById('sync-dot').className = 'sync-dot';
-      document.getElementById('sync-txt').textContent = t('sync_synced');
-      console.log(`✅ 成功加载 ${events.length} 条数据`);
-    }
+    localStorage.setItem('allEvents', JSON.stringify(events));
 
     render();
+    document.getElementById('sync-dot').className = 'sync-dot';
+    document.getElementById('sync-txt').textContent = t('sync_synced');
   } catch (e) {
     console.error('❌ 加载失败:', e);
     document.getElementById('sync-dot').className = 'sync-dot err';
