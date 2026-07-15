@@ -122,9 +122,9 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:85vh;overflow:hidden}
 .modal-bar{height:8px;flex-shrink:0;border-radius:16px 16px 0 0}
-.modal-pic-container{background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;min-height:180px}
-.modal-pic-container img{max-width:100%;max-height:180px;object-fit:contain}
-.modal-pic-error{width:100%;min-height:180px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:var(--muted);font-size:13px;flex-direction:column;gap:12px}
+.modal-pic-container{background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;min-height:320px;max-height:380px;width:100%}
+.modal-pic-container img{max-width:100%;max-height:100%;object-fit:contain;width:100%}
+.modal-pic-error{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:var(--muted);font-size:13px;flex-direction:column;gap:12px;position:absolute;inset:0}
 .pic-nav-btn{background:rgba(0,0,0,0.3);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .15s;z-index:5;position:absolute;top:50%;transform:translateY(-50%)}
 .pic-nav-btn:hover{background:rgba(0,0,0,0.5)}
 .pic-nav-btn:disabled{opacity:0.5;cursor:not-allowed}
@@ -840,37 +840,48 @@ function displayPicture(index) {
   const img = document.createElement('img');
   img.src = url;
   img.alt = '活动图片';
+  img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;';
   
   // 加载失败处理
   img.onerror = () => {
-    container.innerHTML = `
-      <div class="modal-pic-error">
-        <div>${t('pic_error')}</div>
-        <button class="pic-refresh-btn" onclick="retryLoadPicture(${currentPictureIndex})">
-          <i class="ti ti-refresh"></i> ${t('pic_refresh')}
-        </button>
-      </div>
+    // 只替换内容，不清空导航按钮
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'modal-pic-error';
+    errorDiv.innerHTML = `
+      <div>${t('pic_error')}</div>
+      <button class="pic-refresh-btn" onclick="retryLoadPicture(${currentPictureIndex})">
+        <i class="ti ti-refresh"></i> ${t('pic_refresh')}
+      </button>
     `;
+    
+    const oldImg = container.querySelector('img');
+    const oldError = container.querySelector('.modal-pic-error');
+    if (oldImg) oldImg.replaceWith(errorDiv);
+    else if (oldError) oldError.replaceWith(errorDiv);
+    else container.appendChild(errorDiv);
+    
     document.getElementById('pic-prev').style.display = 'none';
     document.getElementById('pic-next').style.display = 'none';
     document.getElementById('pic-counter').style.display = 'none';
   };
 
-  // ✅ 修复：不要清空container，只替换img元素
+  // ✅ 只替换img元素，保留导航按钮和计数器
   img.onload = () => {
     const oldImg = container.querySelector('img');
+    const oldError = container.querySelector('.modal-pic-error');
+    
     if (oldImg) {
       oldImg.replaceWith(img);
+    } else if (oldError) {
+      oldError.replaceWith(img);
     } else {
-      container.innerHTML = '';
       container.appendChild(img);
     }
     updatePictureNav();
   };
 
   // 如果还没有img，添加
-  if (!container.querySelector('img')) {
-    container.innerHTML = '';
+  if (!container.querySelector('img') && !container.querySelector('.modal-pic-error')) {
     container.appendChild(img);
   }
 }
