@@ -1349,25 +1349,29 @@ function render() {
     let cellHtml = `<div class="${cellClass}" ${hasMore ? `onclick="openDayModal(${d})"` : ''} style="${hasMore ? 'cursor:pointer' : ''}">`;
     cellHtml += `<div class="cell-num ${nc}">${d}</div>`;
     
-    const displayEvs = evs.slice(0, hasMore ? 2 : 3);
-    displayEvs.forEach(ev => {
-      const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
-      const officialClass = (ev.isOfficial === true || ev.isOfficial === 'true') ? 'official' : '';
-      const disabledClass = hasMore ? 'disabled-click' : '';
-      
-      if (hasMore) {
-        cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass} ${disabledClass}">${ev.name}</button>`;
-      } else {
-        cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
-      }
-    });
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const maxCount = isMobile ? 2 : 3;
+  const hasMore = evs.length > maxCount;
+  const displayEvs = evs.slice(0, maxCount);
 
+  displayEvs.forEach(ev => {
+    const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
+    const officialClass = (ev.isOfficial === true || ev.isOfficial === 'true') ? 'official' : '';
+    const disabledClass = hasMore ? 'disabled-click' : '';
+    
     if (hasMore) {
-      cellHtml += `<span class="more">还有${evs.length - displayEvs.length}项</span>`;
+      cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass} ${disabledClass}">${ev.name}</button>`;
+    } else {
+      cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
     }
-    cellHtml += '</div>';
-    html += cellHtml;
+  });
+
+  if (hasMore) {
+    cellHtml += `<span class="more">还有${evs.length - displayEvs.length}项</span>`;
   }
+  cellHtml += '</div>';
+  html += cellHtml;
+}
 
   const rem = (fd + dim) % 7;
   if (rem > 0) for (let i = rem; i < 7; i++) html += '<div class="cell empty"></div>';
