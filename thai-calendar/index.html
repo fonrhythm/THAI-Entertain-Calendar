@@ -1811,7 +1811,7 @@ async function loadFromSheets() {
           category: (obj.category || '').toLowerCase(),
           status: (obj.status || '').toLowerCase(),
           type: rawType,
-          company: Array.from(document.querySelectorAll('#company-select-checkboxes input:checked')).map(cb => cb.value),
+          company: (obj.company || []),
           isOfficial: config.isOfficial
         };
       });
