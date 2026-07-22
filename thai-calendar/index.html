@@ -1341,7 +1341,11 @@ function render() {
     const todayZero = new Date(tod.getFullYear(), tod.getMonth(), tod.getDate());
     const isPast = currentDate < todayZero;
 
-    const hasMore = evs.length > 3;
+    // 根据屏幕宽度决定显示的chip数量：宽屏(≥768px)显示3个，窄屏(<768px)显示2个
+    const isMobileScreen = window.innerWidth < 768;
+    const chipsToShow = isMobileScreen ? 2 : 3;
+    const hasMore = evs.length > chipsToShow;
+    
     let cellClass = 'cell';
     if (isT) cellClass += ' today';
     else if (isPast) cellClass += ' past-day';
@@ -1349,7 +1353,7 @@ function render() {
     let cellHtml = `<div class="${cellClass}" ${hasMore ? `onclick="openDayModal(${d})"` : ''} style="${hasMore ? 'cursor:pointer' : ''}">`;
     cellHtml += `<div class="cell-num ${nc}">${d}</div>`;
     
-    const displayEvs = evs.slice(0, hasMore ? 2 : 3);
+    const displayEvs = evs.slice(0, chipsToShow);
     displayEvs.forEach(ev => {
       const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
       const officialClass = (ev.isOfficial === true || ev.isOfficial === 'true') ? 'official' : '';
