@@ -228,6 +228,19 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .error-submessage{font-size:13px;color:var(--muted);margin-bottom:30px}
 
 footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;text-align:center;font-size:10px;color:var(--muted);background:var(--surface)}
+.page-footer{background:#2a2a2a;color:#ccc;padding:32px 24px;margin-top:auto;font-family:'Noto Sans SC','Lato',sans-serif}
+.page-footer-content{max-width:1100px;margin:0 auto}
+.page-footer-section{margin-bottom:24px}
+.page-footer-heading{font-size:12px;font-weight:700;color:#fff;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;font-family:'Lato',sans-serif}
+.page-footer-links{display:flex;flex-direction:column;gap:8px}
+.page-footer-link{color:#ccc;text-decoration:none;font-size:12px;transition:color .15s;display:flex;align-items:center;gap:4px}
+.page-footer-link:hover{color:#fff}
+.page-footer-link-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.page-footer-divider{border-top:1px solid #444;margin:20px 0}
+.page-footer-bottom{font-size:11px;color:#999;text-align:center;padding-top:16px;border-top:1px solid #444}
+.page-footer-bottom-text{margin-bottom:4px}
+.page-footer-cooperation{color:#aaa;margin-top:8px;font-style:italic}
+@media(max-width:768px){.page-footer-section{margin-bottom:16px}.page-footer-heading{font-size:11px}}
 @media(max-width:768px){.cal-grid{grid-auto-rows:82px}}
 @media(max-width:480px){
   .wrap{padding:0 10px}
@@ -923,6 +936,80 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
       <button class="btn secondary" onclick="backToFormFromError()" data-i18n="back_to_edit">返回编辑</button>
       <button class="btn" onclick="closeAddEventModal()" data-i18n="confirm">确认</button>
     </div>
+
+    <!-- 页脚 -->
+    <div class="page-footer" id="add-event-page-footer" style="margin-top:40px">
+      <div class="page-footer-content">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px">
+          <!-- 社交媒体 -->
+          <div class="page-footer-section">
+            <div class="page-footer-heading" data-i18n="footer_socials">社交媒体</div>
+            <div class="page-footer-links">
+              <a href="https://xhslink.cn/m/6daqAMGfZbo" target="_blank" class="page-footer-link">
+                <span class="page-footer-link-icon">📸</span>
+                <span data-i18n="footer_xiaohongshu">小红书: SomenStjerne</span>
+              </a>
+              <a href="https://www.threads.com/@chobcalendar" target="_blank" class="page-footer-link">
+                <span class="page-footer-link-icon">💬</span>
+                <span data-i18n="footer_threads">Threads: chobcalendar</span>
+              </a>
+              <a href="https://www.instagram.com/chobcalendar/" target="_blank" class="page-footer-link">
+                <span class="page-footer-link-icon">📱</span>
+                <span data-i18n="footer_instagram">Instagram: chobcalendar</span>
+              </a>
+              <a href="mailto:chobcalendar@gmail.com" class="page-footer-link">
+                <span class="page-footer-link-icon">✉️</span>
+                <span data-i18n="footer_email">邮箱: chobcalendar@gmail.com</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-footer-divider"></div>
+
+        <div class="page-footer-bottom">
+          <div class="page-footer-bottom-text">Copyright © 2026 — All rights reserved by SomenStjerne</div>
+          <div class="page-footer-cooperation" data-i18n="footer_cooperation">欢迎合作联系</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- About 页面 footer -->
+<div class="page-footer" id="about-page-footer" style="display:none;margin-top:40px">
+  <div class="page-footer-content">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px">
+      <!-- 社交媒体 -->
+      <div class="page-footer-section">
+        <div class="page-footer-heading" data-i18n="footer_socials">社交媒体</div>
+        <div class="page-footer-links">
+          <a href="https://xhslink.cn/m/6daqAMGfZbo" target="_blank" class="page-footer-link">
+            <span class="page-footer-link-icon">📸</span>
+            <span data-i18n="footer_xiaohongshu">小红书: SomenStjerne</span>
+          </a>
+          <a href="https://www.threads.com/@chobcalendar" target="_blank" class="page-footer-link">
+            <span class="page-footer-link-icon">💬</span>
+            <span data-i18n="footer_threads">Threads: chobcalendar</span>
+          </a>
+          <a href="https://www.instagram.com/chobcalendar/" target="_blank" class="page-footer-link">
+            <span class="page-footer-link-icon">📱</span>
+            <span data-i18n="footer_instagram">Instagram: chobcalendar</span>
+          </a>
+          <a href="mailto:chobcalendar@gmail.com" class="page-footer-link">
+            <span class="page-footer-link-icon">✉️</span>
+            <span data-i18n="footer_email">邮箱: chobcalendar@gmail.com</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer-divider"></div>
+
+    <div class="page-footer-bottom">
+      <div class="page-footer-bottom-text">Copyright © 2026 — All rights reserved by SomenStjerne</div>
+      <div class="page-footer-cooperation" data-i18n="footer_cooperation">欢迎合作联系</div>
+    </div>
   </div>
 </div>
 
@@ -968,7 +1055,7 @@ const SHEET_CONFIGS = [
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec';
   
 const ALL_TAGS = ['bl','gl','band','singer','group','actor','other'];
-const ALL_AGENCIES = [];
+const ALL_AGENCIES = ['411 Entertainment', '9 Arkhan', 'BEC World', 'BOXX MUSIC', 'Bridge Management', 'CHANGE 2561', 'Channel 3', 'Copy A Bangkok', 'Dee Hup Hous', 'DoMunDi (DMD)', 'Genie Records', 'GMMTV', 'GNEST', 'Headliner Thailand', 'Idol Factory', 'iQIYIArtist TH', 'Kicks Records', 'kiddorecords', 'Lemonmint', 'Line TV', 'Major Cineplex Group', 'Modern Museum', 'MONO Management', 'Nadao Bangkok', 'Noble Produce', 'One Lamp Production', 'Pappyland', 'Prelude Records', 'Pushing Play', 'Radarlek Studio', 'Riser Entertainment', 'RSIAM', 'SHIFT Entertainment', 'Siam Paragon', 'South Sky', 'Star Media Group', 'STITCH Bangkok', 'Sycamore Entertainment', 'Syd De', 'Tango Media', 'The Camp Thailand', 'The Pier Bangkok', 'THE STANDARD', 'THAIFILM', 'Trans Studio Cine', 'Triple A Records', 'UME Thailand', 'UNIVERSE PRESENTS', 'Workpoint Entertainment', 'Yours Musique', 'ZipperFilm'];
 
 let yr = new Date().getFullYear();
 let mo = new Date().getMonth() + 1;
@@ -1263,9 +1350,20 @@ function render() {
     const isInMonth = parseInt(parts[0]) === yr && parseInt(parts[1]) === mo;
     if (!isInMonth) return false;
     
-    const evCategory = ev.category || 'other';
-    if (!activeCategories.has(evCategory)) {
-      return false;
+    // 如果有选中的类型，检查是否匹配
+    if (activeCategories.size > 0) {
+      const evCategory = ev.category || 'other';
+      if (!activeCategories.has(evCategory)) {
+        return false;
+      }
+    }
+    
+    // 如果有选中的公司，检查是否匹配
+    if (activeAgencies.size > 0) {
+      const evAgency = ev.company || '';
+      if (!activeAgencies.has(evAgency)) {
+        return false;
+      }
     }
     
     return true;
@@ -2249,6 +2347,9 @@ const I18N = {
   add_event_category: { zh:'艺人类型', en:'Artist Type', th:'ประเภทศิลปิน' },
   add_event_activity: { zh:'活动名称', en:'Activity Name', th:'ชื่อกิจกรรม' },
   add_event_venue: { zh:'活动地点', en:'Venue', th:'สถานที่จัดงาน' },
+  add_event_date: { zh:'活动日期', en:'Activity Date', th:'วันที่กิจกรรม' },
+  add_event_source: { zh:'活动区域', en:'Activity Region', th:'ภูมิภาคกิจกรรม' },
+  add_event_company_label: { zh:'艺人所属公司', en:'Artist Company', th:'บริษัทของศิลปิน' },
   add_event_time: { zh:'活动时间', en:'Event Time', th:'เวลาจัดงาน' },
   add_event_sale_date: { zh:'开售日期', en:'Sale Date', th:'วันที่เปิดขาย' },
   add_event_sale_time: { zh:'开售时间', en:'Sale Time', th:'เวลาเปิดขาย' },
