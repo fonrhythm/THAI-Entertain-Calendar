@@ -802,55 +802,146 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
       <!-- 艺人所属公司 -->
       <div class="add-event-field">
         <label class="add-event-label" data-i18n="add_event_company_label">艺人所属公司</label>
-        <select id="add-event-company-select" class="add-event-select">
-          <option value="">-- 请选择 --</option>
-          <option value="411 Entertainment">411 Entertainment</option>
-          <option value="9 Arkhan">9 Arkhan</option>
-          <option value="BEC World">BEC World</option>
-          <option value="BOXX MUSIC">BOXX MUSIC</option>
-          <option value="Bridge Management">Bridge Management</option>
-          <option value="CHANGE 2561">CHANGE 2561</option>
-          <option value="Channel 3">Channel 3</option>
-          <option value="Copy A Bangkok">Copy A Bangkok</option>
-          <option value="Dee Hup Hous">Dee Hup Hous</option>
-          <option value="DoMunDi (DMD)">DoMunDi (DMD)</option>
-          <option value="Genie Records">Genie Records</option>
-          <option value="GMMTV">GMMTV</option>
-          <option value="GNEST">GNEST</option>
-          <option value="Headliner Thailand">Headliner Thailand</option>
-          <option value="Idol Factory">Idol Factory</option>
-          <option value="iQIYIArtist TH">iQIYIArtist TH</option>
-          <option value="Kicks Records">Kicks Records</option>
-          <option value="kiddorecords">kiddorecords</option>
-          <option value="LIT Entertainment">LIT Entertainment</option>
-          <option value="LOOKE">LOOKE</option>
-          <option value="LOVEiS Entertainmer">LOVEiS Entertainmer</option>
-          <option value="mandee">mandee</option>
-          <option value="MchoiceTH">MchoiceTH</option>
-          <option value="Me Mind Y">Me Mind Y</option>
-          <option value="ME RECORDS">ME RECORDS</option>
-          <option value="MILK!">MILK!</option>
-          <option value="Move Records">Move Records</option>
-          <option value="Muzik Move">Muzik Move</option>
-          <option value="North Star">North Star</option>
-          <option value="One 31 (一台)">One 31 (一台)</option>
-          <option value="Open Label (一台)">Open Label (一台)</option>
-          <option value="Smallroom">Smallroom</option>
-          <option value="SONAY MUSIC">SONAY MUSIC</option>
-          <option value="Sony Music Thailand">Sony Music Thailand</option>
-          <option value="SpicyDisc">SpicyDisc</option>
-          <option value="Tero Music">Tero Music</option>
-          <option value="TV Thunder">TV Thunder</option>
-          <option value="Wabi Sabi">Wabi Sabi</option>
-          <option value="Wayfer Records">Wayfer Records</option>
-          <option value="What The Duck">What The Duck</option>
-          <option value="White Fox">White Fox</option>
-          <option value="White Music">White Music</option>
-          <option value="XOXO Entertainment">XOXO Entertainment</option>
-          <option value="其他个人工作室">其他个人工作室</option>
-          <option value="洞察娱乐 (Insight)">洞察娱乐 (Insight)</option>
-          <option value="星猎 (Star Hunter)">星猎 (Star Hunter)</option>
-        </select>
+        <div id="company-select-checkboxes" style="max-height:250px;overflow-y:auto;border:1px solid var(--border-soft);padding:8px;display:flex;flex-direction:column;gap:4px">
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="411 Entertainment"> 411 Entertainment
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="9 Arkhan"> 9 Arkhan
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="BEC World"> BEC World
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="BOXX MUSIC"> BOXX MUSIC
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Bridge Management"> Bridge Management
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="CHANGE 2561"> CHANGE 2561
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Channel 3"> Channel 3
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Copy A Bangkok"> Copy A Bangkok
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Dee Hup Hous"> Dee Hup Hous
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="DoMunDi (DMD)"> DoMunDi (DMD)
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Genie Records"> Genie Records
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="GMMTV"> GMMTV
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="GNEST"> GNEST
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Headliner Thailand"> Headliner Thailand
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Idol Factory"> Idol Factory
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="iQIYIArtist TH"> iQIYIArtist TH
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Kicks Records"> Kicks Records
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="kiddorecords"> kiddorecords
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="LIT Entertainment"> LIT Entertainment
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="LOOKE"> LOOKE
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="LOVEiS Entertainmer"> LOVEiS Entertainmer
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="mandee"> mandee
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="MchoiceTH"> MchoiceTH
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Me Mind Y"> Me Mind Y
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="ME RECORDS"> ME RECORDS
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="MILK!"> MILK!
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Move Records"> Move Records
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Muzik Move"> Muzik Move
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="North Star"> North Star
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="One 31 (一台)"> One 31 (一台)
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Open Label (一台)"> Open Label (一台)
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Smallroom"> Smallroom
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="SONAY MUSIC"> SONAY MUSIC
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Sony Music Thailand"> Sony Music Thailand
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="SpicyDisc"> SpicyDisc
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Tero Music"> Tero Music
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="TV Thunder"> TV Thunder
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Wabi Sabi"> Wabi Sabi
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="Wayfer Records"> Wayfer Records
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="What The Duck"> What The Duck
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="White Fox"> White Fox
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="White Music"> White Music
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="XOXO Entertainment"> XOXO Entertainment
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="其他个人工作室"> 其他个人工作室
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="洞察娱乐 (Insight)"> 洞察娱乐 (Insight)
+  </label>
+  <label class="filter-checkbox" style="padding:4px">
+    <input type="checkbox" value="星猎 (Star Hunter)"> 星猎 (Star Hunter)
+  </label>
+</div>
         <div class="add-event-helper" data-i18n="add_event_company_help">可手动输入 快速定位 如若列表里没有，可以在备注里反馈</div>
       </div>
 
@@ -1353,20 +1444,19 @@ function render() {
     // 如果有选中的类型，检查是否匹配
     if (activeCategories.size > 0) {
       const evCategory = ev.category || 'other';
-      if (!activeCategories.has(evCategory)) {
-        return false;
-      }
-    }
-    
-    // 如果有选中的公司，检查是否匹配
-    if (activeAgencies.size > 0) {
-      const evAgency = ev.company || '';
-      if (!activeAgencies.has(evAgency)) {
-        return false;
-      }
-    }
-    
-    return true;
+if (!activeCategories.has(evCategory)) {
+  return false;
+}
+
+// 公司筛选（支持多选数组）
+if (useAgencyFilter && ev.company && Array.isArray(ev.company)) {
+  const hasMatchingCompany = ev.company.some(c => activeAgencies.has(c));
+  if (!hasMatchingCompany) {
+    return false;
+  }
+}
+
+return true;
   });
 
   const byDay = {};
@@ -1721,7 +1811,7 @@ async function loadFromSheets() {
           category: (obj.category || '').toLowerCase(),
           status: (obj.status || '').toLowerCase(),
           type: rawType,
-          company: (obj.company || '').trim(),
+          company: Array.from(document.querySelectorAll('#company-select-checkboxes input:checked')).map(cb => cb.value),
           isOfficial: config.isOfficial
         };
       });
