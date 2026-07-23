@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+
+<!-- ✅ 配置两个 GAS URL -->
+<script>
+  // GAS_URL_READ: 读取日历数据（原有的）
+  const GAS_URL_READ = 'https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec';
   
+  // GAS_URL_WRITE: 接收用户提交的新增活动（新的）
+  const GAS_URL_WRITE = 'https://script.google.com/macros/s/AKfycbxZsv6JkOAh4lXJxxrf3RxbbwZoGjVFXYn5rdNiprUTiDyNfP-ufrqQAFRMlHbMFv2p/exec';
+  
+  console.log('✓ GAS_URL_READ 已配置（读取日历数据）');
+  console.log('✓ GAS_URL_WRITE 已配置（接收新增活动）');
+</script>
+
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-0VZ4MGL1YE"></script>
 <script>
@@ -31,33 +43,33 @@
   --c-other:#a27d60;--t-other:#fff;
 }
 body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
-.wrap{max-width:1100px;margin:0 auto;padding:0 24px;width:100%}
-.sticky-shell{position:sticky;top:0;left:0;right:0;z-index:200;background:var(--surface);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 32px;width:100%}
+.sticky-shell{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--surface);box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .site-nav{background:var(--surface);border-bottom:1px solid var(--border-soft);padding:8px 0}
 .site-nav-inner{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .site-nav a{font-family:'Lato',sans-serif;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;flex-shrink:0}
 .site-nav a:hover{color:var(--text);background:var(--bg)}
 .site-nav a.active{color:var(--text);font-weight:700}
 .sep{color:#bbb;font-size:10px;flex-shrink:0}
-.header{background:var(--surface);border-bottom:1px solid var(--border);padding:24px 0 24px}
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:60px 0 20px}
 .header-inner{display:flex;align-items:center}
-.nav-btn{background:none;border:none;cursor:pointer;width:36px;color:var(--muted);font-size:17px;display:flex;align-items:center;justify-content:center;align-self:stretch;border-radius:6px;transition:color .15s,background .15s;flex-shrink:0}
+.nav-btn{background:none;border:none;cursor:pointer;width:36px;color:var(--muted);font-size:17px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:color .15s,background .15s;flex-shrink:0}
 .nav-btn:hover{color:var(--text);background:var(--bg)}
 .month-block{flex:1;padding:0 6px}
 .year-lbl{font-family:'Lato',sans-serif;font-size:11px;font-weight:300;color:var(--muted);letter-spacing:3px;margin-bottom:1px}
-.month-row{display:flex;align-items:baseline;gap:10px;line-height:1}
+.month-row{display:flex;align-items:center;gap:10px;line-height:1}
 .month-cn{font-size:72px;font-weight:700;color:var(--text);line-height:.88;letter-spacing:-2px}
 .month-en{font-family:'Lato',sans-serif;font-size:32px;font-weight:300;color:#888;letter-spacing:1px}
-.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 0}
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 0}
 .toolbar-inner{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .view-group{display:flex;gap:2px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px;flex-shrink:0}
-.view-btn{background:none;border:none;padding:4px 13px;border-radius:16px;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;color:var(--sub);transition:all .15s;white-space:nowrap}
+.view-btn{background:none;border:none;padding:4px 13px;border-radius:16px;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;color:var(--sub);transition:all .15s;white-space:nowrap}
 .view-btn.active{background:var(--text);color:#fff}
 .tb-div{width:1px;height:22px;background:var(--border);flex-shrink:0}
-.pills{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+.pills{display:flex;gap:5px;flex-wrap:wrap;flex:1;order:1}
 .pill{border:1.5px solid transparent;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .15s;white-space:nowrap;opacity:.42}
 .pill.on{opacity:1;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.pill .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.4)}
+.pill .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:rgba(0,0,0,0.18)}
 .p-bl{background:var(--c-bl);color:var(--t-bl);border-color:var(--c-bl)}
 .p-gl{background:var(--c-gl);color:var(--t-gl);border-color:var(--c-gl)}
 .p-band{background:var(--c-band);color:var(--t-band);border-color:var(--c-band)}
@@ -71,29 +83,38 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .sync-dot.busy{background:#fb8c00;animation:blink 1s infinite}
 .sync-dot.err{background:#e53935}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.lang-group{display:flex;gap:2px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px;flex-shrink:0;margin-right:8px}
-.lang-btn{background:none;border:none;padding:3px 9px;border-radius:16px;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;color:var(--sub);transition:all .15s;white-space:nowrap}
+.filter-dropdown-container{position:relative;z-index:101}
+.filter-dropdown-menu{position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:100;min-width:200px;margin-top:4px;max-height:350px;overflow-y:auto}
+.filter-pills{display:flex;flex-direction:column;gap:0}
+.filter-checkbox{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--sub);user-select:none;padding:4px}
+.filter-checkbox input{cursor:pointer;width:14px;height:14px}
+.filter-checkbox input:checked{accent-color:var(--text)}
+.toolbar-bottom{display:flex;gap:16px;margin-top:12px;justify-content:flex-end;order:2}
+.lang-group{display:flex;gap:2px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px;flex-shrink:0;margin-right:8px} 
+.lang-btn{background:none;border:none;padding:4px 13px;border-radius:16px;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;color:var(--sub);transition:all .15s;white-space:nowrap}
 .lang-btn.active{background:var(--text);color:#fff}
-.user-menu{position:fixed;background:#fff;border:1px solid #e6e2dc;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:999;min-width:160px;overflow:hidden}
-.user-menu-header{padding:12px 16px;border-bottom:1px solid #f1eee8;font-size:12px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.user-menu-item{display:block;width:100%;padding:10px 16px;color:#1a1a1a;text-decoration:none;font-size:13px;border:none;background:none;cursor:pointer;text-align:left;transition:background 0.15s;border-bottom:1px solid #f1eee8}
+.user-menu{position:fixed;background:#fff;border:1px solid #e8e4de;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:999;min-width:160px;overflow:hidden}
+.user-menu-header{padding:12px 16px;border-bottom:1px solid #f0ece6;font-size:12px;color:#6b6b6b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-menu-item{display:block;width:100%;padding:10px 16px;color:#1a1a1a;text-decoration:none;font-size:13px;border:none;background:none;cursor:pointer;text-align:left;transition:background 0.15s;border-bottom:1px solid #f0ece6}
 .user-menu-item:last-child{border-bottom:none}
 .user-menu-item:hover{background:#faf9f7}
+.user-menu-item.disabled{opacity:0.5;cursor:not-allowed}
 .page-content{padding-top:0;flex:1}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.stat{padding:13px 16px;text-align:center;border-right:1px solid var(--border-soft)}
+.stat{padding:18px 18px;text-align:center;border-right:1px solid var(--border-soft)}
 .stat:last-child{border-right:none}
 .stat-n{font-size:26px;font-weight:700;font-family:'Lato',sans-serif;line-height:1}
 .stat-l{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.3px}
-.cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:0;border-bottom:10px solid var(--border)}
+.cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:20px;border-bottom:10px solid var(--border)}
 .dow-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--border-soft)}
-.dow{text-align:center;padding:8px 0;font-size:10px;font-weight:500;letter-spacing:1.5px;color:var(--muted);border-right:1px solid var(--border-soft);overflow:hidden}
+.dow{text-align:center;padding:8px 0;font-size:10px;font-weight:500;letter-spacing:1.5px;color:var(--muted);border-right:1px solid var(--border-soft)}
 .dow:last-child{border-right:none}
 .dow.sun{color:#c0524e}.dow.sat{color:#5E7B9B}
 .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:110px}
 .cell{overflow:hidden;min-width:0;min-height:0;padding:6px 5px 4px;border-right:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);background:var(--surface);transition:background .1s;display:flex;flex-direction:column}
 .cell:nth-child(7n){border-right:none}
-.cell.empty{background:#fcfbf9}.cell.today{background:#fffbf5}
+.cell.empty{background:#fcfbf9}
+.cell.today{background:#fffbf5}
 .cell.past-day{opacity:.5}
 .cell:not(.empty):hover{background:#fdfcfa}
 .cell-num{font-size:11px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:var(--sub);flex-shrink:0;margin-bottom:2px}
@@ -107,6 +128,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.group{background:var(--c-group);color:var(--t-group)}
 .chip.actor{background:var(--c-actor);color:var(--t-actor)}
 .chip.other{background:var(--c-other);color:var(--t-other)}
+.chip.actor .dot{background:#907C6C}
 .chip.cancelled{opacity:.38!important;text-decoration:line-through;position:relative}
 .chip.cancelled::after{content:'已取消';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none}
 .chip.postponed::after{content:'已延期';position:absolute;top:2px;right:4px;font-size:8px;line-height:1;padding:2px 4px;border-radius:10px;background:rgba(0,0,0,.35);color:#fff;text-decoration:none}
@@ -115,25 +137,22 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .chip.band.official{background:transparent;border:1.5px solid #464336;color:#464336}
 .chip.singer.official{background:transparent;border:1.5px solid #674b3f;color:#674b3f}
 .chip.group.official{background:transparent;border:1.5px solid #907C6C;color:#907C6C}
-.chip.actor.official{background:transparent;border:1.5px solid #3a2a1e;color:#3a2a1e}
+.chip.actor.official{background:transparent;border:1.5px solid #b0a090;color:#C9BEAD}
 .chip.other.official{background:transparent;border:1.5px solid #a27d60;color:#a27d60}
 .chip.official::before{content:'★';position:absolute;top:50%;right:2px;transform:translateY(-50%);font-size:10px;color:currentColor;text-decoration:none}
-.more{font-size:9px;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;flex-shrink:0;padding:0 2px;display:block}
-.more:hover{color:var(--text)}
-.coming-soon-wrap{display:flex;justify-content:center;align-items:center;padding:24px 0}
+.chip.disabled-click{cursor:default}
+.more{font-size:9px;color:var(--muted);cursor:pointer;padding:0 2px;display:block;margin-top:2px}
+.coming-soon-wrap{display:flex;justify-content:center;gap:12px;padding:8px 0;flex-wrap:wrap;margin:8px 0}
 .coming-soon-badge{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 18px;font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:border-color .2s,color .2s}
 .coming-soon-badge:hover{border-color:#c9b8a8;color:var(--sub)}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;color:#fff;border-radius:10px;padding:11px 18px;font-size:12px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .25s,transform .25s;z-index:999;max-width:90vw;text-align:center}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
+.overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:16px}
 #overlay{z-index:1002}
-#day-overlay{z-index:900!important}
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:85vh;overflow:hidden}
 .modal-bar{height:8px;flex-shrink:0;border-radius:16px 16px 0 0}
-.modal-pic-container{background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.modal-pic{width:100%;height:auto;display:block}
-.modal-pic-error{width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:var(--muted);font-size:13px}
+.modal-pic-container{background:#f5f5f5;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;touch-action:pan-y;min-height:280px}
+.modal-pic{width:100%;height:auto;display:block;cursor:pointer}
+.modal-pic-error{width:100%;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f5f5f5;color:var(--muted);font-size:13px;gap:12px}
 .modal-body{padding:0;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .modal-body::-webkit-scrollbar{display:none}
 .heart-btn{position:absolute;top:13px;right:45px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,0.06);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#999;transition:all 0.15s;z-index:10}
@@ -150,24 +169,22 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .modal-field i{color:var(--muted);font-size:15px;flex-shrink:0;margin-top:2px;width:15px;text-align:center}
 .modal-field-value{color:var(--text);line-height:1.6;display:inline}
 .modal-foot{border-top:1px solid var(--border-soft);padding:14px 20px 18px;display:flex;flex-direction:column;gap:8px;flex-shrink:0}
-.btn{display:block;width:100%;padding:11px;border-radius:9px;font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;border:none;text-align:center;transition:opacity .2s}
+.btn{display:block;width:100%;padding:12px;border-radius:10px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border:none;text-align:center;background:var(--text);color:#fff;transition:opacity .2s}
 .btn:hover{opacity:0.9}
-.btn-dark{background:var(--text);color:#fff}
-.btn-ghost{background:var(--bg);color:var(--text);border:1px solid var(--border)}
-.ticket-info{font-size:12px;color:var(--sub);text-align:center;padding:6px 0}
+.btn.secondary{background:#fff;border:1px solid var(--border);color:var(--text)}
 .modal-day{background:var(--surface);border:1px solid var(--border);border-radius:16px;max-height:80vh;display:flex;flex-direction:column;width:380px;max-width:100%}
 .modal-day-header{padding:20px 20px 16px;border-bottom:1px solid var(--border-soft);position:relative;flex-shrink:0}
 .modal-day-title{font-size:18px;font-weight:700;margin-bottom:4px}
 .modal-day-count{font-size:12px;color:var(--muted)}
 .modal-day-body{padding:16px 20px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
-.choice-overlay{display:none;position:fixed;inset:0;z-index:1001;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;padding:16px}
+.choice-overlay{display:none;position:fixed;inset:0;z-index:1003;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;padding:16px}
 .choice-overlay.open{display:flex}
 .choice-modal{background:#fff;border-radius:12px;width:300px;max-width:100%;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 .choice-title{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--text)}
 .choice-btn{display:block;width:100%;padding:12px;margin-bottom:10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;transition:all 0.15s}
 .choice-btn:last-child{margin-bottom:0}
 .choice-btn:hover{background:var(--bg);border-color:var(--text)}
-.artist-overlay{display:none;position:fixed;inset:0;z-index:1001;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;padding:16px}
+.artist-overlay{display:none;position:fixed;inset:0;z-index:1003;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;padding:16px}
 .artist-overlay.open{display:flex}
 .artist-modal{background:#fff;border-radius:12px;width:320px;max-width:100%;max-height:70vh;display:flex;flex-direction:column;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 .artist-modal-header{padding:20px;border-bottom:1px solid var(--border-soft);flex-shrink:0}
@@ -176,9 +193,69 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .artist-item{display:block;width:100%;padding:12px 14px;margin-bottom:8px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;transition:all 0.15s;text-align:left}
 .artist-item:last-child{margin-bottom:0}
 .artist-item:hover{background:var(--bg);border-color:var(--text)}
+.pic-nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,0.5);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:5;transition:background .2s}
+.pic-nav-btn:hover{background:rgba(0,0,0,0.7)}
+.pic-prev{left:8px}
+.pic-next{right:8px}
+.pic-counter{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.6);color:#fff;padding:4px 10px;border-radius:12px;font-size:12px;z-index:5}
+.modal-pic-lightbox{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.95);align-items:center;justify-content:center}
+.modal-pic-lightbox.open{display:flex}
+.lightbox-img{max-width:90%;max-height:90%;object-fit:contain}
+.lightbox-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border:none;background:rgba(255,255,255,0.2);color:#fff;border-radius:50%;cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;z-index:10}
+
+/* 新增活动弹窗样式 */
+.add-event-modal{background:#EFEDE9;border-radius:16px;width:420px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:60vh;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+.add-event-header{padding:20px;border-bottom:1px solid var(--border-soft);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.add-event-title{font-size:18px;font-weight:700;color:var(--text)}
+.add-event-close{background:none;border:none;font-size:24px;color:var(--muted);cursor:pointer;transition:color .15s;padding:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center}
+.add-event-close:hover{color:var(--text)}
+.add-event-body{padding:20px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.add-event-body::-webkit-scrollbar{display:none}
+.add-event-field{margin-bottom:16px;display:flex;flex-direction:column}
+.add-event-label{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.add-event-label.required::after{content:' *';color:#e53935}
+.add-event-input,.add-event-select,.add-event-textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--text);transition:border-color .15s}
+.add-event-input:focus,.add-event-select:focus,.add-event-textarea:focus{outline:none;border-color:#333;box-shadow:0 0 0 2px rgba(0,0,0,.1)}
+.add-event-textarea{resize:vertical;min-height:80px}
+.add-event-helper{font-size:11px;color:var(--muted);margin-top:4px}
+.add-event-footer{border-top:1px solid var(--border-soft);padding:14px 20px;display:flex;gap:10px;flex-shrink:0}
+.add-event-footer .btn{flex:1;padding:11px;font-size:13px}
+.add-event-success{text-align:center;padding:60px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px}
+.success-checkmark{width:60px;height:60px;border-radius:50%;background:#4caf50;display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;margin-bottom:20px}
+.success-message{font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px}
+.success-submessage{font-size:13px;color:var(--muted);margin-bottom:30px}
+.submit-error{text-align:center;padding:60px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px}
+.error-icon{width:60px;height:60px;border-radius:50%;background:#e53935;display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;margin-bottom:20px}
+.error-message{font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px}
+.error-submessage{font-size:13px;color:var(--muted);margin-bottom:30px}
+
 footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;text-align:center;font-size:10px;color:var(--muted);background:var(--surface)}
+.page-footer-minimal{background:rgba(239,237,233,0.3);padding:12px 24px;border-top:1px solid rgba(0,0,0,0.05);margin-top:20px;text-align:center}
+.page-footer-icons{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
+.footer-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;cursor:pointer;transition:all .2s;opacity:0.6;text-decoration:none;position:relative;color:var(--text);font-size:16px}
+.footer-icon-btn i{font-size:16px;display:block}
+.footer-icon-btn:hover{opacity:1;transform:scale(1.2)}
+.footer-icon-btn::after{content:attr(title);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:4px 8px;border-radius:4px;font-size:9px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;margin-bottom:8px;font-family:'Noto Sans SC',sans-serif;letter-spacing:0}
+.footer-icon-btn:hover::after{opacity:1}
+@media(max-width:768px){.page-footer-minimal{padding:10px 16px;margin-top:20px}.page-footer-icons{gap:16px}.footer-icon-btn{width:20px;height:20px}.footer-icon-btn i{font-size:14px}}
 @media(max-width:768px){.cal-grid{grid-auto-rows:82px}}
-@media(max-width:480px){.wrap{padding:0 10px}.header{padding:28px 0 28px}.month-cn{font-size:50px;letter-spacing:-1px}.month-en{font-size:20px}.cal-grid{grid-auto-rows:62px}.cell{padding:1px 2px 2px}.cell-num{font-size:10px;width:15px;height:15px;margin-bottom:1px}.chip{font-size:9px;padding:1px 2px;line-height:11px}.more{font-size:8px}.dow{font-size:9px;letter-spacing:.3px}.modal{width:90%;max-width:380px}.toolbar-inner{flex-wrap:wrap}.tb-div{display:none}.pills{order:3;flex-basis:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}.sync{order:2}.view-group{order:1}}
+@media(max-width:480px){
+  .wrap{padding:0 16px}
+  .header{padding:42px 0 10px}
+  .month-cn{font-size:50px;letter-spacing:-1px}
+  .month-en{font-size:20px}
+  .cal-grid{grid-auto-rows:62px}
+  .cell{padding:1px 2px 2px}
+  .cell-num{font-size:10px;width:15px;height:15px;margin-bottom:1px}
+  .chip{font-size:9px;padding:1px 2px;line-height:11px}
+  .more{font-size:9px;margin-top:-3px}
+  .dow{font-size:9px;letter-spacing:.3px}
+  .modal{width:90%;max-width:380px}
+  .add-event-modal{width:90%;max-width:380px}
+  .toolbar-inner{display:flex;flex-wrap:wrap}
+  .tb-div{display:none}
+  .sync{display:flex;gap:4px;align-items:center}
+}
 </style>
 </head>
 <body>
@@ -197,50 +274,294 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
   </div>
 </div>
 
- <div class="header">
-    <div class="wrap">
-      <div class="header-inner">
-        <button class="nav-btn" onclick="changeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
-        <div class="month-block">
-          <div class="year-lbl" id="y-lbl">2026</div>
-          <div class="month-row">
-            <span class="month-cn" id="m-cn">五月</span>
-            <span class="month-en" id="m-en">May</span>
-          </div>
+<div class="header">
+  <div class="wrap">
+    <div class="header-inner">
+      <button class="nav-btn" onclick="changeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
+      <div class="month-block">
+        <div class="year-lbl" id="y-lbl">2026</div>
+        <div class="month-row">
+          <span class="month-cn" id="m-cn">五月</span>
+          <span class="month-en" id="m-en">May</span>
         </div>
-        <button class="nav-btn" onclick="changeMonth(1)"><i class="ti ti-chevron-right"></i></button>
       </div>
+      <button class="nav-btn" onclick="changeMonth(1)"><i class="ti ti-chevron-right"></i></button>
     </div>
   </div>
+</div>
 
 <div class="page-content" id="page-content">
   <div class="toolbar">
     <div class="wrap">
       <div class="toolbar-inner">
-        <div class="view-group">
-          <button class="view-btn active" onclick="setView(this,'perform')" data-i18n="view_perform">演出日期</button>
-          <button class="view-btn" onclick="setView(this,'sale')" data-i18n="view_sale">开售日期</button>
-        </div>
-        <div class="tb-div"></div>
-        <div class="pills">
-          <button class="pill p-bl on" onclick="toggleTag(this,'bl')"><span class="dot"></span><span data-i18n="cat_bl">泰腐</span></button>
-          <button class="pill p-gl on" onclick="toggleTag(this,'gl')"><span class="dot"></span><span data-i18n="cat_gl">泰百</span></button>
-          <button class="pill p-band on" onclick="toggleTag(this,'band')"><span class="dot"></span><span data-i18n="cat_band">乐队</span></button>
-          <button class="pill p-singer on" onclick="toggleTag(this,'singer')"><span class="dot"></span><span data-i18n="cat_singer">歌手</span></button>
-          <button class="pill p-group on" onclick="toggleTag(this,'group')"><span class="dot"></span><span data-i18n="cat_group">男女团</span></button>
-          <button class="pill p-actor on" onclick="toggleTag(this,'actor')"><span class="dot"></span><span data-i18n="cat_actor">演员</span></button>
-          <button class="pill p-other on" onclick="toggleTag(this,'other')"><span class="dot"></span><span data-i18n="cat_other">其他艺人</span></button>
-        </div>
-        <div class="lang-group" id="lang-group">
+        <!-- 左边：三语切换 -->
+        <div class="lang-group" id="lang-group" style="margin-right:12px">
           <button class="lang-btn active" data-lang="zh" onclick="setLang('zh')">中</button>
           <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
           <button class="lang-btn" data-lang="th" onclick="setLang('th')">ไทย</button>
         </div>
-        <div class="sync">
-          <button id="search-btn" onclick="handleSearch()" style="background:none;border:none;cursor:pointer;color:var(--sub);font-size:18px;display:flex;align-items:center;padding:4px;border-radius:6px;transition:color .15s;flex-shrink:0;margin-right:8px" data-i18n-title="search_title">
+        
+        <!-- 演出日期/开售日期 -->
+        <div class="view-group" style="margin-right:12px">
+          <button class="view-btn active" onclick="setView(this,'perform')" data-i18n="view_perform">演出日期</button>
+          <button class="view-btn" onclick="setView(this,'sale')" data-i18n="view_sale">开售日期</button>
+        </div>
+
+        <!-- 下拉菜单筛选器 -->
+        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+            <!-- 公司下拉框 -->
+            <div class="filter-dropdown-container" style="position:relative">
+              <button class="view-btn filter-dropdown-btn" onclick="toggleAgencyDropdown()" id="agency-btn">
+                  <span>公司</span>
+                  <i class="ti ti-chevron-down" style="font-size:12px; transition:transform .15s;" id="agency-chevron"></i>
+              </button> 
+              <div id="agency-dropdown" class="filter-dropdown-menu" style="display:none">
+                <div style="max-height:250px;overflow-y:auto;padding:0" id="agency-filters">
+                   <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="select-all-agency" onchange="toggleSelectAllAgency()">
+                    <span style="font-weight:600;color:var(--text)">全选</span>
+                  </label>
+                  <div style="border-bottom:1px solid var(--border-soft);margin:4px 0"></div>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="411 Entertainment" onchange="toggleFilter('agency','411 Entertainment')">
+                    <span>411 Entertainment</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="9 Arkhan" onchange="toggleFilter('agency','9 Arkhan')">
+                    <span>9 Arkhan</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="BEC World" onchange="toggleFilter('agency','BEC World')">
+                    <span>BEC World</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="BOXX MUSIC" onchange="toggleFilter('agency','BOXX MUSIC')">
+                    <span>BOXX MUSIC</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Bridge Management" onchange="toggleFilter('agency','Bridge Management')">
+                    <span>Bridge Management</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="CHANGE 2561" onchange="toggleFilter('agency','CHANGE 2561')">
+                    <span>CHANGE 2561</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Channel 3" onchange="toggleFilter('agency','Channel 3')">
+                    <span>Channel 3</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Copy A Bangkok" onchange="toggleFilter('agency','Copy A Bangkok')">
+                    <span>Copy A Bangkok</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Dee Hup Hous" onchange="toggleFilter('agency','Dee Hup Hous')">
+                    <span>Dee Hup Hous</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="DoMunDi (DMD)" onchange="toggleFilter('agency','DoMunDi (DMD)')">
+                    <span>DoMunDi (DMD)</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Genie Records" onchange="toggleFilter('agency','Genie Records')">
+                    <span>Genie Records</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="GMMTV" onchange="toggleFilter('agency','GMMTV')">
+                    <span>GMMTV</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="GNEST" onchange="toggleFilter('agency','GNEST')">
+                    <span>GNEST</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Headliner Thailand" onchange="toggleFilter('agency','Headliner Thailand')">
+                    <span>Headliner Thailand</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Idol Factory" onchange="toggleFilter('agency','Idol Factory')">
+                    <span>Idol Factory</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="iQIYIArtist TH" onchange="toggleFilter('agency','iQIYIArtist TH')">
+                    <span>iQIYIArtist TH</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Kicks Records" onchange="toggleFilter('agency','Kicks Records')">
+                    <span>Kicks Records</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="kiddorecords" onchange="toggleFilter('agency','kiddorecords')">
+                    <span>kiddorecords</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="LIT Entertainment" onchange="toggleFilter('agency','LIT Entertainment')">
+                    <span>LIT Entertainment</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="LOOKE" onchange="toggleFilter('agency','LOOKE')">
+                    <span>LOOKE</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="LOVEiS Entertainmer" onchange="toggleFilter('agency','LOVEiS Entertainmer')">
+                    <span>LOVEiS Entertainmer</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="mandee" onchange="toggleFilter('agency','mandee')">
+                    <span>mandee</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="MchoiceTH" onchange="toggleFilter('agency','MchoiceTH')">
+                    <span>MchoiceTH</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Me Mind Y" onchange="toggleFilter('agency','Me Mind Y')">
+                    <span>Me Mind Y</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="ME RECORDS" onchange="toggleFilter('agency','ME RECORDS')">
+                    <span>ME RECORDS</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="MILK!" onchange="toggleFilter('agency','MILK!')">
+                    <span>MILK!</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Move Records" onchange="toggleFilter('agency','Move Records')">
+                    <span>Move Records</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Muzik Move" onchange="toggleFilter('agency','Muzik Move')">
+                    <span>Muzik Move</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="North Star" onchange="toggleFilter('agency','North Star')">
+                    <span>North Star</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="One 31 (一台)" onchange="toggleFilter('agency','One 31 (一台)')">
+                    <span>One 31 (一台)</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Open Label (一台)" onchange="toggleFilter('agency','Open Label (一台)')">
+                    <span>Open Label (一台)</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Smallroom" onchange="toggleFilter('agency','Smallroom')">
+                    <span>Smallroom</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="SONAY MUSIC" onchange="toggleFilter('agency','SONAY MUSIC')">
+                    <span>SONAY MUSIC</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Sony Music Thailand" onchange="toggleFilter('agency','Sony Music Thailand')">
+                    <span>Sony Music Thailand</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="SpicyDisc" onchange="toggleFilter('agency','SpicyDisc')">
+                    <span>SpicyDisc</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Tero Music" onchange="toggleFilter('agency','Tero Music')">
+                    <span>Tero Music</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="TV Thunder" onchange="toggleFilter('agency','TV Thunder')">
+                    <span>TV Thunder</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Wabi Sabi" onchange="toggleFilter('agency','Wabi Sabi')">
+                    <span>Wabi Sabi</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="Wayfer Records" onchange="toggleFilter('agency','Wayfer Records')">
+                    <span>Wayfer Records</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="What The Duck" onchange="toggleFilter('agency','What The Duck')">
+                    <span>What The Duck</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="White Fox" onchange="toggleFilter('agency','White Fox')">
+                    <span>White Fox</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="White Music" onchange="toggleFilter('agency','White Music')">
+                    <span>White Music</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="XOXO Entertainment" onchange="toggleFilter('agency','XOXO Entertainment')">
+                    <span>XOXO Entertainment</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="其他个人工作室" onchange="toggleFilter('agency','其他个人工作室')">
+                    <span>其他个人工作室</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="洞察娱乐 (Insight)" onchange="toggleFilter('agency','洞察娱乐 (Insight)')">
+                    <span>洞察娱乐 (Insight)</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="星猎 (Star Hunter)" onchange="toggleFilter('agency','星猎 (Star Hunter)')">
+                    <span>星猎 (Star Hunter)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+               <!-- 类型下拉框 -->
+            <div class="filter-dropdown-container" style="position:relative">
+               <button class="view-btn filter-dropdown-btn" onclick="toggleCategoryDropdown()" id="category-btn">
+               <span>类型</span>
+               <i class="ti ti-chevron-down" style="font-size:12px; transition:transform .15s;" id="category-chevron"></i>
+             </button>
+              <div id="category-dropdown" class="filter-dropdown-menu" style="display:none">
+               <div style="padding:0" id="type-filters">
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="select-all-category" onchange="toggleSelectAllCategory()">
+                    <span style="font-weight:600;color:var(--text)">全选</span>
+                  </label>
+                  <div style="border-bottom:1px solid var(--border-soft);margin:4px 0"></div>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="bl" onchange="toggleFilter('category','bl')"> 
+                    <span data-i18n="cat_bl">泰腐</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="gl" onchange="toggleFilter('category','gl')">
+                    <span data-i18n="cat_gl">泰百</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="band" onchange="toggleFilter('category','band')">
+                    <span data-i18n="cat_band">乐队</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="singer" onchange="toggleFilter('category','singer')">
+                    <span data-i18n="cat_singer">歌手</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="group" onchange="toggleFilter('category','group')">
+                    <span data-i18n="cat_group">男女团</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="actor" onchange="toggleFilter('category','actor')">
+                    <span data-i18n="cat_actor">演员</span>
+                  </label>
+                  <label class="filter-checkbox" style="padding:8px 12px">
+                    <input type="checkbox" value="other" onchange="toggleFilter('category','other')">
+                    <span data-i18n="cat_other">其他</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+        <!-- 右侧：搜索、个人账户、同步中 -->
+        <div style="display:flex;gap:4px;align-items:center;margin-left:auto;font-size:11px;color:var(--muted)">
+          <button id="search-btn" onclick="handleSearch()" style="background:none;border:none;cursor:pointer;color:var(--sub);font-size:18px;display:flex;align-items:center;padding:4px;border-radius:6px;transition:color .15s;flex-shrink:0" data-i18n-title="search_title">
             <i class="ti ti-search"></i>
           </button>
-          <button id="nav-menu-btn" style="background:none;border:none;cursor:pointer;color:var(--sub);font-size:18px;display:flex;align-items:center;padding:4px;border-radius:6px;transition:color .15s;flex-shrink:0;margin-right:8px" data-i18n-title="login_title">
+          <button id="nav-menu-btn" style="background:none;border:none;cursor:pointer;color:var(--sub);font-size:18px;display:flex;align-items:center;padding:4px;border-radius:6px;transition:color .15s;flex-shrink:0" data-i18n-title="login_title">
             <i class="ti ti-user"></i>
           </button>
           <div class="sync-dot busy" id="sync-dot"></div>
@@ -249,18 +570,13 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
       </div>
     </div>
   </div>
-</div>
 
-<div class="page-content" id="page-content">
   <div class="wrap" style="flex:1;padding-top:16px">
     <div class="stats" style="margin:0px 0 12px">
-      <div class="stat"><div class="stat-n" id="s-0">—</div><div class="stat-l" data-i18n="stat_0">见面会</div></div>
-      <div class="stat"><div class="stat-n" id="s-1">—</div><div class="stat-l" data-i18n="stat_1">线下演出</div></div>
-      <div class="stat"><div class="stat-n" id="s-2">—</div><div class="stat-l" data-i18n="stat_2">开放售票</div></div>
+      <div class="stat"><div class="stat-n" id="s-0">—</div><div class="stat-l" data-i18n="stat_0">站台活动</div></div>
+      <div class="stat"><div class="stat-n" id="s-1">—</div><div class="stat-l" data-i18n="stat_1">剧集宣传</div></div>
+      <div class="stat"><div class="stat-n" id="s-2">—</div><div class="stat-l" data-i18n="stat_2">舞台演出</div></div>
       <div class="stat"><div class="stat-n" id="s-3">—</div><div class="stat-l" data-i18n="stat_3">其他</div></div>
-    </div>
-    <div style="font-size:11px;color:#999;margin-bottom:8px;padding:0 2px;" data-i18n="tz_notice">
-      📍 🌍 本页行程均为活动当地时间，受您所在时区影响，日历单元格可能存在 ±1 天的显示偏差，请务必点击查看详情，核对准确时间。
     </div>
     <div class="cal">
       <div class="dow-row" id="dow-row">
@@ -275,12 +591,38 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
       <div class="cal-grid" id="grid"></div>
     </div>
     <div class="coming-soon-wrap">
+      <button class="coming-soon-badge" onclick="openAddEventModal()" style="border:1px solid var(--border)">
+        <i class="ti ti-plus" style="font-size:14px"></i>
+        <span>新增活动</span>
+      </button>
       <a href="/About/" class="coming-soon-badge">About</a>
+    </div>
+
+    <!-- 页脚 -->
+    <div class="page-footer-minimal">
+      <div class="page-footer-icons">
+        <a href="https://xhslink.cn/m/6daqAMGfZbo" target="_blank" class="footer-icon-btn" title="小红书: SomenStjerne">
+          <i class="ti ti-heart"></i>
+        </a>
+        <a href="https://x.com/ChobCalendar" target="_blank" class="footer-icon-btn" title="X: ChobCalendar">
+          <i class="ti ti-brand-x"></i>
+        </a>
+        <a href="https://www.threads.com/@chobcalendar" target="_blank" class="footer-icon-btn" title="Threads: chobcalendar">
+          <i class="ti ti-message-circle"></i>
+        </a>
+        <a href="https://www.instagram.com/chobcalendar/" target="_blank" class="footer-icon-btn" title="Instagram: chobcalendar">
+          <i class="ti ti-camera"></i>
+        </a>
+        <a href="mailto:chobcalendar@gmail.com" class="footer-icon-btn" title="邮箱: chobcalendar@gmail.com">
+          <i class="ti ti-mail"></i>
+        </a>
+        <a href="#" class="footer-icon-btn" onclick="event.preventDefault()" title="欢迎合作联系" style="cursor:default">
+          <i class="ti ti-handshake"></i>
+        </a>
+      </div>
     </div>
   </div>
 </div>
-
-<div class="toast" id="toast"><i class="ti ti-bell-check"></i><span id="toast-msg"></span></div>
 
 <!-- 活动详情弹窗 -->
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
@@ -291,15 +633,21 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
         <i class="ti ti-heart"></i>
       </button>
       <button class="modal-x" onclick="closeModal()"><i class="ti ti-x"></i></button>
-
-      <div class="modal-pic-container" id="m-pic-container"></div>
-
+      
+      <div class="modal-pic-container" id="m-pic-container">
+       <img class="modal-pic" id="modal-pic" style="display:none;" onerror="this.style.display='none'" />
+       <div class="modal-pic-error" id="modal-pic-error" style="display:none;"></div>
+       <button id="pic-prev" class="pic-nav-btn pic-prev" onclick="prevPicture()" style="display:none;"><i class="ti ti-chevron-left"></i></button>
+       <button id="pic-next" class="pic-nav-btn pic-next" onclick="nextPicture()" style="display:none;"><i class="ti ti-chevron-right"></i></button>
+       <div id="pic-counter" class="pic-counter" style="display:none;"></div>
+      </div>
+      
       <div class="modal-info">
         <div class="modal-badge" id="m-badge"></div>
         <div class="modal-name" id="m-name"></div>
         <div class="modal-activity" id="m-activity"></div>
       </div>
-
+      
       <div class="modal-content">
         <div class="modal-field" id="m-venue-city-container" style="display:none">
           <i class="ti ti-map-pin"></i>
@@ -317,6 +665,10 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
           <i class="ti ti-calendar-event"></i>
           <span class="modal-field-value" id="m-sale"></span>
         </div>
+        <div class="modal-field" id="m-ticket-container" style="display:none">
+          <i class="ti ti-ticket"></i>
+          <span class="modal-field-value" id="m-ticket"></span>
+        </div>
         <div class="modal-field" id="m-note-container" style="display:none">
           <i class="ti ti-info-circle"></i>
           <span class="modal-field-value" id="m-note"></span>
@@ -327,14 +679,15 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
         </div>
       </div>
     </div>
-
+    
     <div class="modal-foot">
-      <button class="btn btn-dark" id="m-buy" style="display:none"></button>
-      <div class="ticket-info" id="m-ticket-info" style="display:none"></div>
-      <button class="btn btn-ghost" id="m-remind" onclick="addToCalendar()" style="display:none" data-i18n="remind_btn">设置售票提醒</button>
-    </div>
+     <button class="btn" id="m-buy" style="display:none;background:#000" onclick="if(currentEvent&&currentEvent.ticket_url)window.open(currentEvent.ticket_url,'_blank')"></button>
+     <div id="m-info-note" style="display:none;text-align:left;font-size:13px;color:var(--sub);padding:8px 4px;white-space:pre-wrap;word-wrap:break-word"></div>
+     <button class="btn" id="m-remind" onclick="addToCalendar()" style="display:none" data-i18n="remind_btn">设置售票提醒</button>
+    <div id="m-empty-block" style="display:none;height:12px"></div>
+   </div>
   </div>
-</div>
+ </div>
 
 <!-- 某天的所有活动弹窗 -->
 <div class="overlay" id="day-overlay" onclick="if(event.target===this)closeDayModal()">
@@ -368,6 +721,246 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
   </div>
 </div>
 
+<!-- 图片放大灯箱 -->
+<div class="modal-pic-lightbox" id="pic-lightbox" onclick="if(event.target.id==='pic-lightbox')closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()"><i class="ti ti-x"></i></button>
+  <img id="lightbox-img" class="lightbox-img" src="" />
+</div>
+
+<!-- 离开确认弹窗 -->
+<div class="overlay" id="leave-confirm-overlay" onclick="if(event.target===this)closeLeaveConfirm()" style="z-index:1005">
+  <div class="choice-modal">
+    <div class="choice-title" data-i18n="leave_confirm_title">数据尚未保存</div>
+    <p style="font-size:13px;color:var(--sub);margin-bottom:20px;line-height:1.5" data-i18n="leave_confirm_msg">您在表单中有未保存的内容，确定要离开吗？</p>
+    <button class="choice-btn" onclick="confirmLeave()" style="background:var(--text);color:#fff;border-color:var(--text)" data-i18n="leave_confirm_yes">确认离开</button>
+    <button class="choice-btn" onclick="closeLeaveConfirm()" data-i18n="leave_confirm_no">取消</button>
+  </div>
+</div>
+
+<!-- 新增活动弹窗 -->
+<div class="overlay" id="add-event-overlay" onclick="if(event.target===this)handleAddEventOverlayClick()">
+  <div class="add-event-modal">
+    <div class="add-event-header">
+      <div class="add-event-title" data-i18n="add_event_title">新增活动</div>
+      <button class="add-event-close" onclick="closeAddEventModalWithConfirm()"><i class="ti ti-x"></i></button>
+    </div>
+    
+    <div class="add-event-body" id="add-event-form">
+      <!-- 艺人名称 -->
+      <div class="add-event-field">
+        <label class="add-event-label required" data-i18n="add_event_artist">艺人名称</label>
+        <input type="text" id="add-event-name" class="add-event-input" placeholder="e.g. New (GELBOYS) 或 Ohm (ohmtpk)">
+      </div>
+
+      <!-- 艺人类型 -->
+      <div class="add-event-field">
+        <label class="add-event-label" data-i18n="add_event_category">艺人类型</label>
+        <select id="add-event-category" class="add-event-select">
+          <option value="">-- 请选择 --</option>
+          <option value="bl">泰腐</option>
+          <option value="gl">泰百</option>
+          <option value="band">乐队</option>
+          <option value="singer">歌手</option>
+          <option value="group">男女团</option>
+          <option value="actor">演员</option>
+          <option value="other">其他</option>
+        </select>
+      </div>
+
+      <!-- 活动名称 -->
+      <div class="add-event-field">
+        <label class="add-event-label required" data-i18n="add_event_activity">活动名称</label>
+        <input type="text" id="add-event-activity" class="add-event-input" placeholder="最好填写英文版">
+      </div>
+
+      <!-- 活动类型 -->
+      <div class="add-event-field">
+        <label class="add-event-label" data-i18n="add_event_type">活动类型</label>
+        <select id="add-event-type" class="add-event-select">
+          <option value="">-- 请选择 --</option>
+          <option value="站台活动">站台活动</option>
+          <option value="剧集宣传">剧集宣传</option>
+          <option value="舞台演出">舞台演出</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+
+      <!-- 活动日期 -->
+      <div class="add-event-field">
+        <label class="add-event-label required" data-i18n="add_event_date">活动日期</label>
+        <input type="date" id="add-event-date" class="add-event-input">
+      </div>
+
+      <!-- 活动时间 -->
+      <div class="add-event-field">
+        <label class="add-event-label" data-i18n="add_event_time">活动时间</label>
+        <input type="time" id="add-event-time" class="add-event-input">
+      </div>
+
+      <!-- 活动区域 -->
+      <div class="add-event-field">
+        <label class="add-event-label required" data-i18n="add_event_source">活动区域</label>
+        <select id="add-event-source" class="add-event-select">
+          <option value="">-- 请选择 --</option>
+          <option value="中国行程">中国行程</option>
+          <option value="泰国行程">泰国行程</option>
+          <option value="海外行程">海外行程</option>
+        </select>
+      </div>
+
+      <!-- 活动城市 -->
+      <div class="add-event-field">
+        <label class="add-event-label required" data-i18n="add_event_city">活动城市</label>
+        <input type="text" id="add-event-city" class="add-event-input" placeholder="如为中国见面会则填写城市，具体地点填非公开">
+      </div>
+
+      <!-- 活动地点 -->
+      <div class="add-event-field">
+        <label class="add-event-label" data-i18n="add_event_venue">活动地点</label>
+        <input type="text" id="add-event-venue" class="add-event-input" placeholder="非公开 / 具体地址，例：SIAM PARAGON 5楼">
+      </div>
+
+      <!-- 艺人所属公司 -->
+      <div class="add-event-field">
+        <label class="add-event-label" data-i18n="add_event_company_label">艺人所属公司</label>
+        <select id="add-event-company-select" class="add-event-select">
+          <option value="">-- 请选择 --</option>
+          <option value="411 Entertainment">411 Entertainment</option>
+          <option value="9 Arkhan">9 Arkhan</option>
+          <option value="BEC World">BEC World</option>
+          <option value="BOXX MUSIC">BOXX MUSIC</option>
+          <option value="Bridge Management">Bridge Management</option>
+          <option value="CHANGE 2561">CHANGE 2561</option>
+          <option value="Channel 3">Channel 3</option>
+          <option value="Copy A Bangkok">Copy A Bangkok</option>
+          <option value="Dee Hup Hous">Dee Hup Hous</option>
+          <option value="DoMunDi (DMD)">DoMunDi (DMD)</option>
+          <option value="Genie Records">Genie Records</option>
+          <option value="GMMTV">GMMTV</option>
+          <option value="GNEST">GNEST</option>
+          <option value="Headliner Thailand">Headliner Thailand</option>
+          <option value="Idol Factory">Idol Factory</option>
+          <option value="iQIYIArtist TH">iQIYIArtist TH</option>
+          <option value="Kicks Records">Kicks Records</option>
+          <option value="kiddorecords">kiddorecords</option>
+          <option value="LIT Entertainment">LIT Entertainment</option>
+          <option value="LOOKE">LOOKE</option>
+          <option value="LOVEiS Entertainmer">LOVEiS Entertainmer</option>
+          <option value="mandee">mandee</option>
+          <option value="MchoiceTH">MchoiceTH</option>
+          <option value="Me Mind Y">Me Mind Y</option>
+          <option value="ME RECORDS">ME RECORDS</option>
+          <option value="MILK!">MILK!</option>
+          <option value="Move Records">Move Records</option>
+          <option value="Muzik Move">Muzik Move</option>
+          <option value="North Star">North Star</option>
+          <option value="One 31 (一台)">One 31 (一台)</option>
+          <option value="Open Label (一台)">Open Label (一台)</option>
+          <option value="Smallroom">Smallroom</option>
+          <option value="SONAY MUSIC">SONAY MUSIC</option>
+          <option value="Sony Music Thailand">Sony Music Thailand</option>
+          <option value="SpicyDisc">SpicyDisc</option>
+          <option value="Tero Music">Tero Music</option>
+          <option value="TV Thunder">TV Thunder</option>
+          <option value="Wabi Sabi">Wabi Sabi</option>
+          <option value="Wayfer Records">Wayfer Records</option>
+          <option value="What The Duck">What The Duck</option>
+          <option value="White Fox">White Fox</option>
+          <option value="White Music">White Music</option>
+          <option value="XOXO Entertainment">XOXO Entertainment</option>
+          <option value="其他个人工作室">其他个人工作室</option>
+          <option value="洞察娱乐 (Insight)">洞察娱乐 (Insight)</option>
+          <option value="星猎 (Star Hunter)">星猎 (Star Hunter)</option>
+        </select>
+        <div class="add-event-helper" data-i18n="add_event_company_help">可手动输入 快速定位 如若列表里没有，可以在备注里反馈</div>
+      </div>
+
+      <!-- 参与方式 -->
+      <div class="add-event-field">
+        <label class="add-event-label required" data-i18n="add_event_ticket_type">参与方式</label>
+        <select id="add-event-ticket-type" class="add-event-select" onchange="toggleParticipationFields()">
+          <option value="">-- 请选择 --</option>
+          <option value="buy">立即购票</option>
+          <option value="info">详情</option>
+          <option value="from">查看原文</option>
+        </select>
+      </div>
+
+      <!-- 动态显示：购票链接相关字段 -->
+      <div id="ticket-buy-fields" style="display:none">
+        <div class="add-event-field">
+          <label class="add-event-label" data-i18n="add_event_sale_date">开售日期</label>
+          <input type="date" id="add-event-sale-date" class="add-event-input">
+        </div>
+
+        <div class="add-event-field">
+          <label class="add-event-label" data-i18n="add_event_sale_time">开售时间</label>
+          <input type="time" id="add-event-sale-time" class="add-event-input">
+        </div>
+
+        <div class="add-event-field">
+          <label class="add-event-label" data-i18n="add_event_ticket_link">购票链接</label>
+          <input type="text" id="add-event-ticket-url" class="add-event-input" placeholder="https://example.com/tickets">
+        </div>
+      </div>
+
+      <!-- 动态显示：参与信息文本框 -->
+      <div id="ticket-info-field" style="display:none">
+        <div class="add-event-field">
+          <label class="add-event-label" data-i18n="add_event_participation_info">参与信息</label>
+          <textarea id="add-event-participation-info" class="add-event-textarea" placeholder="e.g. 更多详细信息 请关注IG@xx（账号id）"></textarea>
+        </div>
+      </div>
+
+      <!-- 图片URL -->
+      <div class="add-event-field">
+        <label class="add-event-label" data-i18n="add_event_pictures">图片URL</label>
+        <textarea id="add-event-pictures" class="add-event-textarea" placeholder="最多支持6张活动相关图片，请用英文的分号 ; 隔开每张图片&#10;https://example.com/pic1.jpg;https://example.com/pic2.jpg"></textarea>
+      </div>
+
+      <!-- 备注 -->
+      <div class="add-event-field">
+        <label class="add-event-label" data-i18n="add_event_note">备注</label>
+        <textarea id="add-event-note" class="add-event-textarea" placeholder="填写各种上述没提到的信息"></textarea>
+      </div>
+    </div>
+
+    <!-- 成功提示 -->
+    <div id="add-event-success" class="add-event-success" style="display:none">
+      <div class="success-checkmark">✓</div>
+      <div class="success-message" data-i18n="add_event_success">提交成功</div>
+      <div class="success-submessage" data-i18n="add_event_success_msg">感谢您的支持！</div>
+    </div>
+
+    <!-- 错误提示 -->
+    <div id="add-event-error" class="submit-error" style="display:none">
+      <div class="error-icon">!</div>
+      <div class="error-message" id="error-message">提交失败</div>
+      <div class="error-submessage" data-i18n="add_event_error_auto">数据已自动保存为草稿</div>
+    </div>
+
+    <!-- 底部按钮 -->
+    <div class="add-event-footer" id="add-event-footer">
+      <button class="btn" onclick="saveDraft()" style="background:#999" data-i18n="save_draft">存草稿</button>
+      <button class="btn secondary" onclick="closeAddEventModalWithCancel()" data-i18n="cancel">取消</button>
+      <button class="btn" id="submit-btn" onclick="submitAddEvent()" data-i18n="submit">提交</button>
+    </div>
+
+    <!-- 成功后的按钮 -->
+    <div class="add-event-footer" id="add-event-success-footer" style="display:none">
+      <button class="btn secondary" onclick="closeAddEventModal()" data-i18n="confirm">确认</button>
+      <button class="btn" onclick="resetAddEventForm()" data-i18n="add_another">再新增一个</button>
+    </div>
+
+    <!-- 错误后的按钮 -->
+    <div class="add-event-footer" id="add-event-error-footer" style="display:none">
+      <button class="btn secondary" onclick="backToFormFromError()" data-i18n="back_to_edit">返回编辑</button>
+      <button class="btn" onclick="closeAddEventModal()" data-i18n="confirm">确认</button>
+    </div>
+  </div>
+</div>
+
+<!-- About 页面 footer -->
 <footer>Copyright &copy; 2026 — All rights reserved by SomenStjerne</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -375,127 +968,29 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
+// ============ Polyfill for .closest() ============
+if (!Element.prototype.closest) {
+  Element.prototype.closest = function(s) {
+    let el = this;
+    do {
+      if (Element.prototype.matches.call(el, s)) return el;
+      el = el.parentElement;
+    } while (el);
+    return null;
+  };
+}
+
+// ============ 日历应用主逻辑 ============
 const CN_M = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
 const EN_M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const EN_M_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const TH_M = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 const TH_M_FULL = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 const DOW = {
   zh: ['日','一','二','三','四','五','六'],
   en: ['SUN','MON','TUE','WED','THU','FRI','SAT'],
   th: ['อา','จ','อ','พ','พฤ','ศ','ส']
 };
-
-// ===== 三语字典（仅界面文字，活动数据不翻译） =====
-const I18N = {
-  view_perform: { zh:'演出日期', en:'Show Dates', th:'วันที่แสดง' },
-  view_sale: { zh:'开售日期', en:'Sale Dates', th:'วันที่เปิดขาย' },
-  cat_bl: { zh:'泰腐', en:'BL', th:'บีแอล' },
-  cat_gl: { zh:'泰百', en:'GL', th:'จีแอล' },
-  cat_band: { zh:'乐队', en:'Band', th:'วงดนตรี' },
-  cat_singer: { zh:'歌手', en:'Singer', th:'นักร้อง' },
-  cat_group: { zh:'男女团', en:'Idol Group', th:'ไอดอลกรุ๊ป' },
-  cat_actor: { zh:'演员', en:'Actor', th:'นักแสดง' },
-  cat_other: { zh:'其他艺人', en:'Other Artists', th:'ศิลปินอื่นๆ' },
-  stat_0: { zh:'见面会', en:'Fan Meet', th:'แฟนมีต' },
-  stat_1: { zh:'线下演出', en:'Live Show', th:'การแสดงสด' },
-  stat_2: { zh:'开放售票', en:'Tickets Open', th:'เปิดขายบัตร' },
-  stat_3: { zh:'其他', en:'Other', th:'อื่นๆ' },
-  tz_notice: { zh:'📍 🌍 本页行程均为活动当地时间，受您所在时区影响，日历单元格可能存在 ±1 天的显示偏差，请务必点击查看详情，核对准确时间。', en:'📍 🌍 All times shown are local to the event. Due to your timezone, the calendar cell date may be off by ±1 day — please click for details to confirm the exact time.', th:'📍 🌍 เวลาทั้งหมดเป็นเวลาท้องถิ่นของกิจกรรม เนื่องจากเขตเวลาของคุณ วันที่ในปฏิทินอาจคลาดเคลื่อน ±1 วัน กรุณาคลิกดูรายละเอียดเพื่อยืนยันเวลาที่แน่นอน' },
-  search_title: { zh:'搜索', en:'Search', th:'ค้นหา' },
-  login_title: { zh:'登录', en:'Login', th:'เข้าสู่ระบบ' },
-  sync_loading: { zh:'同步中…', en:'Loading…', th:'กำลังโหลด…' },
-  sync_synced: { zh:'已同步', en:'Synced', th:'ซิงค์แล้ว' },
-  sync_error: { zh:'同步失败', en:'Sync Failed', th:'ซิงค์ล้มเหลว' },
-  favorite_title: { zh:'收藏', en:'Favorite', th:'บันทึกรายการโปรด' },
-  remind_btn: { zh:'设置售票提醒', en:'Set Ticket Alert', th:'ตั้งเตือนเปิดขายบัตร' },
-  day_default_title: { zh:'日期详情', en:'Date Details', th:'รายละเอียดวันที่' },
-  choice_title: { zh:'选择收藏方式', en:'Choose how to save', th:'เลือกวิธีการบันทึก' },
-  choice_event: { zh:'仅收藏此场活动', en:'Save this event only', th:'บันทึกเฉพาะกิจกรรมนี้' },
-  choice_artist: { zh:'收藏相关艺人全部行程', en:'Follow all events by this artist', th:'ติดตามกิจกรรมทั้งหมดของศิลปินนี้' },
-  choice_cancel: { zh:'取消', en:'Cancel', th:'ยกเลิก' },
-  artist_modal_title: { zh:'选择要关注的艺人', en:'Select artist to follow', th:'เลือกศิลปินที่จะติดตาม' },
-  buy_ticket: { zh:'点击购票 →', en:'Buy Tickets →', th:'ซื้อบัตร →' },
-  buy_now: { zh:'立即购票 →', en:'Buy Now →', th:'ซื้อบัตรตอนนี้ →' },
-  fill_form: { zh:'填写报名表 →', en:'Fill Registration →', th:'กรอกแบบฟอร์ม →' },
-  pic_error: { zh:'图片加载失败', en:'Image failed to load', th:'โหลดรูปไม่สำเร็จ' },
-  pic_empty: { zh:'暂无图片', en:'No image', th:'ไม่มีรูปภาพ' },
-  account: { zh:'个人账户', en:'Account', th:'บัญชีของฉัน' },
-  favorites: { zh:'我的收藏', en:'My Favorites', th:'รายการโปรด' },
-  logout: { zh:'登出', en:'Logout', th:'ออกจากระบบ' },
-  need_login_search: { zh:'请先登录才能使用搜索功能', en:'Please log in to use search', th:'กรุณาเข้าสู่ระบบเพื่อใช้การค้นหา' },
-  need_login_fav: { zh:'请先登录才能收藏行程', en:'Please log in to save favorites', th:'กรุณาเข้าสู่ระบบเพื่อบันทึกรายการโปรด' },
-  no_artist_found: { zh:'无法从此活动信息中识别艺人', en:'Could not identify an artist from this event', th:'ไม่สามารถระบุศิลปินจากกิจกรรมนี้ได้' },
-  fav_event_ok: { zh:'✓ 已收藏此场活动', en:'✓ Event saved to favorites', th:'✓ บันทึกกิจกรรมนี้แล้ว' },
-  fav_artist_ok: { zh:'✓ 已关注艺人：', en:'✓ Following artist: ', th:'✓ ติดตามศิลปิน: ' },
-  logout_fail: { zh:'登出失败，请重试', en:'Logout failed, please try again', th:'ออกจากระบบไม่สำเร็จ กรุณาลองใหม่' },
-  more_events: { zh:'还有 {n} 个活动', en:'{n} more', th:'อีก {n} กิจกรรม' },
-  day_title: { zh:'{mo}月{day}日 全部活动', en:'{mo}/{day} All Events', th:'{day}/{mo} กิจกรรมทั้งหมด' },
-  day_count: { zh:'共 {n} 个行程', en:'{n} events total', th:'รวม {n} กิจกรรม' },
-  ics_alert_prefix: { zh:'[开售提醒] ', en:'[Ticket Alert] ', th:'[แจ้งเตือนเปิดขายบัตร] ' },
-  ics_show_date: { zh:'演出日期：', en:'Show Date: ', th:'วันที่แสดง: ' },
-  ics_venue: { zh:'场地：', en:'Venue: ', th:'สถานที่: ' },
-  ics_price: { zh:'票价：', en:'Price: ', th:'ราคา: ' },
-  ics_free: { zh:'免费', en:'Free', th:'ฟรี' },
-  ics_downloaded: { zh:'已下载「{name}」开售提醒', en:'Downloaded reminder for "{name}"', th:'ดาวน์โหลดการแจ้งเตือนสำหรับ "{name}" แล้ว' },
-  date_tbd: { zh:'日期待定', en:'Date TBD', th:'วันที่ยังไม่กำหนด' },
-  venue_tbd: { zh:'待公布', en:'TBA', th:'รอประกาศ' },
-  local_time_suffix: { zh:'（当地时间）', en:' (local time)', th:' (เวลาท้องถิ่น)' }
-};
-
-let LANG = localStorage.getItem('lang') || 'zh';
-
-function t(key, vars) {
-  let s = (I18N[key] && I18N[key][LANG]) || (I18N[key] && I18N[key].zh) || key;
-  if (vars) Object.keys(vars).forEach(k => { s = s.replace('{' + k + '}', vars[k]); });
-  return s;
-}
-
-function applyStaticI18n() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.getAttribute('data-i18n'));
-  });
-  document.querySelectorAll('[data-i18n-title]').forEach(el => {
-    el.title = t(el.getAttribute('data-i18n-title'));
-  });
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.getAttribute('data-lang') === LANG);
-  });
-  const dow = DOW[LANG] || DOW.zh;
-  document.querySelectorAll('#dow-row .dow').forEach(el => {
-    el.textContent = dow[parseInt(el.getAttribute('data-dow'))];
-  });
-  const dot = document.getElementById('sync-dot');
-  const txt = document.getElementById('sync-txt');
-  if (dot && txt) {
-    if (dot.classList.contains('err')) txt.textContent = t('sync_error');
-    else if (dot.classList.contains('busy')) txt.textContent = t('sync_loading');
-    else txt.textContent = t('sync_synced');
-  }
-}
-
-function setLang(l) {
-  LANG = l;
-  localStorage.setItem('lang', l);
-  applyStaticI18n();
-  updateHeader();
-  render();
-  if (document.getElementById('overlay').classList.contains('open') && currentEvent) {
-    openModal(currentEvent);
-  }
-}
-
-const CAT = {
-  bl: {label:'泰腐', bg:'#442D1C', fg:'#fff', key:'cat_bl'},
-  gl: {label:'泰百', bg:'#743014', fg:'#fff', key:'cat_gl'},
-  band: {label:'乐队', bg:'#464336', fg:'#fff', key:'cat_band'},
-  singer: {label:'歌手', bg:'#674b3f', fg:'#fff', key:'cat_singer'},
-  group: {label:'男女团', bg:'#907C6C', fg:'#fff', key:'cat_group'},
-  actor: {label:'演员', bg:'#C9BEAD', fg:'#3a2a1e', key:'cat_actor'},
-  other: {label:'其他艺人', bg:'#a27d60', fg:'#fff', key:'cat_other'}
-};
-
-// stat_type（重命名为 type）四类统计口径
-const STAT_TYPES = ['见面会', '线下演出', '开放售票', '其他'];
 
 // ===== 表格配置：标注官方表格 =====
 const SHEET_CONFIGS = [
@@ -511,26 +1006,40 @@ const SHEET_CONFIGS = [
 ];
 
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyVIlDJ1YoJfmZZnY1lt04te7iMPIdObqBBnu_iWQ6vp4K2SjXKmFustTynhMjsb-Zv/exec';
-
+  
 const ALL_TAGS = ['bl','gl','band','singer','group','actor','other'];
+const ALL_AGENCIES = ['411 Entertainment', '9 Arkhan', 'BEC World', 'BOXX MUSIC', 'Bridge Management', 'CHANGE 2561', 'Channel 3', 'Copy A Bangkok', 'Dee Hup Hous', 'DoMunDi (DMD)', 'Genie Records', 'GMMTV', 'GNEST', 'Headliner Thailand', 'Idol Factory', 'iQIYIArtist TH', 'Kicks Records', 'kiddorecords', 'Lemonmint', 'Line TV', 'Major Cineplex Group', 'Modern Museum', 'MONO Management', 'Nadao Bangkok', 'Noble Produce', 'One Lamp Production', 'Pappyland', 'Prelude Records', 'Pushing Play', 'Radarlek Studio', 'Riser Entertainment', 'RSIAM', 'SHIFT Entertainment', 'Siam Paragon', 'South Sky', 'Star Media Group', 'STITCH Bangkok', 'Sycamore Entertainment', 'Syd De', 'Tango Media', 'The Camp Thailand', 'The Pier Bangkok', 'THE STANDARD', 'THAIFILM', 'Trans Studio Cine', 'Triple A Records', 'UME Thailand', 'UNIVERSE PRESENTS', 'Workpoint Entertainment', 'Yours Musique', 'ZipperFilm'];
+
 let yr = new Date().getFullYear();
 let mo = new Date().getMonth() + 1;
 let events = [];
 let currentEvent = null;
 let currentUser = null;
 let view = 'perform';
-let active = new Set(ALL_TAGS);
+
+let activeCategories = new Set(['bl', 'gl', 'band', 'singer', 'group', 'actor', 'other']);
+let activeAgencies = new Set();
+let useAgencyFilter = false;
 
 let userFavorites = { events: [], artists: [] };
 let pendingFavorite = { type: null, artists: [] };
 
 let isGuest = true;
 let toastTimer = null;
+let currentPictureIndex = 0;
+let currentPictures = [];
+let currentCellWithMore = null;
+let pendingLeaveAction = null;
+
+// 表单提交状态
+let isSubmitting = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   applyStaticI18n();
   updateHeader();
+  initFilterMenu();
   loadFromSheets();
+  setupUnloadPrompt();
 });
 
 const firebaseConfig = {
@@ -550,45 +1059,43 @@ auth.onAuthStateChanged(async user => {
   currentUser = user;
   isGuest = !user;
   const btn = document.getElementById('nav-menu-btn');
-
+  
   if (user) {
     btn.style.color = 'var(--text)';
     btn.title = user.displayName || user.email.split('@')[0];
     btn.onclick = () => openUserMenu();
-    loadFromSheets();
   } else {
     btn.style.color = 'var(--muted)';
     btn.title = t('login_title');
     btn.onclick = () => location.href = '/login';
-
-    userFavorites = { events: [], artists: [] };
-    view = 'perform';
-    render();
   }
+  
+  loadFromSheets();
 });
 
 function openUserMenu() {
   if (isGuest) return;
   const oldMenu = document.querySelector('.user-menu');
   if (oldMenu) oldMenu.remove();
-
+  
   const menu = document.createElement('div');
   menu.className = 'user-menu';
   const btn = document.getElementById('nav-menu-btn');
   const btnRect = btn.getBoundingClientRect();
   menu.style.top = (btnRect.bottom + 8) + 'px';
   menu.style.right = (window.innerWidth - btnRect.right) + 'px';
-
+  
   let menuHTML = `
     <div class="user-menu-header">${currentUser.displayName || currentUser.email.split('@')[0]}</div>
     <a href="/account/" class="user-menu-item">${t('account')}</a>
   `;
+  
   menuHTML += `<a href="../favorite/" class="user-menu-item">${t('favorites')}</a>`;
   menuHTML += `<button class="user-menu-item" onclick="logout()">${t('logout')}</button>`;
-
+  
   menu.innerHTML = menuHTML;
   document.body.appendChild(menu);
-
+  
   setTimeout(() => {
     document.addEventListener('click', function closeMenu(e) {
       if (!menu.contains(e.target) && e.target !== btn) {
@@ -617,8 +1124,8 @@ async function logout() {
 
 function handleSearch() {
   if (isGuest) {
-    alert(t('need_login_search'));
-    location.href = '/login/?redirect=/oversea-calendar/';
+    alert('搜索功能需要登录后才能使用');
+    location.href = '/login/?redirect=/thai-calendar/';
     return;
   }
   location.href = '/search/';
@@ -653,35 +1160,124 @@ function setView(btn, v) {
   render();
 }
 
-function toggleTag(btn, tag) {
-  if (active.size === ALL_TAGS.length) {
-    active = new Set([tag]);
-  } else {
-    active.has(tag) ? active.delete(tag) : active.add(tag);
+function toggleAgencyDropdown() {
+  const dropdown = document.getElementById('agency-dropdown');
+  const chevron = document.getElementById('agency-chevron');
+  const isOpen = dropdown.style.display !== 'none';
+  dropdown.style.display = isOpen ? 'none' : 'block';
+  chevron.style.transform = isOpen ? 'rotate(0)' : 'rotate(180deg)';
+  const categoryDropdown = document.getElementById('category-dropdown');
+  const categoryChevron = document.getElementById('category-chevron');
+  categoryDropdown.style.display = 'none';
+  categoryChevron.style.transform = 'rotate(0)';
+}
+
+function toggleCategoryDropdown() {
+  const dropdown = document.getElementById('category-dropdown');
+  const chevron = document.getElementById('category-chevron');
+  const isOpen = dropdown.style.display !== 'none';
+  dropdown.style.display = isOpen ? 'none' : 'block';
+  chevron.style.transform = isOpen ? 'rotate(0)' : 'rotate(180deg)';
+  const agencyDropdown = document.getElementById('agency-dropdown');
+  const agencyChevron = document.getElementById('agency-chevron');
+  agencyDropdown.style.display = 'none';
+  agencyChevron.style.transform = 'rotate(0)';
+}
+
+function toggleFilter(filterType, value) {
+  if (filterType === 'category') {
+    if (activeCategories.has(value)) {
+      activeCategories.delete(value);
+    } else {
+      activeCategories.add(value);
+    }
+    console.log('✓ 类型筛选更新:', Array.from(activeCategories));
+    
+    document.querySelectorAll('#type-filters input:not([value="select-all-category"])').forEach(input => {
+      input.checked = activeCategories.has(input.value);
+    });
+    
+    const selectAllCheckbox = document.querySelector('#type-filters input[value="select-all-category"]');
+    const allTypeCheckboxes = document.querySelectorAll('#type-filters input:not([value="select-all-category"])');
+    selectAllCheckbox.checked = Array.from(allTypeCheckboxes).every(cb => cb.checked);
+  } else if (filterType === 'agency') {
+    useAgencyFilter = true;
+    if (activeAgencies.has(value)) {
+      activeAgencies.delete(value);
+    } else {
+      activeAgencies.add(value);
+    }
+    console.log('✓ 公司筛选更新:', Array.from(activeAgencies));
+    
+    document.querySelectorAll('#agency-filters input:not([value="select-all-agency"])').forEach(input => {
+      input.checked = activeAgencies.has(input.value);
+    });
+    
+    const selectAllCheckbox = document.querySelector('#agency-filters input[value="select-all-agency"]');
+    const allCompanyCheckboxes = document.querySelectorAll('#agency-filters input:not([value="select-all-agency"])');
+    selectAllCheckbox.checked = Array.from(allCompanyCheckboxes).every(cb => cb.checked);
   }
-  if (active.size === 0 || active.size === ALL_TAGS.length) {
-    active = new Set(ALL_TAGS);
-  }
-  document.querySelectorAll('.pill').forEach(p => {
-    const tg = p.getAttribute('onclick').match(/'([^']+)'/)[1];
-    p.classList.toggle('on', active.has(tg));
-  });
+  
   render();
+}
+
+function toggleSelectAllAgency() {
+  const selectAllCheckbox = document.querySelector('#agency-filters input[value="select-all-agency"]');
+  const allCompanyCheckboxes = document.querySelectorAll('#agency-filters input:not([value="select-all-agency"])');
+  
+  const allChecked = Array.from(allCompanyCheckboxes).every(cb => cb.checked);
+  
+  if (allChecked) {
+    selectAllCheckbox.checked = false;
+    allCompanyCheckboxes.forEach(cb => cb.checked = false);
+    activeAgencies = new Set();
+  } else {
+    selectAllCheckbox.checked = true;
+    allCompanyCheckboxes.forEach(cb => cb.checked = true);
+    activeAgencies = new Set(ALL_AGENCIES);
+  }
+  
+  render();
+}
+
+function toggleSelectAllCategory() {
+  const selectAllCheckbox = document.querySelector('#type-filters input[value="select-all-category"]');
+  const allTypeCheckboxes = document.querySelectorAll('#type-filters input:not([value="select-all-category"])');
+  
+  const allChecked = Array.from(allTypeCheckboxes).every(cb => cb.checked);
+  
+  if (allChecked) {
+    selectAllCheckbox.checked = false;
+    allTypeCheckboxes.forEach(cb => cb.checked = false);
+    activeCategories = new Set();
+  } else {
+    selectAllCheckbox.checked = true;
+    allTypeCheckboxes.forEach(cb => cb.checked = true);
+    activeCategories = new Set(['bl', 'gl', 'band', 'singer', 'group', 'actor', 'other']);
+  }
+  
+  render();
+}
+
+function initFilterMenu() {
+  document.querySelectorAll('#type-filters input:not([value="select-all-category"])').forEach(input => {
+    input.checked = activeCategories.has(input.value);
+  });
+  
+  const selectAllCheckbox = document.querySelector('#type-filters input[value="select-all-category"]');
+  const allTypeCheckboxes = document.querySelectorAll('#type-filters input:not([value="select-all-category"])');
+  selectAllCheckbox.checked = Array.from(allTypeCheckboxes).every(cb => cb.checked);
+  
+  document.querySelectorAll('#agency-filters input:not([value="select-all-agency"])').forEach(input => {
+    input.checked = activeAgencies.has(input.value);
+  });
 }
 
 function getDate(ev) {
   return view === 'sale' ? (ev.sale_date || '').trim() || null : (ev.date || '').trim() || null;
 }
 
-const evStore = new Map();
-let evStoreIdx = 0;
-function storeEv(ev) { const k = 'e' + (evStoreIdx++); evStore.set(k, ev); return k; }
-function getEv(k) { return evStore.get(k) || null; }
-
 function render() {
-  evStore.clear(); evStoreIdx = 0;
-  const isMobile = window.innerWidth < 480;
-
   const mo_all = events.filter(ev => {
     const ds = getDate(ev);
     if (!ds) return false;
@@ -689,21 +1285,41 @@ function render() {
     if (parts.length < 3) return false;
     return parseInt(parts[0]) === yr && parseInt(parts[1]) === mo;
   });
-
+  
+  const STAT_TYPES = ['站台活动', '剧集宣传', '舞台演出', '其他'];
   STAT_TYPES.forEach((tp, i) => {
     document.getElementById('s-' + i).textContent = mo_all.filter(e => {
       const currentType = (e.type || '').toString().trim();
       return currentType === tp;
     }).length;
   });
-
+  
   const mo_evs = events.filter(ev => {
-    if (!active.has(ev.category || 'other')) return false;
     const ds = getDate(ev);
     if (!ds) return false;
     const parts = ds.split(' ')[0].split('-');
     if (parts.length < 3) return false;
-    return parseInt(parts[0]) === yr && parseInt(parts[1]) === mo;
+    
+    const isInMonth = parseInt(parts[0]) === yr && parseInt(parts[1]) === mo;
+    if (!isInMonth) return false;
+    
+    // 如果有选中的类型，检查是否匹配
+    if (activeCategories.size > 0) {
+      const evCategory = ev.category || 'other';
+      if (!activeCategories.has(evCategory)) {
+        return false;
+      }
+    }
+    
+    // 如果有选中的公司，检查是否匹配
+    if (activeAgencies.size > 0) {
+      const evAgency = ev.company || '';
+      if (!activeAgencies.has(evAgency)) {
+        return false;
+      }
+    }
+    
+    return true;
   });
 
   const byDay = {};
@@ -727,40 +1343,38 @@ function render() {
     const isT = isNow && d === tod.getDate();
     const evs = byDay[d] || [];
     const nc = dow === 0 ? 'sun' : dow === 6 ? 'sat' : '';
-
+    
     const currentDate = new Date(yr, mo - 1, d);
     const todayZero = new Date(tod.getFullYear(), tod.getMonth(), tod.getDate());
     const isPast = currentDate < todayZero;
 
-    const hasMore = evs.length > 3;
-    const maxVisible = hasMore ? (isMobile ? 2 : 3) : (isMobile ? 3 : 4);
-    const allKeys = evs.map(ev => storeEv(ev));
-
+    // 根据屏幕宽度决定显示的chip数量：宽屏(≥768px)显示3个，窄屏(<768px)显示2个
+    const isMobileScreen = window.innerWidth < 768;
+    const chipsToShow = isMobileScreen ? 2 : 3;
+    const hasMore = evs.length > chipsToShow;
+    
     let cellClass = 'cell';
     if (isT) cellClass += ' today';
     else if (isPast) cellClass += ' past-day';
 
-    const cellAttrs = hasMore
-      ? `data-day="${d}" data-day-keys="${allKeys.join(',')}" class="${cellClass} day-has-more" style="cursor:pointer"`
-      : `class="${cellClass}"`;
-
-    let cellHtml = `<div ${cellAttrs}>`;
+    let cellHtml = `<div class="${cellClass}" ${hasMore ? `onclick="openDayModal(${d})"` : ''} style="${hasMore ? 'cursor:pointer' : ''}">`;
     cellHtml += `<div class="cell-num ${nc}">${d}</div>`;
-
-    evs.slice(0, maxVisible).forEach((ev, idx) => {
-      const opStyle = view === 'sale' ? 'opacity:0.68;' : '';
-      const cancelledCls = ev.status === 'cancelled' ? ' cancelled' : '';
-      const postponedCls = ev.status === 'postponed' ? ' postponed' : '';
-      const officialCls = ev.isOfficial ? ' official' : '';
+    
+    const displayEvs = evs.slice(0, chipsToShow);
+    displayEvs.forEach(ev => {
+      const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
+      const officialClass = (ev.isOfficial === true || ev.isOfficial === 'true') ? 'official' : '';
+      const disabledClass = hasMore ? 'disabled-click' : '';
+      
       if (hasMore) {
-        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${postponedCls}${officialCls}" style="pointer-events:none;${opStyle}" tabindex="-1">${ev.name}</button>`;
+        cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass} ${disabledClass}">${ev.name}</button>`;
       } else {
-        cellHtml += `<button class="chip ${ev.category || 'other'}${cancelledCls}${postponedCls}${officialCls}" style="${opStyle}" data-ev-key="${allKeys[idx]}">${ev.name}</button>`;
+        cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
       }
     });
 
     if (hasMore) {
-      cellHtml += `<span class="more" style="pointer-events:none">${t('more_events', {n: evs.length - maxVisible})}</span>`;
+      cellHtml += `<span class="more">还有${evs.length - displayEvs.length}项</span>`;
     }
     cellHtml += '</div>';
     html += cellHtml;
@@ -770,60 +1384,50 @@ function render() {
   if (rem > 0) for (let i = rem; i < 7; i++) html += '<div class="cell empty"></div>';
 
   document.getElementById('grid').innerHTML = html;
+  document.querySelectorAll('.cell').forEach(cell => {
+    const dayNum = parseInt(cell.querySelector('.cell-num')?.textContent);
+    if (dayNum && byDay[dayNum]) {
+      cell.dataset.events = JSON.stringify(byDay[dayNum]);
+    }
+  });
 }
 
-document.getElementById('grid').addEventListener('click', function(e) {
-  const chip = e.target.closest('[data-ev-key]');
-  if (chip) { e.stopPropagation(); const ev = getEv(chip.dataset.evKey); if (ev) openModal(ev); return; }
-  const cell = e.target.closest('.day-has-more');
-  if (cell) {
-    const day = parseInt(cell.dataset.day);
-    const dayEvs = cell.dataset.dayKeys.split(',').map(k => getEv(k)).filter(Boolean);
-    openDayModal(day, dayEvs);
-  }
-});
-
-function openDayModal(day, dayEvs) {
-  document.getElementById('day-title').textContent = t('day_title', {mo, day});
-  document.getElementById('day-count').textContent = t('day_count', {n: dayEvs.length});
-  const listKeys = dayEvs.map(ev => storeEv(ev));
-  document.getElementById('day-body').innerHTML = dayEvs.map((ev, i) => {
-    const cancelledCls = ev.status === 'cancelled' ? ' cancelled' : '';
-    const postponedCls = ev.status === 'postponed' ? ' postponed' : '';
-    const officialCls = ev.isOfficial ? ' official' : '';
-    return `<button class="chip ${ev.category || 'other'}${cancelledCls}${postponedCls}${officialCls}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" data-ev-key="${listKeys[i]}">${ev.name}</button>`;
-  }).join('');
-  document.getElementById('day-overlay').classList.add('open');
-}
-
-document.getElementById('day-body').addEventListener('click', function(e) {
-  const chip = e.target.closest('[data-ev-key]');
-  if (chip) { e.stopPropagation(); const ev = getEv(chip.dataset.evKey); if (ev) openModal(ev); }
-});
-
-function closeDayModal() {
-  document.getElementById('day-overlay').classList.remove('open');
-}
-
-function openModal(ev) {
+function openModal(enc) {
+  const ev = JSON.parse(decodeURIComponent(atob(enc)));
   currentEvent = ev;
 
-  const cat = CAT[ev.category || 'other'] || CAT.other;
-  document.getElementById('m-bar').style.background = cat.bg;
-
-  const badge = document.getElementById('m-badge');
-  if (ev.isOfficial) {
-    badge.textContent = '官方行程';
-    badge.className = 'modal-badge official';
-  } else {
-    badge.textContent = t(cat.key);
-    badge.className = 'modal-badge';
-    badge.style.background = cat.bg;
-    badge.style.color = cat.fg;
+  let categories = [];
+  if (ev.category) {
+    if (Array.isArray(ev.category)) {
+      categories = ev.category;
+    } else if (typeof ev.category === 'string') {
+      categories = ev.category.split(',').map(c => c.trim()).filter(c => c);
+    }
   }
+  if (categories.length === 0) categories = ['other'];
+  
+  const primaryCat = CAT[categories[0]] || CAT.other;
+  document.getElementById('m-bar').style.background = primaryCat.bg;
 
-  document.getElementById('m-name').textContent = ev.name || '';
+  const badgeContainer = document.getElementById('m-badge');
+  badgeContainer.innerHTML = '';
+  categories.forEach(cat => {
+    const catInfo = CAT[cat] || CAT.other;
+    const badgeEl = document.createElement('div');
+    badgeEl.style.display = 'inline-block';
+    badgeEl.style.background = catInfo.bg;
+    badgeEl.style.color = catInfo.fg;
+    badgeEl.style.padding = '2px 8px';
+    badgeEl.style.borderRadius = '6px';
+    badgeEl.style.fontSize = '11px';
+    badgeEl.style.fontWeight = '500';
+    badgeEl.style.marginRight = '4px';
+    badgeEl.textContent = t(catInfo.key);
+    badgeContainer.appendChild(badgeEl);
+  });
 
+  document.getElementById('m-name').textContent = ev.name || '未命名';
+  
   const activityEl = document.getElementById('m-activity');
   if (ev.activity) {
     activityEl.textContent = ev.activity;
@@ -832,20 +1436,35 @@ function openModal(ev) {
     activityEl.style.display = 'none';
   }
 
-  const picContainer = document.getElementById('m-pic-container');
-  if (ev.picture_url && ev.picture_url.trim()) {
-    picContainer.innerHTML = `<img class="modal-pic" src="${ev.picture_url.trim()}" alt="活动图片" onerror="this.parentElement.innerHTML='<div class=\\'modal-pic-error\\'>${t('pic_error')}</div>'" />`;
-    picContainer.style.display = 'flex';
+  currentPictures = [];
+  const pictureUrls = ev.picture_urls || ev.picture_url;
+
+  if (pictureUrls) {
+    if (Array.isArray(pictureUrls)) {
+      currentPictures = pictureUrls.filter(u => u && u.trim()).slice(0, 6);
+    } else if (typeof pictureUrls === 'string') {
+      currentPictures = pictureUrls.split(/[;；]/).map(u => u.trim()).filter(u => u).slice(0, 6);
+    }
+  }
+
+  document.getElementById('pic-prev').style.display = currentPictures.length > 1 ? 'flex' : 'none';
+  document.getElementById('pic-next').style.display = currentPictures.length > 1 ? 'flex' : 'none';
+  document.getElementById('pic-counter').style.display = currentPictures.length > 1 ? 'block' : 'none';
+
+  if (currentPictures.length > 0) {
+    currentPictureIndex = 0;
+    setPicture(0);
   } else {
-    picContainer.innerHTML = '';
-    picContainer.style.display = 'none';
+    document.getElementById('modal-pic').style.display = 'none';
+    const errorDiv = document.getElementById('modal-pic-error');
+    errorDiv.innerHTML = `<span>${t('pic_empty')}</span><button onclick="reloadPicture()" style="background:var(--text);color:#fff;border:none;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:12px">${t('retry')}</button>`;
+    errorDiv.style.display = 'flex';
   }
 
   const venueCityContainer = document.getElementById('m-venue-city-container');
   if (ev.venue || ev.city) {
     const parts = [];
     if (ev.venue) parts.push(ev.venue);
-    else parts.push(t('venue_tbd'));
     if (ev.city) parts.push(ev.city);
     document.getElementById('m-venue-city').textContent = parts.join(' · ');
     venueCityContainer.style.display = 'flex';
@@ -861,15 +1480,18 @@ function openModal(ev) {
   }
 
   if (ev.time) {
-    document.getElementById('m-time').textContent = ev.time + t('local_time_suffix');
+    document.getElementById('m-time').textContent = ev.time + ' (GMT+7)';
     document.getElementById('m-time-container').style.display = 'block';
   } else {
     document.getElementById('m-time-container').style.display = 'none';
   }
 
   if (ev.sale_date) {
-    const saleTime = ev.sale_time ? ` ${ev.sale_time}` : '';
-    document.getElementById('m-sale').textContent = `${ev.sale_date}${saleTime}`;
+    let saleText = ev.sale_date;
+    if (ev.sale_time) {
+      saleText = ev.sale_time + ' (GMT+7)';
+    }
+    document.getElementById('m-sale').textContent = saleText;
     document.getElementById('m-sale-container').style.display = 'block';
   } else {
     document.getElementById('m-sale-container').style.display = 'none';
@@ -889,33 +1511,32 @@ function openModal(ev) {
     document.getElementById('m-tag-container').style.display = 'none';
   }
 
-  const buyBtn = document.getElementById('m-buy');
-  const tInfo = document.getElementById('m-ticket-info');
   const remindBtn = document.getElementById('m-remind');
-  const url = (ev.ticket_url || '').trim();
-  const ttype = (ev.ticket_type || '').trim().toLowerCase();
+  const emptyBlock = document.getElementById('m-empty-block');
+  const buyBtn = document.getElementById('m-buy');
+  const infoNote = document.getElementById('m-info-note');
 
-  buyBtn.style.display = 'none';
-  tInfo.style.display = 'none';
   remindBtn.style.display = 'none';
+  emptyBlock.style.display = 'none';
+  buyBtn.style.display = 'none';
+  infoNote.style.display = 'none';
 
-  if (ttype === 'buy' && url) {
+  const ticketType = (ev.ticket_type || '').toLowerCase().trim();
+
+  if (ticketType === 'buy') {
     buyBtn.textContent = t('buy_now');
     buyBtn.style.display = 'block';
-    buyBtn.onclick = () => window.open(url, '_blank');
-  } else if (ttype === 'form' && url) {
-    buyBtn.textContent = t('fill_form');
+  } else if (ticketType === 'info') {
+    infoNote.textContent = ev.ticket_url || '';
+    infoNote.style.display = 'block';
+  } else if (ticketType === 'from') {
+    buyBtn.textContent = t('from_now');
     buyBtn.style.display = 'block';
-    buyBtn.onclick = () => window.open(url, '_blank');
-  } else if (ttype === 'info' && url) {
-    tInfo.style.display = 'block';
-    tInfo.innerHTML = url.replace(/\n/g, '<br>');
-  } else if (url.startsWith('http')) {
-    buyBtn.textContent = t('buy_now');
-    buyBtn.style.display = 'block';
-    buyBtn.onclick = () => window.open(url, '_blank');
   } else if (ev.sale_date || ev.sale_time) {
     remindBtn.style.display = 'block';
+  } else {
+    emptyBlock.style.display = 'block';
+    emptyBlock.style.height = '4px';
   }
 
   updateHeartButton();
@@ -927,14 +1548,45 @@ function closeModal() {
   pendingFavorite = { type: null, artists: [] };
 }
 
+function openDayModal(day) {
+  const cell = event.target.closest ? event.target.closest('.cell') : null;
+  if (!cell) return;
+  
+  const evs = cell.dataset.events ? JSON.parse(cell.dataset.events) : [];
+
+  document.getElementById('day-title').textContent = t('day_title', {mo, day});
+  document.getElementById('day-count').textContent = t('day_count', {n: evs.length});
+
+  document.getElementById('day-body').innerHTML = evs.map(ev => {
+    const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
+    const officialClass = (ev.isOfficial === true || ev.isOfficial === 'true') ? 'official' : '';
+    let primaryCategory = 'other';
+    if (ev.category) {
+      if (Array.isArray(ev.category)) {
+        primaryCategory = ev.category[0] || 'other';
+      } else if (typeof ev.category === 'string') {
+        const cats = ev.category.split(',').map(c => c.trim()).filter(c => c);
+        primaryCategory = cats[0] || 'other';
+      }
+    }
+    return `<button class="chip ${primaryCategory} ${officialClass}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+  }).join('');
+
+  document.getElementById('day-overlay').classList.add('open');
+}
+
+function closeDayModal() {
+  document.getElementById('day-overlay').classList.remove('open');
+}
+
 function addToCalendar() {
   if (!currentEvent) return;
   const ev = currentEvent;
-
+  
   const saleDateStr = ev.sale_date || ev.date;
   const saleTimeStr = ev.sale_time || '10:00';
   const [sh, sm] = (saleTimeStr + ':00').split(':').map(Number);
-
+  
   const sd = new Date(saleDateStr.split(' ')[0]);
   sd.setHours(sh, sm, 0, 0);
   const ed = new Date(sd.getTime() + 30 * 60000);
@@ -961,15 +1613,6 @@ function addToCalendar() {
   }, 1000);
 
   closeModal();
-  showToast(t('ics_downloaded', {name: ev.name || ''}));
-}
-
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  document.getElementById('toast-msg').textContent = msg;
-  el.classList.add('show');
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 4500);
 }
 
 async function loadFromSheets() {
@@ -977,16 +1620,33 @@ async function loadFromSheets() {
     document.getElementById('sync-dot').className = 'sync-dot busy';
     document.getElementById('sync-txt').textContent = t('sync_loading');
 
+    const currentOrigin = window.location.hostname || '';
+    const secretKey = 'thenorthremenbersandhighgardengrowingstrong';
+    
+    console.log('开始加载数据...');
+
     const requests = SHEET_CONFIGS.map(config => {
-      const url = `${GAS_URL}?id=${config.id}&key=thenorthremenbersandhighgardengrowingstrong&origin=chobcalendar.pages.dev`;
-      return fetch(url)
+      const url = `${GAS_URL_READ}?id=${config.id}&key=${encodeURIComponent(secretKey)}&origin=${encodeURIComponent(currentOrigin)}`;
+      
+      return fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
         .then(res => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          }
           return res.json();
         })
-        .then(data => ({ data, config }))
+        .then(data => {
+          console.log(`✓ 表格 [${config.id.substring(0, 8)}...] 成功加载`, Array.isArray(data) ? data.length + ' 条' : '错误');
+          return { data, config };
+        })
         .catch(err => {
-          console.warn(`⚠️ 表格 [${config.id.substring(0, 8)}...] 加载失败，已自动跳过:`, err);
+          console.warn(`⚠️ 表格 [${config.id.substring(0, 8)}...] 加载失败:`, err.message);
           return { data: null, config };
         });
     });
@@ -994,13 +1654,10 @@ async function loadFromSheets() {
     const allResults = await Promise.all(requests);
 
     let combinedEvents = [];
-    
-    // 调试：记录每个表格的加载情况
-    const sheetStats = [];
 
     allResults.forEach(({ data, config }) => {
       if (!data || !Array.isArray(data)) {
-        sheetStats.push(`❌ 表格 ${config.id.substring(0, 12)}... 无数据`);
+        console.log(`⊘ 表格 [${config.id.substring(0, 8)}...] 无有效数据`);
         return;
       }
 
@@ -1021,27 +1678,23 @@ async function loadFromSheets() {
           category: (obj.category || '').toLowerCase(),
           status: (obj.status || '').toLowerCase(),
           type: rawType,
+          company: (obj.company || '').trim(),
           isOfficial: config.isOfficial
         };
       });
 
-      // 如果不是专属表格，需要过滤 source 字段
       let filtered = cleanedRows;
-      if (!config.isExclusive) {
-        filtered = cleanedRows.filter(o => {
-          const source = (o.source || '').toLowerCase().trim();
-          return source === 'oversea' || source === '';
-        });
-      }
 
-      // 确保至少有 date 或 sale_date
       filtered = filtered.filter(o => o.date || o.sale_date);
 
+      console.log(`✓ 表格 [${config.id.substring(0, 8)}...] 有效数据:`, filtered.length + '条');
+      
       combinedEvents = combinedEvents.concat(filtered);
-      sheetStats.push(`表格 ${config.id.substring(0, 12)}... (官方:${config.isOfficial}): ${filtered.length} 条事件`);
     });
 
     events = combinedEvents;
+    console.log('✓ 数据加载完成，共', events.length, '条事件');
+    
     localStorage.setItem('allEvents', JSON.stringify(events));
 
     render();
@@ -1075,13 +1728,13 @@ function extractArtistsFromEvent(event) {
 
 function handleFavoriteClick(e) {
   if (e && e.stopPropagation) e.stopPropagation();
-
+  
   if (isGuest) {
-    alert(t('need_login_fav'));
-    location.href = '/login/?redirect=/oversea-calendar/';
+    alert('请先登录才能收藏行程');
+    location.href = '/login/?redirect=/thai-calendar/';
     return;
   }
-
+  
   if (!currentEvent) return;
   document.getElementById('choice-overlay').classList.add('open');
 }
@@ -1089,7 +1742,7 @@ function handleFavoriteClick(e) {
 function handleFavoriteChoice(type) {
   closeChoiceModal();
   if (!currentEvent) return;
-
+  
   if (type === 'event') {
     const eventId = currentEvent.id;
     if (!userFavorites.events.includes(eventId)) {
@@ -1101,7 +1754,7 @@ function handleFavoriteChoice(type) {
   } else if (type === 'artist') {
     pendingFavorite.artists = extractArtistsFromEvent(currentEvent);
     pendingFavorite.type = 'artist';
-
+    
     if (pendingFavorite.artists.length === 0) {
       alert(t('no_artist_found'));
     } else if (pendingFavorite.artists.length === 1) {
@@ -1152,7 +1805,7 @@ function updateHeartButton() {
   if (!currentEvent) return;
   const btn = document.getElementById('heart-btn');
   if (!btn) return;
-
+  
   if (isEventFavorited(currentEvent)) {
     btn.classList.add('favorited');
     btn.innerHTML = '<i class="ti ti-heart-filled"></i>';
@@ -1170,6 +1823,574 @@ function closeArtistModal() {
   document.getElementById('artist-overlay').classList.remove('open');
   pendingFavorite = { type: null, artists: [] };
 }
+
+function setPicture(index) {
+  if (currentPictures.length === 0) return;
+  
+  currentPictureIndex = (index + currentPictures.length) % currentPictures.length;
+  const pic = document.getElementById('modal-pic');
+  const error = document.getElementById('modal-pic-error');
+  const counter = document.getElementById('pic-counter');
+  
+  pic.src = currentPictures[currentPictureIndex];
+  pic.style.display = 'block';
+  error.style.display = 'none';
+  counter.textContent = `${currentPictureIndex + 1}/${currentPictures.length}`;
+}
+
+function prevPicture() {
+  setPicture(currentPictureIndex - 1);
+}
+
+function nextPicture() {
+  setPicture(currentPictureIndex + 1);
+}
+
+function openLightbox() {
+  if (currentPictures.length === 0) return;
+  document.getElementById('lightbox-img').src = currentPictures[currentPictureIndex];
+  document.getElementById('pic-lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('pic-lightbox').classList.remove('open');
+}
+
+function reloadPicture() {
+  if (currentEvent && currentPictures.length > 0) {
+    setPicture(currentPictureIndex);
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const filterContainers = document.querySelectorAll('.filter-dropdown-container');
+  let clickedInside = false;
+  filterContainers.forEach(container => {
+    if (container.contains(e.target)) {
+      clickedInside = true;
+    }
+  });
+  
+  if (!clickedInside) {
+    const agencyDropdown = document.getElementById('agency-dropdown');
+    const categoryDropdown = document.getElementById('category-dropdown');
+    const agencyChevron = document.getElementById('agency-chevron');
+    const categoryChevron = document.getElementById('category-chevron');
+    if (agencyDropdown) agencyDropdown.style.display = 'none';
+    if (categoryDropdown) categoryDropdown.style.display = 'none';
+    if (agencyChevron) agencyChevron.style.transform = 'rotate(0)';
+    if (categoryChevron) categoryChevron.style.transform = 'rotate(0)';
+  }
+});
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+function handleSwipe() {
+  if (currentPictures.length <= 1) return;
+  
+  const swipeDistance = Math.abs(touchEndX - touchStartX);
+  if (swipeDistance > 50) {
+    if (touchEndX < touchStartX) {
+      nextPicture();
+    } else {
+      prevPicture();
+    }
+  }
+}
+
+document.addEventListener('touchstart', function(e) {
+  const container = document.getElementById('m-pic-container');
+  if (container && container.contains(e.target)) {
+    touchStartX = e.changedTouches[0].screenX;
+  }
+}, false);
+
+document.addEventListener('touchend', function(e) {
+  const container = document.getElementById('m-pic-container');
+  if (container && container.contains(e.target)) {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }
+}, false);
+
+// ============ 新增活动功能（修复版） ============
+
+function openAddEventModal() {
+  if (isGuest) {
+    alert('请先登录才能新增活动');
+    location.href = '/login/?redirect=/thai-calendar/';
+    return;
+  }
+  
+  resetAddEventForm();
+  loadDraft();
+  document.getElementById('add-event-overlay').classList.add('open');
+}
+
+function closeAddEventModal() {
+  document.getElementById('add-event-overlay').classList.remove('open');
+  pendingLeaveAction = null;
+  isSubmitting = false;
+}
+
+function handleAddEventOverlayClick() {
+  closeAddEventModalWithConfirm();
+}
+
+function closeAddEventModalWithConfirm() {
+  const formDiv = document.getElementById('add-event-form');
+  const successDiv = document.getElementById('add-event-success');
+  
+  // 成功状态下，直接关闭
+  if (successDiv.style.display !== 'none') {
+    closeAddEventModal();
+    return;
+  }
+  
+  // 表单有内容才确认
+  if (hasFormContent()) {
+    pendingLeaveAction = 'close';
+    document.getElementById('leave-confirm-overlay').classList.add('open');
+  } else {
+    closeAddEventModal();
+  }
+}
+
+function closeAddEventModalWithCancel() {
+  if (hasFormContent()) {
+    pendingLeaveAction = 'cancel';
+    document.getElementById('leave-confirm-overlay').classList.add('open');
+  } else {
+    closeAddEventModal();
+  }
+}
+
+function closeLeaveConfirm() {
+  document.getElementById('leave-confirm-overlay').classList.remove('open');
+  pendingLeaveAction = null;
+}
+
+function confirmLeave() {
+  clearDraft();
+  closeLeaveConfirm();
+  closeAddEventModal();
+}
+
+function hasFormContent() {
+  return Array.from(document.querySelectorAll('.add-event-input, .add-event-select, .add-event-textarea'))
+    .some(el => el.value.trim() !== '');
+}
+
+function saveDraft() {
+  const draft = {
+    name: document.getElementById('add-event-name').value,
+    category: document.getElementById('add-event-category').value,
+    activity: document.getElementById('add-event-activity').value,
+    type: document.getElementById('add-event-type').value,
+    date: document.getElementById('add-event-date').value,
+    time: document.getElementById('add-event-time').value,
+    city: document.getElementById('add-event-city').value,
+    venue: document.getElementById('add-event-venue').value,
+    ticket_type: document.getElementById('add-event-ticket-type').value,
+    sale_date: document.getElementById('add-event-sale-date').value,
+    sale_time: document.getElementById('add-event-sale-time').value,
+    ticket_url: document.getElementById('add-event-ticket-url').value,
+    participation_info: document.getElementById('add-event-participation-info').value,
+    pictures: document.getElementById('add-event-pictures').value,
+    note: document.getElementById('add-event-note').value
+  };
+  
+  localStorage.setItem('addEventDraft', JSON.stringify(draft));
+  alert(t('draft_saved'));
+  
+  // 存完草稿后，关闭离开确认对话框
+  closeLeaveConfirm();
+  // 直接关闭弹窗
+  closeAddEventModal();
+}
+
+function loadDraft() {
+  const draftStr = localStorage.getItem('addEventDraft');
+  if (!draftStr) return;
+  
+  try {
+    const draft = JSON.parse(draftStr);
+    document.getElementById('add-event-name').value = draft.name || '';
+    document.getElementById('add-event-category').value = draft.category || '';
+    document.getElementById('add-event-activity').value = draft.activity || '';
+    document.getElementById('add-event-type').value = draft.type || '';
+    document.getElementById('add-event-date').value = draft.date || '';
+    document.getElementById('add-event-time').value = draft.time || '';
+    document.getElementById('add-event-city').value = draft.city || '';
+    document.getElementById('add-event-venue').value = draft.venue || '';
+    document.getElementById('add-event-ticket-type').value = draft.ticket_type || '';
+    document.getElementById('add-event-sale-date').value = draft.sale_date || '';
+    document.getElementById('add-event-sale-time').value = draft.sale_time || '';
+    document.getElementById('add-event-ticket-url').value = draft.ticket_url || '';
+    document.getElementById('add-event-participation-info').value = draft.participation_info || '';
+    document.getElementById('add-event-pictures').value = draft.pictures || '';
+    document.getElementById('add-event-note').value = draft.note || '';
+    
+    toggleParticipationFields();
+  } catch (err) {
+    console.error('加载草稿失败:', err);
+  }
+}
+
+function clearDraft() {
+  localStorage.removeItem('addEventDraft');
+}
+
+function resetAddEventForm() {
+  document.querySelectorAll('.add-event-input, .add-event-select, .add-event-textarea').forEach(el => {
+    el.value = '';
+  });
+  
+  toggleParticipationFields();
+  
+  document.getElementById('add-event-form').style.display = 'block';
+  document.getElementById('add-event-success').style.display = 'none';
+  document.getElementById('add-event-error').style.display = 'none';
+  document.getElementById('add-event-footer').style.display = 'flex';
+  document.getElementById('add-event-success-footer').style.display = 'none';
+  document.getElementById('add-event-error-footer').style.display = 'none';
+  
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = t('submit');
+}
+
+function toggleParticipationFields() {
+  const ticketType = document.getElementById('add-event-ticket-type').value;
+  const buyFields = document.getElementById('ticket-buy-fields');
+  const infoField = document.getElementById('ticket-info-field');
+  
+  if (ticketType === 'buy') {
+    buyFields.style.display = 'block';
+    infoField.style.display = 'none';
+  } else if (ticketType === 'info') {
+    buyFields.style.display = 'none';
+    infoField.style.display = 'block';
+  } else if (ticketType === 'from') {
+    buyFields.style.display = 'block';
+    infoField.style.display = 'none';
+  } else {
+    buyFields.style.display = 'none';
+    infoField.style.display = 'none';
+  }
+}
+
+function backToFormFromError() {
+  document.getElementById('add-event-form').style.display = 'block';
+  document.getElementById('add-event-error').style.display = 'none';
+  document.getElementById('add-event-footer').style.display = 'flex';
+  document.getElementById('add-event-error-footer').style.display = 'none';
+}
+
+async function submitAddEvent() {
+  if (isSubmitting) return;
+  isSubmitting = true;
+  
+  try {
+    const name = document.getElementById('add-event-name').value.trim();
+    const date = document.getElementById('add-event-date').value;
+    const city = document.getElementById('add-event-city').value.trim();
+    const activity = document.getElementById('add-event-activity').value.trim();
+    const ticketType = document.getElementById('add-event-ticket-type').value.trim();
+    
+    if (!name) {
+      alert('请输入艺人名称');
+      isSubmitting = false;
+      return;
+    }
+    if (!date) {
+      alert('请选择活动日期');
+      isSubmitting = false;
+      return;
+    }
+    if (!city) {
+      alert('请输入活动城市');
+      isSubmitting = false;
+      return;
+    }
+    if (!activity) {
+      alert('请输入活动名称');
+      isSubmitting = false;
+      return;
+    }
+    if (!ticketType) {
+      alert('请选择参与方式');
+      isSubmitting = false;
+      return;
+    }
+
+    const category = document.getElementById('add-event-category').value.trim();
+    const type = document.getElementById('add-event-type').value.trim();
+    const venue = document.getElementById('add-event-venue').value.trim();
+    const time = document.getElementById('add-event-time').value;
+    const sale_date = document.getElementById('add-event-sale-date').value;
+    const sale_time = document.getElementById('add-event-sale-time').value;
+    const pictures = document.getElementById('add-event-pictures').value.trim();
+    const note = document.getElementById('add-event-note').value.trim();
+
+    const eventData = {
+      id: 'user_' + Date.now(),
+      name: name,
+      source: 'thailand',
+      date: date,
+      city: city,
+      category: category || 'other',
+      activity: activity,
+      type: type,
+      venue: venue,
+      time: time,
+      sale_date: sale_date,
+      sale_time: sale_time,
+      ticket_type: ticketType,
+      picture_urls: pictures,
+      note: note
+    };
+
+    if (ticketType === 'buy') {
+      eventData.ticket_url = document.getElementById('add-event-ticket-url').value.trim();
+    } else if (ticketType === 'info') {
+      eventData.ticket_url = document.getElementById('add-event-participation-info').value.trim();
+    } else if (ticketType === 'from') {
+      eventData.ticket_url = document.getElementById('add-event-ticket-url').value.trim();
+    }
+
+    console.log('✓ 提交数据准备完成:', eventData);
+
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-btn').textContent = '提交中...';
+
+    // 使用 Fetch API 直接提交
+    const formData = new FormData();
+    formData.append('action', 'addEvent');
+    formData.append('key', 'thenorthremenbersandhighgardengrowingstrong');
+    formData.append('userId', currentUser.uid);
+    formData.append('data', JSON.stringify(eventData));
+
+    const response = await fetch(GAS_URL_WRITE, {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+    console.log('✓ 服务器响应:', result);
+
+    if (result.success) {
+      // 成功
+      console.log('✓ 数据提交成功！');
+      document.getElementById('add-event-form').style.display = 'none';
+      document.getElementById('add-event-success').style.display = 'flex';
+      document.getElementById('add-event-error').style.display = 'none';
+      document.getElementById('add-event-footer').style.display = 'none';
+      document.getElementById('add-event-success-footer').style.display = 'flex';
+      document.getElementById('add-event-error-footer').style.display = 'none';
+      
+      clearDraft();
+      
+      setTimeout(() => {
+        loadFromSheets();
+      }, 1500);
+    } else {
+      throw new Error(result.message || '提交失败');
+    }
+
+  } catch (err) {
+    console.error('❌ 提交错误:', err);
+    
+    // 提交失败时自动保存
+    const draft = {
+      name: document.getElementById('add-event-name').value,
+      category: document.getElementById('add-event-category').value,
+      activity: document.getElementById('add-event-activity').value,
+      type: document.getElementById('add-event-type').value,
+      date: document.getElementById('add-event-date').value,
+      time: document.getElementById('add-event-time').value,
+      city: document.getElementById('add-event-city').value,
+      venue: document.getElementById('add-event-venue').value,
+      ticket_type: document.getElementById('add-event-ticket-type').value,
+      sale_date: document.getElementById('add-event-sale-date').value,
+      sale_time: document.getElementById('add-event-sale-time').value,
+      ticket_url: document.getElementById('add-event-ticket-url').value,
+      participation_info: document.getElementById('add-event-participation-info').value,
+      pictures: document.getElementById('add-event-pictures').value,
+      note: document.getElementById('add-event-note').value
+    };
+    localStorage.setItem('addEventDraft', JSON.stringify(draft));
+    
+    // 显示错误信息
+    document.getElementById('add-event-form').style.display = 'none';
+    document.getElementById('add-event-success').style.display = 'none';
+    document.getElementById('add-event-error').style.display = 'flex';
+    document.getElementById('error-message').textContent = '提交失败：' + err.message;
+    document.getElementById('add-event-footer').style.display = 'none';
+    document.getElementById('add-event-success-footer').style.display = 'none';
+    document.getElementById('add-event-error-footer').style.display = 'flex';
+    
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('submit-btn').textContent = t('submit');
+  }
+  
+  isSubmitting = false;
+}
+
+function setupUnloadPrompt() {
+  window.addEventListener('beforeunload', (e) => {
+    const overlay = document.getElementById('add-event-overlay');
+    if (overlay && overlay.classList.contains('open')) {
+      const successDiv = document.getElementById('add-event-success');
+      const errorDiv = document.getElementById('add-event-error');
+      if (successDiv.style.display === 'none' && errorDiv.style.display === 'none' && hasFormContent()) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    }
+  });
+}
+
+const I18N = {
+  view_perform: { zh:'演出日期', en:'Show Dates', th:'วันที่แสดง' },
+  view_sale: { zh:'开售日期', en:'Sale Dates', th:'วันที่เปิดขาย' },
+  cat_bl: { zh:'泰腐', en:'BL', th:'คู่จิ้นชายชาย' },
+  cat_gl: { zh:'泰百', en:'GL', th:'คู่จิ้นหญิงหญิง' },
+  cat_band: { zh:'乐队', en:'Band', th:'วงดนตรี' },
+  cat_singer: { zh:'歌手', en:'Singer', th:'นักร้อง' },
+  cat_group: { zh:'男女团', en:'T-POP Group', th:'ไอดอลกรุ๊ป' },
+  cat_actor: { zh:'演员', en:'Actor', th:'นักแสดง' },
+  cat_other: { zh:'其他', en:'Other', th:'ศิลปินอื่นๆ' },
+  stat_0: { zh:'站台活动', en:'Appearance', th:'อีเวนต์' },
+  stat_1: { zh:'剧集宣传', en:'Drama Promo', th:'โปรโมทซีรีส์' },
+  stat_2: { zh:'舞台演出', en:'Stage Show', th:'การแสดงสด' },
+  stat_3: { zh:'其他', en:'Other', th:'อื่นๆ' },
+  search_title: { zh:'搜索', en:'Search', th:'ค้นหา' },
+  login_title: { zh:'登录', en:'Login', th:'เข้าสู่ระบบ' },
+  sync_loading: { zh:'同步中…', en:'Loading…', th:'กำลังโหลด…' },
+  sync_synced: { zh:'已同步', en:'Synced', th:'ซิงค์แล้ว' },
+  sync_error: { zh:'同步失败', en:'Sync Failed', th:'ซิงค์ล้มเหลว' },
+  favorite_title: { zh:'收藏', en:'Favorite', th:'บันทึกรายการโปรด' },
+  remind_btn: { zh:'设置售票提醒', en:'Set Ticket Alert', th:'ตั้งเตือนเปิดขายบัตร' },
+  day_default_title: { zh:'日期详情', en:'Date Details', th:'รายละเอียดวันที่' },
+  choice_title: { zh:'选择收藏方式', en:'Choose how to save', th:'เลือกวิธีการบันทึก' },
+  choice_event: { zh:'仅收藏此场活动', en:'Save this event only', th:'บันทึกเฉพาะกิจกรรมนี้' },
+  choice_artist: { zh:'收藏相关艺人全部行程', en:'Follow all events by this artist', th:'ติดตามกิจกรรมทั้งหมดของศิลปินนี้' },
+  choice_cancel: { zh:'取消', en:'Cancel', th:'ยกเลิก' },
+  artist_modal_title: { zh:'选择要关注的艺人', en:'Select artist to follow', th:'เลือกศิลปินที่จะติดตาม' },
+  buy_ticket: { zh:'点击购票 →', en:'Buy Tickets →', th:'ซื้อบัตร →' },
+  buy_now: { zh:'立即购票 →', en:'Buy Now →', th:'ซื้อบัตรตอนนี้ →' },
+  fill_form: { zh:'填写报名表 →', en:'Fill Registration →', th:'กรอกแบบฟอร์ม →' },
+  pic_error: { zh:'图片加载失败', en:'Image failed to load', th:'โหลดรูปไม่สำเร็จ' },
+  pic_empty: { zh:'暂无图片', en:'No image', th:'ไม่มีรูปภาพ' },
+  retry: { zh:'重试', en:'Retry', th:'ลองใหม่' },
+  account: { zh:'个人账户', en:'Account', th:'บัญชีของฉัน' },
+  favorites: { zh:'我的收藏', en:'My Favorites', th:'รายการโปรด' },
+  logout: { zh:'登出', en:'Logout', th:'ออกจากระบบ' },
+  need_login_search: { zh:'请先登录才能使用搜索功能', en:'Please log in to use search', th:'กรุณาเข้าสู่ระบบเพื่อใช้การค้นหา' },
+  need_login_fav: { zh:'请先登录才能收藏行程', en:'Please log in to save favorites', th:'กรุณาเข้าสู่ระบบเพื่อบันทึกรายการโปรด' },
+  no_artist_found: { zh:'无法从此活动信息中识别艺人', en:'Could not identify an artist from this event', th:'ไม่สามารถระบุศิลปินจากกิจกรรมนี้ได้' },
+  fav_event_ok: { zh:'✓ 已收藏此场活动', en:'✓ Event saved to favorites', th:'✓ บันทึกกิจกรรมนี้แล้ว' },
+  fav_artist_ok: { zh:'✓ 已关注艺人：', en:'✓ Following artist: ', th:'✓ ติดตามศิลปิน: ' },
+  logout_fail: { zh:'登出失败，请重试', en:'Logout failed, please try again', th:'ออกจากระบบไม่สำเร็จ กรุณาลองใหม่' },
+  more_events: { zh:'还有 {n} 个活动', en:'{n} more', th:'อีก {n} กิจกรรม' },
+  day_title: { zh:'{mo}月{day}日 全部活动', en:'{mo}/{day} All Events', th:'{day}/{mo} กิจกรรมทั้งหมด' },
+  day_count: { zh:'共 {n} 个行程', en:'{n} events total', th:'รวม {n} กิจกรรม' },
+  ics_alert_prefix: { zh:'[开售提醒] ', en:'[Ticket Alert] ', th:'[แจ้งเตือนเปิดขายบัตร] ' },
+  ics_show_date: { zh:'演出日期：', en:'Show Date: ', th:'วันที่แสดง: ' },
+  ics_venue: { zh:'场地：', en:'Venue: ', th:'สถานที่: ' },
+  ics_price: { zh:'票价：', en:'Price: ', th:'ราคา: ' },
+  ics_free: { zh:'免费', en:'Free', th:'ฟรี' },
+  ics_downloaded: { zh:'已下载「{name}」开售提醒', en:'Downloaded reminder for "{name}"', th:'ดาวน์โหลดการแจ้งเตือนสำหรับ "{name}" แล้ว' },
+  date_tbd: { zh:'日期待定', en:'Date TBD', th:'วันที่ยังไม่กำหนด' },
+  venue_tbd: { zh:'待公布', en:'TBA', th:'รอประกาศ' },
+  local_time_suffix: { zh:'（当地时间）', en:' (local time)', th:' (เวลาท้องถิ่น)' },
+  add_event_title: { zh:'新增活动', en:'Add Event', th:'เพิ่มกิจกรรม' },
+  add_event_artist: { zh:'艺人名称', en:'Artist Name', th:'ชื่อศิลปิน' },
+  add_event_source: { zh:'活动区域', en:'Event Region', th:'ภูมิภาคกิจกรรม' },
+  add_event_date: { zh:'活动日期', en:'Event Date', th:'วันที่จัดงาน' },
+  add_event_city: { zh:'活动城市', en:'City', th:'เมือง' },
+  add_event_category: { zh:'艺人类型', en:'Artist Type', th:'ประเภทศิลปิน' },
+  add_event_company_label: { zh:'艺人所属公司', en:'Artist Agency', th:'บริษัทศิลปิน' },
+  add_event_company_help: { zh:'可手动输入 快速定位 如若列表里没有，可以在备注里反馈', en:'Can manually input. If not in list, please provide in notes', th:'สามารถป้อนข้อมูลด้วยตนเอง หากไม่อยู่ในรายชื่อ โปรดระบุในหมายเหตุ' },
+  add_event_activity: { zh:'活动名称', en:'Activity Name', th:'ชื่อกิจกรรม' },
+  add_event_venue: { zh:'活动地点', en:'Venue', th:'สถานที่จัดงาน' },
+  add_event_time: { zh:'活动时间', en:'Event Time', th:'เวลาจัดงาน' },
+  add_event_sale_date: { zh:'开售日期', en:'Sale Date', th:'วันที่เปิดขาย' },
+  add_event_sale_time: { zh:'开售时间', en:'Sale Time', th:'เวลาเปิดขาย' },
+  add_event_ticket_type: { zh:'参与方式', en:'Participation Method', th:'วิธีการเข้าร่วม' },
+  add_event_ticket_link: { zh:'购票链接', en:'Ticket Link', th:'ลิงก์ซื้อบัตร' },
+  add_event_participation_info: { zh:'参与信息', en:'Participation Info', th:'ข้อมูลการเข้าร่วม' },
+  add_event_pictures: { zh:'图片URL', en:'Image URLs', th:'URL รูปภาพ' },
+  add_event_note: { zh:'备注', en:'Note', th:'หมายเหตุ' },
+  add_event_type: { zh:'活动类型', en:'Activity Type', th:'ประเภทกิจกรรม' },
+  add_event_success: { zh:'✓ 提交成功', en:'✓ Submit Success', th:'✓ ส่งสำเร็จ' },
+  add_event_success_msg: { zh:'感谢您的贡献！', en:'Thank you for your contribution!', th:'ขอบคุณสำหรับการสนับสนุน!' },
+  add_event_error_auto: { zh:'数据已自动保存为草稿', en:'Data auto-saved as draft', th:'ข้อมูลบันทึกเป็นร่างแล้ว' },
+  cancel: { zh:'取消', en:'Cancel', th:'ยกเลิก' },
+  submit: { zh:'提交', en:'Submit', th:'ส่ง' },
+  confirm: { zh:'确认', en:'Confirm', th:'ยืนยัน' },
+  add_another: { zh:'再新增一个', en:'Add Another', th:'เพิ่มอันใหม่' },
+  save_draft: { zh:'存草稿', en:'Save Draft', th:'บันทึกร่าง' },
+  draft_saved: { zh:'✓ 草稿已保存', en:'✓ Draft saved', th:'✓ ร่างได้รับการบันทึก' },
+  back_to_edit: { zh:'返回编辑', en:'Back', th:'กลับไป' },
+  leave_confirm_title: { zh:'数据尚未保存', en:'Data Not Saved', th:'ยังไม่ได้บันทึกข้อมูล' },
+  leave_confirm_msg: { zh:'您在表单中有未保存的内容，确定要离开吗？', en:'You have unsaved content. Are you sure you want to leave?', th:'คุณมีเนื้อหาที่ยังไม่ได้บันทึก คุณแน่ใจหรือว่าต้องการออก?' },
+  leave_confirm_yes: { zh:'确认离开', en:'Leave', th:'ออกไป' },
+  leave_confirm_no: { zh:'取消', en:'Cancel', th:'ยกเลิก' }
+};
+
+let LANG = localStorage.getItem('lang') || 'zh';
+
+function t(key, vars) {
+  let s = (I18N[key] && I18N[key][LANG]) || (I18N[key] && I18N[key].zh) || key;
+  if (vars) Object.keys(vars).forEach(k => { s = s.replace('{' + k + '}', vars[k]); });
+  return s;
+}
+
+function applyStaticI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.getAttribute('data-i18n-title'));
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === LANG);
+  });
+  const dow = DOW[LANG] || DOW.zh;
+  document.querySelectorAll('#dow-row .dow').forEach(el => {
+    el.textContent = dow[parseInt(el.getAttribute('data-dow'))];
+  });
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-txt');
+  if (dot && txt) {
+    if (dot.classList.contains('err')) txt.textContent = t('sync_error');
+    else if (dot.classList.contains('busy')) txt.textContent = t('sync_loading');
+    else txt.textContent = t('sync_synced');
+  }
+}
+
+function setLang(l) {
+  LANG = l;
+  localStorage.setItem('lang', l);
+  applyStaticI18n();
+  updateHeader();
+  render();
+  if (document.getElementById('overlay').classList.contains('open') && currentEvent) {
+    openModal(btoa(encodeURIComponent(JSON.stringify(currentEvent))));
+  }
+}
+
+const CAT = {
+  bl: {label:'泰腐', bg:'#442D1C', fg:'#fff', key:'cat_bl'},
+  gl: {label:'泰百', bg:'#743014', fg:'#fff', key:'cat_gl'},
+  band: {label:'乐队', bg:'#464336', fg:'#fff', key:'cat_band'},
+  singer: {label:'歌手', bg:'#674b3f', fg:'#fff', key:'cat_singer'},
+  group: {label:'男女团', bg:'#907C6C', fg:'#fff', key:'cat_group'},
+  actor: {label:'演员', bg:'#C9BEAD', fg:'#3a2a1e', key:'cat_actor'},
+  other: {label:'其他艺人', bg:'#a27d60', fg:'#fff', key:'cat_other'}
+};
 
 window.addEventListener('resize', () => render());
 </script>
