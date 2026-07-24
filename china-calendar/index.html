@@ -589,7 +589,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
       <button class="modal-x" onclick="closeModal()"><i class="ti ti-x"></i></button>
       
       <div class="modal-pic-container" id="m-pic-container">
-       <img class="modal-pic" id="modal-pic" style="display:none;" onerror="this.style.display='none'" />
+       <img class="modal-pic" id="modal-pic" onclick="openLightbox()" style="display:none;" onerror="this.style.display='none'" />
        <div class="modal-pic-error" id="modal-pic-error" style="display:none;"></div>
        <button id="pic-prev" class="pic-nav-btn pic-prev" onclick="prevPicture()" style="display:none;"><i class="ti ti-chevron-left"></i></button>
        <button id="pic-next" class="pic-nav-btn pic-next" onclick="nextPicture()" style="display:none;"><i class="ti ti-chevron-right"></i></button>
