@@ -1535,11 +1535,18 @@ function openModal(enc) {
 
   const ticketType = (ev.ticket_type || '').toLowerCase().trim();
 
+  // ticket_type 处理规则：
+  // 'buy': 显示"立即购票"按钮，点击跳转到 ticket_url（购票链接）
+  // 'info': 直接显示 ticket_url 中的文本信息（支持手动换行）
+  // 'from': 显示"查看原文"按钮，点击跳转到 ticket_url（原文链接）
+  
   if (ticketType === 'buy') {
     buyBtn.textContent = t('buy_now');
     buyBtn.style.display = 'block';
   } else if (ticketType === 'info') {
-    infoNote.textContent = ev.ticket_url || '';
+    // info类型：直接显示ticket_url中的文本，支持\n换行符
+    const infoText = ev.ticket_url || '';
+    infoNote.innerHTML = infoText.replace(/\n/g, '<br>');
     infoNote.style.display = 'block';
   } else if (ticketType === 'from') {
     buyBtn.textContent = t('from_now');
@@ -2292,6 +2299,7 @@ const I18N = {
   artist_modal_title: { zh:'选择要关注的艺人', en:'Select artist to follow', th:'เลือกศิลปินที่จะติดตาม' },
   buy_ticket: { zh:'点击购票 →', en:'Buy Tickets →', th:'ซื้อบัตร →' },
   buy_now: { zh:'立即购票 →', en:'Buy Now →', th:'ซื้อบัตรตอนนี้ →' },
+  from_now: { zh:'查看原文 →', en:'View from Source →', th:'ดูจากแหล่งต้นฉบับ →' },
   fill_form: { zh:'填写报名表 →', en:'Fill Registration →', th:'กรอกแบบฟอร์ม →' },
   pic_error: { zh:'图片加载失败', en:'Image failed to load', th:'โหลดรูปไม่สำเร็จ' },
   pic_empty: { zh:'暂无图片', en:'No image', th:'ไม่มีรูปภาพ' },
