@@ -5,8 +5,8 @@
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-// 修改这一行，加上 collection, doc, setDoc, serverTimestamp, addDoc
-import { getFirestore, doc, getDoc, collection, setDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+// 修改这一行，加上 collection, doc, setDoc, serverTimestamp
+import { getFirestore, doc, getDoc, collection, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAv4v5B1HXotOABmIcc5TOi3uzqPmLnvNs",
