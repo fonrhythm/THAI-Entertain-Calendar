@@ -1337,15 +1337,13 @@ function render() {
 displayEvs.forEach(ev => {
   const enc = btoa(encodeURIComponent(JSON.stringify(ev)));
   const officialClass = (ev.isOfficial === true || ev.isOfficial === 'true') ? 'official' : '';
-  const statusClass = (ev.status || '').toLowerCase();  // ← 加这一行
+  const statusClass = (ev.status || '').toLowerCase();
   const disabledClass = hasMore ? 'disabled-click' : '';
   
   if (hasMore) {
     cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass} ${statusClass} ${disabledClass}">${ev.name}</button>`;
-    // 改这里 ↑ 加 ${statusClass}
   } else {
     cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass} ${statusClass}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
-    // 改这里 ↑ 加 ${statusClass}
   }
 });
   
