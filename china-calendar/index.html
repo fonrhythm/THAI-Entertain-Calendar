@@ -1346,24 +1346,6 @@ displayEvs.forEach(ev => {
     cellHtml += `<button class="chip ${ev.category || 'other'} ${officialClass} ${statusClass}" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
   }
 });
-  
-  // 提取第一个category作为主要样式
-  let primaryCategory = 'other';
-  if (ev.category) {
-    if (Array.isArray(ev.category)) {
-      primaryCategory = ev.category[0] || 'other';
-    } else if (typeof ev.category === 'string') {
-      const cats = ev.category.split(',').map(c => c.trim()).filter(c => c);
-      primaryCategory = cats[0] || 'other';
-    }
-  }
-  
-  if (hasMore) {
-    cellHtml += `<button class="chip ${primaryCategory} ${officialClass} ${disabledClass}">${ev.name}</button>`;
-  } else {
-    cellHtml += `<button class="chip ${primaryCategory} ${officialClass}" onclick="event.stopPropagation();openModal('${enc}')"><span>${ev.name}</span></button>`;
-  }
-});
 
     if (hasMore) {
       cellHtml += `<span class="more">还有${evs.length - displayEvs.length}项</span>`;
@@ -1559,7 +1541,7 @@ function openDayModal(day) {
         primaryCategory = cats[0] || 'other';
       }
     }
-    return `<button class="chip ${primaryCategory} ${officialClass} ${statusClass}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+    return `<button class="chip ${primaryCategory} ${officialClass}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
   }).join('');
 
   document.getElementById('day-overlay').classList.add('open');
