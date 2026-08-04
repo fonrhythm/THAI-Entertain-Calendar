@@ -1559,7 +1559,7 @@ function openDayModal(day) {
         primaryCategory = cats[0] || 'other';
       }
     }
-    return `<button class="chip ${primaryCategory} ${officialClass}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+    return `<button class="chip ${primaryCategory} ${officialClass} ${statusClass}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
   }).join('');
 
   document.getElementById('day-overlay').classList.add('open');
