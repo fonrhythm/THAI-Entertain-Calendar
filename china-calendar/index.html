@@ -643,7 +643,7 @@ footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;te
     </div>
     
     <div class="modal-foot">
-     <button class="btn" id="m-buy" style="display:none;background:#000" onclick="if(currentEvent&&currentEvent.ticket_url)window.open(currentEvent.ticket_url,'_blank')"></button>
+     <button class="btn" id="m-buy" style="display:none;background:#000" onclick="if(currentEvent&&currentEvent.ticket_url)openUrl(currentEvent.ticket_url)"></button>
      <div id="m-info-note" style="display:none;text-align:center;font-size:13px;color:var(--sub);padding:8px 4px"></div>
      <button class="btn" id="m-remind" onclick="addToCalendar()" style="display:none" data-i18n="remind_btn">设置售票提醒</button>
     <div id="m-empty-block" style="display:none;height:12px"></div>
@@ -1496,13 +1496,26 @@ function openModal(enc) {
   infoNote.style.display = 'none';
 
   const ticketType = (ev.ticket_type || '').toLowerCase().trim();
+  const isPostponed = (ev.status || '').toLowerCase() === 'postponed';
 
-  if (ticketType === 'buy') {
-    buyBtn.textContent = t('buy_now');
+  if (ticketType === 'buy' && ev.ticket_url) {
+    // 如果延期，显示⚠符号格式
+    if (isPostponed) {
+      buyBtn.textContent = '⚠ ' + (ev.ticket_url || t('buy_now')) + ' ⚠';
+      buyBtn.style.background = '#fb8c00';
+    } else {
+      buyBtn.textContent = t('buy_now');
+      buyBtn.style.background = '#000';
+    }
     buyBtn.style.display = 'block';
   } else if (ticketType === 'info') {
     infoNote.textContent = ev.note || ev.ticket_note || '';
     infoNote.style.display = 'block';
+  } else if (isPostponed && ev.ticket_url) {
+    // 延期且有ticket_url，显示延期信息按钮
+    buyBtn.textContent = '⚠ ' + ev.ticket_url + ' ⚠';
+    buyBtn.style.background = '#fb8c00';
+    buyBtn.style.display = 'block';
   } else if (ev.sale_date || ev.sale_time) {
     remindBtn.style.display = 'block';
   } else {
@@ -1541,7 +1554,7 @@ function openDayModal(day) {
         primaryCategory = cats[0] || 'other';
       }
     }
-    return `<button class="chip ${primaryCategory} ${officialClass}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
+    return `<button class="chip ${primaryCategory} ${officialClass} ${statusClass}" style="margin-bottom:12px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:normal;text-align:left;width:100%;border-radius:8px;" onclick="event.stopPropagation();openModal('${enc}')">${ev.name}</button>`;
   }).join('');
 
   document.getElementById('day-overlay').classList.add('open');
@@ -2399,6 +2412,31 @@ const CAT = {
   music: {label:'音乐演出', bg:'#B5ACA3', fg:'#fff', key:'cat_music'},
   other: {label:'其他艺人活动', bg:'#F5E6D1', fg:'#674b3f', key:'cat_other'}
 };
+
+// 处理和验证URL
+function normalizeUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  url = url.trim();
+  if (url === '') return '';
+  
+  // 如果不以http://或https://开头，添加https://
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+  return url;
+}
+
+// 安全打开URL
+function openUrl(url) {
+  const normalized = normalizeUrl(url);
+  if (normalized) {
+    try {
+      window.open(normalized, '_blank', 'noopener,noreferrer');
+    } catch (e) {
+      console.error('打开链接失败:', e);
+    }
+  }
+}
 
 window.addEventListener('resize', () => render());
 </script>
