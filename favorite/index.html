@@ -81,11 +81,6 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .empty-icon{font-size:64px;margin-bottom:16px}
 .empty-title{font-size:20px;font-weight:700;margin-bottom:8px}
 .empty-text{font-size:14px;color:var(--sub);line-height:1.6;margin-bottom:32px}
-.upgrade-banner{background:linear-gradient(135deg, #142b4b 0%, #2b4779 100%);color:#fff;padding:40px 24px;border-radius:12px;text-align:center;margin-bottom:24px}
-.upgrade-title{font-size:24px;font-weight:700;margin-bottom:12px}
-.upgrade-text{font-size:14px;line-height:1.6;margin-bottom:20px;opacity:0.95}
-.upgrade-btn{display:inline-block;background:#fff;color:#142b4b;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;transition:all .2s;cursor:pointer;border:none;font-size:14px}
-.upgrade-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.2)}
 .overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:16px}
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:16px;width:380px;max-width:100%;position:relative;display:flex;flex-direction:column;max-height:85vh;overflow:hidden}
@@ -114,7 +109,7 @@ body{font-family:'Noto Sans SC','Lato',sans-serif;background:var(--bg);color:var
 .modal-day-body{padding:16px 20px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
 footer{margin-top:auto;border-top:1px solid var(--border-soft);padding:14px 0;text-align:center;font-size:10px;color:var(--muted);background:var(--surface)}
 @media(max-width:768px){.cal-grid{grid-auto-rows:82px}}
-@media(max-width:480px){.wrap{padding:0 10px}.header{padding:42px 0 10px}.month-cn{font-size:50px;letter-spacing:-1px}.month-en{font-size:20px}.cal-grid{grid-auto-rows:62px}.cell{padding:1px 2px 2px}.cell-num{font-size:10px;width:15px;height:15px;margin-bottom:1px}.chip{font-size:9px;padding:1px 2px;line-height:11px}.more{font-size:8px}.dow{font-size:9px;letter-spacing:.3px}.modal{width:90%;max-width:380px}.upgrade-banner{padding:30px 16px}.upgrade-title{font-size:18px}}
+@media(max-width:480px){.wrap{padding:0 10px}.header{padding:42px 0 10px}.month-cn{font-size:50px;letter-spacing:-1px}.month-en{font-size:20px}.cal-grid{grid-auto-rows:62px}.cell{padding:1px 2px 2px}.cell-num{font-size:10px;width:15px;height:15px;margin-bottom:1px}.chip{font-size:9px;padding:1px 2px;line-height:11px}.more{font-size:8px}.dow{font-size:9px;letter-spacing:.3px}.modal{width:90%;max-width:380px}}
 </style>
 </head>
 <body>
@@ -262,7 +257,6 @@ let mo = new Date().getMonth() + 1;
 let events = [];
 let currentEvent = null;
 let currentUser = null;
-let userSubscribed = false;
 let view = 'perform';
 
 let userFavorites = { events: [], artists: [] };
@@ -289,28 +283,15 @@ async function checkAuthAndRender() {
   auth.onAuthStateChanged(async user => {
     currentUser = user;
     
+    // ✅ 保留登录检查 - 需要登陆才能用
     if (!user) {
-      // 未登录 → 跳转到登录
       location.href = '/login/?redirect=../favorite/';
       return;
     }
     
-    // ✅ 读取订阅状态
-    try {
-      const userDoc = await db.collection('users').doc(user.uid).get();
-      userSubscribed = userDoc.exists ? (userDoc.data().subscription || false) : false;
-    } catch (e) {
-      console.error('读取订阅状态失败:', e);
-      userSubscribed = false;
-    }
+    // ✅ 移除订阅检查 - 无需付费即可使用
     
-    if (!userSubscribed) {
-      // 已登录但未付费 → 显示升级提示
-      showUpgradePrompt();
-      return;
-    }
-    
-    // ✅ 已登录且付费 → 加载数据并显示
+    // 直接加载数据并显示
     try {
       const favStr = localStorage.getItem('userFavorites');
       userFavorites = favStr ? JSON.parse(favStr) : { events: [], artists: [] };
@@ -320,19 +301,6 @@ async function checkAuthAndRender() {
     
     loadAllEvents();
   });
-}
-
-function showUpgradePrompt() {
-  document.getElementById('content-wrapper').innerHTML = `
-    <div class="upgrade-banner">
-      <div class="upgrade-title">🔒 仅限订阅用户</div>
-      <div class="upgrade-text">
-        我的收藏功能仅对付费订阅用户开放<br>
-        升级以开启个性化收藏体验
-      </div>
-      <button class="upgrade-btn" onclick="location.href='../main/'">返回日历</button>
-    </div>
-  `;
 }
 
 function updateHeader() {
