@@ -321,7 +321,25 @@ async function loadSheet(sheetConfig) {
   const url = `${GAS_URL}?id=${id}&key=${GAS_KEY}&origin=${ORIGIN}`;
   const r = await fetch(url);
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  const rows = await r.json();
+  const response = await r.json();
+  
+  // 【修复】处理 GAS 返回的格式：{success: true, data: [...], timestamp: "..."}
+  let rows = [];
+  
+  if (response.success === false) {
+    console.error('GAS 错误:', response.error, response.message);
+    return [];
+  }
+  
+  if (response.data && Array.isArray(response.data)) {
+    rows = response.data;
+  } else if (Array.isArray(response)) {
+    // 兼容直接返回数组的情况
+    rows = response;
+  } else {
+    console.error('无效的数据格式:', response);
+    return [];
+  }
   
   let events = rows.map(row => {
     const obj = {};
