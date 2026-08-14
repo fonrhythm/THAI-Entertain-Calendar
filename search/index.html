@@ -375,19 +375,23 @@ window.doSearch = async function() {
     const loaded = await Promise.all(activeSheets.map(config => loadSheet(config)));
     const pool = loaded.flat();
 
-    // 搜索：name、full_name、activity、note、venue、city
+    // 【优化】搜索：优先匹配艺人名字和活动名称，然后按日期排序
     const kw = q.toLowerCase();
+    
     const results = pool.filter(ev => {
-      const fields = [ev.name, ev.full_name, ev.activity, ev.note, ev.venue, ev.city];
-      return fields.some(f => f && f.toLowerCase().includes(kw));
+      // 只搜索最重要的两个字段：name 和 activity
+      const mainFields = [ev.name, ev.full_name, ev.activity];
+      return mainFields.some(f => f && f.toLowerCase().includes(kw));
     });
-
+    
     // 按日期排序（有日期的排前面，从近到远）
     results.sort((a, b) => {
       const da = a.date ? new Date(a.date) : new Date('9999-12-31');
       const db = b.date ? new Date(b.date) : new Date('9999-12-31');
       return da - db;
     });
+
+
 
     // 区分过去和未来的行程
     const futureEvents = [];
